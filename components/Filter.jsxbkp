@@ -1,0 +1,148 @@
+import React from 'react'
+import { useState } from 'react'
+import Accordion from 'react-bootstrap/Accordion';
+function Filter() {
+    const [isActive, setActive] = useState("false");
+    const handleToggle = () => {
+        setActive(!isActive);
+    };
+    return (
+        <>
+
+
+            <div className="filter-section">
+
+
+                {/* filter-block */}
+                <div className={isActive ? "filter-block " : "filter-block active"}>
+
+                    <Accordion defaultActiveKey={['0']} alwaysOpen>
+
+
+                        <Accordion.Item eventKey="0">
+                            <Accordion.Header> <h3 onClick={handleToggle}>Activity <span className="bladge bladge-primary">1</span></h3></Accordion.Header>
+                            <Accordion.Body>
+                                <ul className="filter-list">
+                                <li>
+                                        <div className="form-group">
+                                            <span>All Day Listening (7) </span>
+                                            <input type="checkbox" id="listening" />
+                                            <label for="listening">   </label>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div className="form-group">
+                                            <span>At the Gym (4)</span>
+                                            <input type="checkbox" id="gym" />
+                                            <label for="gym"> </label>
+                                           
+                                           
+                                        </div>
+                                    </li>
+                                    
+                                    <li>
+                                        <div className="form-group">
+                                            <span> Focus (4)</span>
+                                            <input type="checkbox" id="focus" />
+                                            <label for="focus"></label>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </Accordion.Body>
+                        </Accordion.Item>
+
+
+                        <Accordion.Item eventKey="1">
+                            <Accordion.Header> <h3 onClick={handleToggle}>Battery Life </h3></Accordion.Header>
+                            <Accordion.Body>
+                                <ul className="filter-list">
+                                    <li>
+                                        <div className="form-group">
+                                            <span> 40 hrs (1) </span>
+                                            <input type="checkbox" id="40" />
+                                            <label for="40"></label>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div className="form-group">
+                                            <span>30-40 hrs  (1)</span>
+                                            <input type="checkbox" id="30-40" />
+                                            <label for="30-40"></label>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div className="form-group">
+                                            <span> Focus (4)</span>
+                                            <input type="checkbox" id="focus" />
+                                            <label for="focus"></label>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </Accordion.Body>
+                        </Accordion.Item>
+
+                        <Accordion.Item eventKey="2">
+                            <Accordion.Header> <h3 onClick={handleToggle}>Features </h3></Accordion.Header>
+                            <Accordion.Body>
+                                <ul className="filter-list">
+                                    <li>
+                                        <div className="form-group">
+                                            <span> Adjustable Sensory Bass  (2) </span>
+                                            <input type="checkbox" id="40" />
+                                            <label for="40"></label>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div className="form-group">
+                                            <span>Active Noise Canceling  (1)</span>
+                                            <input type="checkbox" id="30-40" />
+                                            <label for="30-40"></label>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div className="form-group">
+                                            <span> Multipoint Pairing  (4)</span>
+                                            <input type="checkbox" id="focus" />
+                                            <label for="focus"></label>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div className="form-group">
+                                            <span> Stay-Aware (4)</span>
+                                            <input type="checkbox" id="focus" />
+                                            <label for="focus"></label>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div className="form-group">
+                                            <span> Personal Sound (2)</span>
+                                            <input type="checkbox" id="focus" />
+                                            <label for="focus"></label>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div className="form-group">
+                                            <span> Custom Equalizer (4)</span>
+                                            <input type="checkbox" id="focus" />
+                                            <label for="focus"></label>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </Accordion.Body>
+                        </Accordion.Item>
+
+
+
+                    </Accordion>
+
+
+                </div>
+                {/* filter-block */}
+
+
+            </div>
+        </>
+    )
+}
+
+export default Filter
