@@ -741,7 +741,7 @@ header .skull_menu ul li.megamenu ul.sub-menu>li.menu-right-blk a:hover {
 }
 
 #menu-right-menu li a {
-  padding:5px;
+  padding:2px 5px;
   font-family: Archivo, serif !important;
   font-weight: 400;
 }
@@ -1301,6 +1301,8 @@ max-height: 300px;
   display: flex;
   align-items: center;
   justify-items: center;
+  border-radius: 15px;
+  overflow: hidden;
 }
 .gallery-img img{
   mix-blend-mode: multiply;
@@ -1435,7 +1437,7 @@ max-height: 300px;
 .notify-btn {
   margin-bottom: 10px;
   background-color: rgb(0, 129, 255);
-  padding: 14px 10px;
+  padding: 10px 10px;
   font-family: archivo, serif;
   max-width: 452px;
   width: 100%;
@@ -1453,8 +1455,10 @@ max-height: 300px;
   color: #fff;
   justify-content: center;
   border: none;
+  text-transform: uppercase!important;
+  letter-spacing: .1px;
 }
-.notify-btn svg{fill: #fff;width: 30px;}
+.notify-btn svg{fill: #fff;width: 24px;}
 .notify-btn:hover {
   background: #006dd9;
   color: #fff;
@@ -2234,10 +2238,7 @@ max-height: 300px;
 .drawer-close svg {
   width: 25px;
 }
-.drawer-body{
-  max-height: 300px;
-  overflow-y: scroll;
-}
+
 .drawer {
   position: fixed;
   z-index: 1000;
@@ -4031,6 +4032,7 @@ header .skull_menu ul li.megamenu.locations_menu>ul.sub-menu {
   display: block;
   padding-bottom: 5px;
 }
+.cart-page.title_section h2{font-size: 72px;line-height: 76px;text-align: left;text-transform: initial;}
 @media(max-width:576px) {
   .header-blk {
     display: none
@@ -4555,4 +4557,9 @@ header .skull_menu ul li.megamenu.locations_menu>ul.sub-menu {
         top: 0;
         overflow: hidden;
         height: 100%;}
+        .skull_title_2 h2{font-size: 26px;}   
+        .skull_title.big.big_text h2 {  font-size: 24px;line-height: 30px;  }
+        .full_center_section.skull_space_xtra.pt-5{padding-top: 0px!important;}
+        .skull_title.big.mb-5{margin-bottom: 0px!important;}
+    .faq h2{font-size: 24px;}
 }

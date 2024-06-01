@@ -1,16 +1,31 @@
+'use client'
 import Link from 'next/link'
 import React from 'react'
+import { useEffect, useState } from 'react';
+import { getDataWithQuery, geturl } from "@/utils/api"
 
 function page() {
+  const [data, setData] = useState();  
+  const getdata = async () =>{
+    const response = await getDataWithQuery("/api/contact-us",
+     { 
+        // pagesize: 1000, typeId: blogId 
+    });
+    setData(response.data)
+       return response;
+}
+useEffect(() => {  
+    getdata();
+  }, []);
   return (
     <>
-    <>
+ 
   <section className="full_center_section title_top_section">
     <div className="container">
       <div className="row">
         <div className="col-md-12">
           <div className="skull_title big text-center">
-            <h2>CONTACT US</h2>
+            <h2>{data?.attributes?.Heading}</h2>
           </div>
         </div>
       </div>
@@ -26,45 +41,40 @@ function page() {
                 <Link href="/faq">FAQ</Link>
               </li>
               <li>
-                <a href="/contact-us">CONTACT US</a>
+                <Link href="/contact-us">CONTACT US</Link>
               </li>
               <li>
-                <a href="/warranty/warranty-policy/">WARRANTY</a>
+                <Link href="/warranty/warranty-policy/">WARRANTY</Link>
               </li>
               <li>
-                <a href="/legal/privacy-policy/">PRIVACY POLICY</a>
+                <Link href="/legal/privacy-policy/">PRIVACY POLICY</Link>
               </li>
             </ul>
           </div>
         </div>
         <div className="col-md-8">
           <div className="contact_box">
-            <h5>CONTACT US</h5>
+            <h5>{data?.attributes?.Heading}</h5>
             <ul>
               <li>
-                {" "}
-                <a href="mailto:customercare@brandeyes.in">
-                  <b>customercare@brandeyes.in</b>
-                </a>
+              
+                <Link href={`mailto:${data?.attributes?.Email}`}>
+                  <b>{data?.attributes?.Email}</b>
+                </Link>
               </li>
               <li>
-                {" "}
+               
                 <a href="#">
                   <b>
-                    01142700400
+                    <Link href={`tel:${data?.attributes?.Phone}`}>{data?.attributes?.Phone}</Link>
                     <br />
-                    Monday – Friday
+                    {data?.attributes?.Days}
                     <br />
-                    10:00am to 4:00pm
+                    {data?.attributes?.Time} to   {data?.attributes?.Time2}
                   </b>
                 </a>
               </li>
-              <li>
-                {" "}
-                <a href=".#">
-                  <b>FAQ</b>
-                </a>
-              </li>
+              
             </ul>
           </div>
         </div>
@@ -73,7 +83,7 @@ function page() {
   </section>
 </>
 
-    </>
+
   )
 }
 

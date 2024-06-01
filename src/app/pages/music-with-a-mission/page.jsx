@@ -1,7 +1,22 @@
+'use client'
 import Link from 'next/link'
 import React from 'react'
+import { useEffect, useState } from 'react';
+import { getDataWithQuery, geturl } from "@/utils/api"
 
 function page() {
+  const [data, setData] = useState();  
+  const getdata = async () =>{
+    const response = await getDataWithQuery("/api/music-with-a-mission/?populate=*",
+     { 
+        // pagesize: 1000, typeId: blogId 
+    });
+    setData(response.data)
+       return response;
+}
+useEffect(() => {  
+    getdata();
+  }, []);
   return (
     <>
        <div className="breacrumb-blk">
@@ -21,24 +36,23 @@ function page() {
         </div>
       </div>
       <section className="music-with-mission">
-        <img src="https://www.skullcandy.com/cdn/shop/files/desktop_hero.png" alt="" className='img-fluid' />
+        <img src={geturl(data?.attributes?.Top_Banner)} alt="" className='img-fluid' />
       </section>
       <section className="our-partner">
         <div className="container">
           <div className="row">
             <div className="col-lg-12">
               <div className="our-partner-heading">
-                <h2>OUR PARTNERS</h2>
+                <h2>{data?.attributes?.Heading}</h2>
               </div>
             </div>
           </div>
         </div>
        <div className="our-partner-banner">
-       <img src="https://www.skullcandy.com/cdn/shop/files/desktop_twloha.jpg?v=1709302524" alt=""  className='img-fluid'/>
+       <img src={geturl(data?.attributes?.Our_Partners_Banner)} alt=""  className='img-fluid'/>
        <div className="ipb-content">
-        <img src="https://www.skullcandy.com/cdn/shop/files/TWLOHA-Logo-Knockout.png" alt="" />
-        <p>To Write Love on Her Arms is a non-profit movement dedicated to presenting hope and finding help for people struggling with depression, addiction, self-injury and suicide.
-</p>
+        <img src={geturl(data?.attributes?.Our_Partners_Upper_Image  )} alt="" />
+        <p>{data?.attributes?.Our_Partners_text}</p>
        </div>
        </div>
 
@@ -46,11 +60,11 @@ function page() {
 
       <div className="col-50-block">
         <div className="col-50-img">
-          <img src="https://www.skullcandy.com/cdn/shop/files/desktop_twloha2_3x_341a426b-9c97-485a-b104-be9a4836ddbd_750x.jpg" alt="" className='img-fluid'/>
+          <img src={geturl(data?.attributes?.Left_Image  )} alt="" className='img-fluid'/>
         </div>
         <div className="col-50-content">
           <div className="col-50-content-inner">
-          <p>TWLOHA founder Jamie Tworkowski didn't set out to start a non-profit organization in 2006. All he wanted to do was help his friend Renee who was suffering from depression, addiction and self-injury. Through writing about the experience and selling t-shirts to help fund her treatment, Jamie discovered a community of people struggling with their own mental health and seeking similar support. Since then, TWLOHA has reached millions of people online and in-person with the message that hope and help are real, and has worked to invest over $2.6 million into treatment and recovery for those who can't afford it.</p>
+          <p>{data?.attributes?.Right_Content}</p>
           </div>
         </div>
       </div>
@@ -58,26 +72,22 @@ function page() {
       <div className="pow-blk">
       <picture>
         <source media="(max-width:540px)" srcset="https://www.skullcandy.com/cdn/shop/files/mobile_pow_update_2021.jpg" className="img-fluid" />
-          <img src="https://www.skullcandy.com/cdn/shop/files/desktop_pow_update2021.jpg" alt="main image" width="100%" className="desktop-banner img-fluid" />
+          <img src={geturl(data?.attributes?.Pow_Banner  )} alt="main image" width="100%" className="desktop-banner img-fluid" />
 
       </picture>
        
         <div className="pow-content">
-          <img src="https://www.skullcandy.com/cdn/shop/files/POW_Logo_POW_Logo.svg" alt="" className='img-fluid'/>
-          <p>Protect Our Winters is a non-profit group dedicated to turning passionate outdoor people into effective climate advocates.</p>
+          <img src={geturl(data?.attributes?.Pow_Image)} alt="" className='img-fluid'/>
+          <p>{data?.attributes?.Pow_Text}</p>
         </div>
       </div>
       <div className="col-50-block">
         <div className="col-50-img">
-          <img src="https://www.skullcandy.com/cdn/shop/files/pow-update-2021_1500x.jpg" alt="" className='img-fluid'/>
+          <img src={geturl(data?.attributes?.Last_Section_Left_Image  )} alt="" className='img-fluid'/>
         </div>
         <div className="col-50-content">
-          <div className="col-50-content-inner">
-          <p>As a company founded at the intersection of music and board sports, we believe strongly in protecting the earth and our access to outdoor recreation. Which is why we're proud to partner with Protect Our Winters.</p>
-          <p>Founded by professional snowboarder, Jeremy Jones, POW is a non-profit group that turns passionate outdoor people into effective climate advocates. They have successfully led a community of outdoor enthusiasts, athletes, scientists, creatives and business leaders to affect systemic political solutions to climate change since 2007.</p>
-          <p>
-          A portion of proceeds from our Upcycling Program, which refurbishes returned or damaged products to reduce landfill waste, goes to Protect Our Winters.
-          </p>
+          <div className="col-50-content-inner">        
+          <span dangerouslySetInnerHTML={{ __html: data?.attributes?.Last_Section_Right_Content }} />;
           </div>
         </div>
       </div>
