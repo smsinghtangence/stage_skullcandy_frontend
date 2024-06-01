@@ -11,7 +11,7 @@ import { getDataWithQuery, geturl } from "@/utils/api"
 const API_URL = process.env.API_URL || '';
 function ProductList({products}) {
 
-  console.log("test product " + JSON.stringify(products))
+  // console.log("test product " + JSON.stringify(products))
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
   return (
     <>

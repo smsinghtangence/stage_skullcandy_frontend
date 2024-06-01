@@ -21,27 +21,18 @@ const TOKEN = process.env.TOKEN || '';
     window.scrollTo(0,0)
 ////
 
-const id = params.id;
+const id = params?.id;
 console.log("orderid "+id)
          
 var ciphertext = id?.replace(/p1L2u3S/g, '+' )?.replace(/s1L2a3S4h/g, '/')?.replace(/e1Q2u3A4l/g, '=');
 var bytes = CryptoJS.AES.decrypt(ciphertext, '');
 
- console.log(bytes)
+ 
 
 var decrypted_Orderid= bytes.toString(CryptoJS.enc.Utf8);
-console.log("decrypt " + decrypted_Orderid)
+console.log("decrypt"+decrypted_Orderid)
 
-// const queryParams = new URLSearchParams(window.location.search);
-
-// const orderid = queryParams.get("orderid") ? queryParams.get("orderid") : '';
-// console.log(orderid);
-const [order, setOrder] = useState({"amount"
-  : 
-  "208000",
-  "order_id"
-  : 
-  "9706"});
+const [order, setOrder] = useState( );
  
 const getorder = async () => {
 
@@ -56,7 +47,7 @@ const getorder = async () => {
     config
   );
   if (response.status == 200) {
-    setOrder(response.data);
+    setOrder(response.data.data.attributes);
   }
   console.log("response.data", response.data);
 };
@@ -105,7 +96,11 @@ const getorder = async () => {
       </tr>
       <tr>
         <td><strong>Order Id</strong></td>
-        <td>#{order?.id}</td>  
+        <td>#{order?.order_id}</td>  
+      </tr>
+      <tr>
+        <td><strong>Payment Id</strong></td>
+        <td>#{order?.payment_id}</td>  
       </tr>
     {order?.line_items  &&  
     <>

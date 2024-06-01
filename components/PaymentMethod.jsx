@@ -37,6 +37,20 @@ function PaymentMethod() {
 
     const { cart, cartComapre, buyNow } = useSelector(state => state.cartWish)
 
+    const total = cart?.reduce((totalPrice, i) => {
+    
+        let sku = i?.SKU
+                  
+        let activeSlide = (i?.Variation_Sliders)?.find(product => product?.SKU === sku)
+         
+          let quantity = i?.quantity
+      
+          let price = activeSlide?.sales_price ? activeSlide?.sales_price :activeSlide?.Variations_Price;
+        
+        return parseFloat(totalPrice + price * quantity);
+      }, 0);
+
+
     const { users } = useSelector(state => state.auth)
     // const cartSnapshot = [...cart];
 
@@ -61,9 +75,11 @@ function PaymentMethod() {
 
     //cod after order has placed
     useEffect(() => {
-        if (isSuccess && order?.id && razorpay == false && payment.payment_method == 'cod') {
+        // if (isSuccess && order?.id && razorpay == false && payment.payment_method == 'cod') {
+            // if (isSuccess && order?.ref_order_id && razorpay == false ) {
+                if (isSuccess && message === "success" && razorpay && isPaymentWithCard) {
             //toast.success('Your Order is Successfully Placed')
-            var ciphertext = CryptoJS.AES.encrypt(JSON.stringify(order?.id), '').toString();
+            var ciphertext = CryptoJS.AES.encrypt(JSON.stringify(order?.ref_order_id), '').toString();
             var encrypt_orderid = ciphertext.replace(/\+/g,'p1L2u3S').replace(/\//g,'s1L2a3S4h').replace(/=/g,'e1Q2u3A4l');
             if (buyNow.length !== 0) {
                 const product = cart?.filter((i) => {
@@ -106,7 +122,7 @@ function PaymentMethod() {
             //     }))
             dispatch(updateOrderAfterPayment(
                 {
-                    "amount": parseInt(order?.total) * 100,
+                    "amount": parseInt(total),
                     "order_id": (order?.ref_order_id).toString
                 }))
                 
@@ -186,7 +202,13 @@ function PaymentMethod() {
   
     // Make API call to the serverless API
 
-    const response = await axios.post(API_URL + '/api/razorpay' , {}, {headers: {
+    const response = await axios.post(API_URL + '/api/razorpay' , {
+        
+        "amount":parseInt(total),
+        "currency": "INR",
+        "order_id": (order?.ref_order_id).toString
+
+     }, {headers: {
         "Authorization": `Bearer ${TOKEN}`
          
       }})
@@ -204,7 +226,7 @@ function PaymentMethod() {
          
    
         "amount": response?.data?.amount,
-        // "order_id": order?.ref_order_id,
+        "order_id":response?.data?.razorpay_order_id,
         "customer_id": users?.id
     }
     dispatch(updateOrderAfterPayment(updateobj));

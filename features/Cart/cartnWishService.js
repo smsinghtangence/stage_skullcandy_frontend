@@ -23,8 +23,8 @@ const addToCartforLogin = async (cartObj, user) => {
     }
     const cartItem = { ...cartObj, quantity: 1 }
     if (user?.id) {
-        // const res = await axios.post(API_URL + `/custom/v1/users/${user.id}/cart`, input, config)
-        // return res.data.response
+        const res = await axios.post(API_URL + `/custom/v1/users/${user.id}/cart`, input, config)
+        return res.data.response
         return cartItem;
     }
 }

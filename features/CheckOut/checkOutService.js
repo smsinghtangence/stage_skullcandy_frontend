@@ -106,7 +106,7 @@ const updateOrderAfterPayment = async(id,data)=>{
     
    
    // return {...response.data,...response1.data}
-   return response
+   return {"ref_order_id":response.data.data.id,...response.data.data.attributes}
 }
 const checkoutService = {
    verifyCoupon,
