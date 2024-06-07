@@ -28,6 +28,10 @@ const [thumbsSwiper2, setThumbsSwiper2] = useState();
 const [thumbsSwiper3, setThumbsSwiper3] = useState();
 const [thumbsSwiper4, setThumbsSwiper4] = useState();
 const [thumbsSwiper5, setThumbsSwiper5] = useState();
+
+
+
+
 return (
 <>
 <section className="whats-new py-50">
@@ -72,8 +76,12 @@ return (
                <div className="whats-new-list">
                   <Link href={"/shop/" + item?.attributes?.slug}>
                   <div className="whats-new-img">
-               {/* <span className="wnl-bladge text-uppercase sale-bladge">on sale </span> */}
-
+                {/* <span id='wnl-bladge' className="wnl-bladge text-uppercase sale-bladge">{item?.attributes?.Product_Tag}</span>  */}
+                <span 
+      id='wnl-bladge' 
+      className={`wnl-bladge text-uppercase ${item?.attributes?.Product_Tag}`}>
+      {item?.attributes?.Product_Tag}
+    </span>
                      <Swiper
                      style={{
                      '--swiper-navigation-color': '#fff',

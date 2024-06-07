@@ -3,7 +3,7 @@ import Link from 'next/link';
 import React, { use, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import $ from 'jquery'
- 
+
 import OrderSummary from '@/components/OrderSummary';
 import PaymentMethod from '@/components/PaymentMethod';
 import { useRouter } from 'next/navigation'
@@ -12,34 +12,18 @@ function page() {
 
     const router = useRouter();
     const { users } = useSelector(state => state.auth)
+    const { cart, wishlist } = useSelector(state => state.cartWish)
 
     const { isLoading, isPaymentWithCard, shipping, address, checkoutUserType } = useSelector(state => state.checkOut)
 
 
     const [status, setStatus] = useState(users ? true : false)
 
-     
+
 
     const toggleShow = () => setBasicModal(!basicModal);
 
-    // useEffect(()=>{
-    //     console.log(JSON.stringify(users))
-    // },[0])
-    // styling start
-    useEffect(() => {
-        $(document).ready(function () {
-            var elementPosition = $('.checkout-right').offset();
 
-            $(window).scroll(function () {
-                if ($(window).scrollTop() > elementPosition.top) {
-                    $('.checkout-right').addClass("fixed-sec")
-                } else {
-                    $('.checkout-right').removeClass("fixed-sec")
-                }
-            });
-        });
-    }, [0])
-    // styling end 
     return (
         <>
             <section className="checkout">
@@ -47,6 +31,20 @@ function page() {
                     <div className="row">
                         <div className="col-lg-7">
                             <div className="checkout-left">
+
+                            {
+                                    !users?.id &&
+                                <div className="row">
+                                    <div className="col-lg-12 text-center">
+                                        <Link href="/my-account">
+                                            <button className='btn btn-dark mt-5' >Login / Signup</button>
+                                        </Link>
+                                    </div>
+                                    <div className="col-lg-12 text-center">
+                                        <hr />
+                                    </div>
+                                </div>
+                                }
                                 {/* <p>Express checkout</p> */}
                                 {/* <div className="checkout-btn">
 
@@ -79,7 +77,7 @@ function page() {
                                     <span>or</span>
                                 </div> */}
 
-
+                                {/* contact form start */}
                                 {/* <div className="checkout-contact-form">
                                     <div className="ccf-heading">
                                         <h4>Contact </h4>
@@ -104,20 +102,25 @@ function page() {
                                     </div>
 
                                 </div> */}
-  
 
-                        <AddressSection toggleShow={toggleShow} />
-                   
+                                {/* contact form end */}
+                                {/* <AddressSection toggleShow={toggleShow} /> */}
+                                {
+                                    users?.id &&  
+                                    <AddressSection />
 
-
+                                }
 
 
                                 <div className="payment">
 
 
                                     <div className="accordion" id="accordionWithRadioExample_PreChecked">
-                                   
-                                        <PaymentMethod />
+
+                                        {
+                                            users?.id && cart?.length > 0 && <PaymentMethod />
+                                        }
+
                                     </div>
 
 
@@ -239,9 +242,9 @@ function page() {
                                 </div>
                             </div>
                         </div>
-                       
+
                         <OrderSummary />
-                       
+
                     </div>
                 </div>
             </section>

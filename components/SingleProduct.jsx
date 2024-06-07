@@ -13,8 +13,11 @@ import { getDataWithQuery, geturl } from "@/utils/api"
 import { useDispatch, useSelector } from 'react-redux'
 import { adddToBuyNow, addToCart, compareCartState, addToCartforLogin, addToWishlist, deleteWishlist, setBuyNowStatus, resetBuyNowStatus, } from '@/features/Cart/cartnWishSlice'
 
-gsap.registerPlugin(ScrollTrigger);
+
 const API_URL =  process.env.API_URL || '';
+
+
+
 function SingleProduct({product}) {
 
 
@@ -30,10 +33,13 @@ function SingleProduct({product}) {
     //console.log(product.id)
     const obj = {
         id: product?.id, quantity: 1
+
+      
+
     }
     if (users) {
         // dispatch(addToCartforLogin(obj))
-        dispatch(addToCartforLogin(product))
+        dispatch(addToCartforLogin({...product,quantity: 1}))
     }
     else {
         dispatch(addToCart(product))
@@ -65,48 +71,20 @@ useEffect(() => {
     const [thumbsSwiper, setThumbsSwiper] = useState(null);
     useEffect(() => {
       gsap.registerPlugin(ScrollTrigger);
-       //  let mm = gsap.matchMedia();
-       //  mm.add("(min-width: 800px)", () => {
-       //    gsap.to(".sps-container", {
-       //      scrollTrigger: {
-       //        trigger: ".single-product-content",
-       //         pin: ".sps-container",
-       //       start: "top",
-       //       end: "+=650",
-       //      scrub: true,
-       //      markers: false,
-       //      }
-       //    });
-       //  });
+      
+    if (window.matchMedia("(min-width: 768px)").matches) {
      
-     
-    //     let steppers = document.querySelector(".single-product-content");
-    // let pinTarget = document.querySelector(".sps-container");
-     
-    // ScrollTrigger.create({
-    //   trigger: 'sps-container',
-    //   start: '-50px top',
-    // //   end: () => `+=${steppers.offsetHeight}`,
-    //   end: 'bottom center',
-    //   pin: '.sps-container',
-    //   markers: true,
-    //   invalidateOnRefresh: true
-    // })
-     
-     
-        if (window.matchMedia("(min-width: 768px)").matches) {
-     
-          let steppers = document.querySelector(".sps-container ");
-          let pinTarget = document.querySelector(".feature-slider");
-          ScrollTrigger.create({
-          trigger: '.single-product-content',
-          start: '0px 0px',
-          end: 'bottom 70%',
-          pin: '.sps-container',
-          markers: false,
-          invalidateOnRefresh: true
-          });
-          }
+      //let steppers = document.querySelector(".single-product-detail ");
+      //let pinTarget = document.querySelector(".feature-slider");
+      ScrollTrigger.create({
+      trigger: '.single-product-content',
+      start: '22% top',
+      end: 'bottom 70%',
+      pin: '.sps-container',
+      markers: false,
+      invalidateOnRefresh: true
+      });
+      }
      
     }, [])
 
@@ -138,6 +116,25 @@ const variant =  sliders.filter((slider) => {
 }
 
 let slideNo = activeSlide?.Desktop_Image?.data?.length - 3;
+
+
+// ////////
+const productColorImgList = document.querySelectorAll('.product-color-img-list');
+// Add a click event listener to each element
+productColorImgList.forEach((item) => {
+   item.addEventListener('click', function() {
+     // Remove 'active' class from all siblings
+     productColorImgList.forEach((sibling) => {
+       sibling.classList.remove('active');
+     });
+  
+     // Add 'active' class to the clicked element
+     this.classList.add('active');
+   });
+ });
+
+////////
+
   return (
     <>
 
@@ -164,7 +161,7 @@ let slideNo = activeSlide?.Desktop_Image?.data?.length - 3;
         
      {activeSlide?.Desktop_Image?.data?.map((item, i) => (
         <SwiperSlide>
-          <div className={i > slideNo ? "gallery-img ls" : "gallery-img "}>
+      <div className={i > slideNo && i > 2 ? "gallery-img ls" : "gallery-img "}>
           <img src={API_URL + item?.attributes?.url} alt=""   />
           </div>
         </SwiperSlide>
@@ -283,7 +280,7 @@ let slideNo = activeSlide?.Desktop_Image?.data?.length - 3;
              activeSlide?.Quantity == 0 
             ?
             <>
-            <button type="button" class="btn btn-primary w-100 mt-2" data-toggle="modal" data-target="#notify-modal">
+            <button type="button" class="btn btn-primary w-100 notify-btn" data-toggle="modal" data-target="#notify-modal">
                NOTIFY ME WHEN AVAILABLE
             </button>
             <Link href="#" className="sold-btn my-2" disabled="disabled">
@@ -306,8 +303,26 @@ let slideNo = activeSlide?.Desktop_Image?.data?.length - 3;
                      onClick={(e) => {
                   // 
                   // if (!cartItems?.some(item => item?.SKU === activeSlide?.SKU)){
+                     // handleCart(e, 
+                        // {...product,
                      if (!cartItems?.includes(activeSlide?.SKU)) {
-                  handleCart(e, {...product,"SKU":activeSlide?.SKU})
+                  handleCart(e, 
+                     {...product,
+                         
+                        "product_id": product?.id,
+                       
+                        "SKU":activeSlide?.SKU,
+                        "name": product?.title,
+                        "slug": product?.slug,
+                        "Variations_Color_Name": activeSlide?.Variations_Color_Name,
+                        "Variations_Price": activeSlide?.Variations_Price,
+                        "Variant_Image":activeSlide?.Variant_Image,
+                        "Variant_Image_url": geturl(activeSlide?.Variant_Image),
+                        "Sales_price": activeSlide?.Sales_price 
+        
+                     
+                     
+                     })
                   }
                }
                }
@@ -333,7 +348,10 @@ let slideNo = activeSlide?.Desktop_Image?.data?.length - 3;
 
 
 
-            {product?.Product_Usp?.length>0 &&
+           {product?.Product_Usp?.length>0? 
+           <>
+               {
+             product?.Product_Usp[0]?.Heading  &&
             <div className="sp-container">
                <div className="sp-wrapper">
                   {product?.Product_Usp?.map((item, i) => (
@@ -348,6 +366,7 @@ let slideNo = activeSlide?.Desktop_Image?.data?.length - 3;
                   ))}
                </div>
             </div>
+}</>:""
 }
             <div className="product-description">
                <p><strong>  {product?.Product_description_Heading}</strong></p>
@@ -406,7 +425,7 @@ let slideNo = activeSlide?.Desktop_Image?.data?.length - 3;
 
  {/* The Modal */}
  <div className="modal" id="notify-modal">
-    <div className="modal-dialog">
+    <div className="modal-dialog modal-dialog-centered">
       <div className="modal-content">
         {/* Modal Header */}
         <div className="modal-header">

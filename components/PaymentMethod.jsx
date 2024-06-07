@@ -41,12 +41,12 @@ function PaymentMethod() {
     
         let sku = i?.SKU
                   
-        let activeSlide = (i?.Variation_Sliders)?.find(product => product?.SKU === sku)
+        // let activeSlide = (i?.Variation_Sliders)?.find(product => product?.SKU === sku)
          
           let quantity = i?.quantity
       
-          let price = activeSlide?.sales_price ? activeSlide?.sales_price :activeSlide?.Variations_Price;
-        
+        //   let price = activeSlide?.sales_price ? activeSlide?.sales_price :activeSlide?.Variations_Price;
+        let price = i?.sales_price ? i?.sales_price :i?.Variations_Price;
         return parseFloat(totalPrice + price * quantity);
       }, 0);
 
@@ -133,7 +133,12 @@ function PaymentMethod() {
 
  
 
-    
+    const checkparameters = () => {
+        if (shipping?.length == 0)
+            toast.error('Please select atleast one address')
+        else
+            makePayment()
+    }
 
      ////////////////////////
  const makePayment = async () => {
@@ -143,11 +148,35 @@ function PaymentMethod() {
     let lineItems
     if (buyNow.length !== 0) {
         lineItems = buyNow.map((item) => {
-            return { product_id: item.id, quantity: item.quantity }
+            return {  
+                "product_id": item?.product_id,
+                "quantity": item?.quantity,
+                "SKU": item?.SKU,
+                "slug": item?.slug,
+                "name": item?.name,
+                "Variations_Color_Name": item?.Variations_Color_Name,
+                "Variations_Price": item?.Variations_Price,
+                "Variant_Image_url": item?.Variant_Image_url,
+                "Variant_Image":item?.Variant_Image,
+
+                "Sales_price": item?.Sales_price 
+            }
         })
     } else {
         lineItems = cart.map((item) => {
-            return { product_id: item.id, quantity: item.quantity }
+            return {  
+                "product_id": item?.product_id,
+                "quantity": item?.quantity,
+                "SKU": item?.SKU,
+                "slug": item?.slug,
+                "name": item?.name,
+                "Variations_Color_Name": item?.Variations_Color_Name,
+                "Variations_Price": item?.Variations_Price,
+                "Variant_Image_url": item?.Variant_Image_url,
+                "Variant_Image":item?.Variant_Image,
+
+                "Sales_price": item?.Sales_price  
+            }
         })
     }
 
@@ -159,8 +188,7 @@ function PaymentMethod() {
             if (payment) {
                 if (order?.id && isOrder) {
 
-                    // console.log('cartSnapshot', cartSnapshot)
-                    //console.log('cart', cart)
+                   
                     const hasCartChanged = compareArrays(cartComapre, cart);
                     // console.log(cartSnapshot)
                     // console.log(hasCartChanged)
@@ -212,16 +240,7 @@ function PaymentMethod() {
         "Authorization": `Bearer ${TOKEN}`
          
       }})
-    // const data = await fetch("http://localhost:1337/api/razorpay", { method: "POST", headers: {
-    //     "Authorization": `Bearer ${TOKEN}`
-         
-    //   }}).then((t) =>{
-         
-    //     console.log("test " + JSON.stringify(t))
-    //   }
-      
-    // );
-    // dispatch(PaymentWithCard())
+  
    const updateobj = {
          
    
@@ -270,7 +289,7 @@ function PaymentMethod() {
     const paymentObject = new window.Razorpay(options);
     paymentObject.open();
          };
- 
+ //////////
 }
 const initializeRazorpay = () => {
     return new Promise((resolve) => {
@@ -357,7 +376,7 @@ const initializeRazorpay = () => {
                             </button>
                         </>
                             : <>
-                                <button id='order-btn' className=' mt-3 btn btn-block btn-dark text-light w-100 ' onClick={() => { makePayment() }}>Place Order</button>
+                                <button id='order-btn' className=' mt-3 btn btn-block btn-dark text-light w-100 ' onClick={() => { checkparameters() }}>Place Order</button>
 
                             </>
                     }
@@ -367,7 +386,7 @@ const initializeRazorpay = () => {
 
 
             {/*  */}
-            <div className={basicModal ? "" : "active"}>
+            {/* <div className={basicModal ? "" : "active"}>
                 <div className="modal" id="myModal">
                     <div className="modal-dialog modal-lg  ">
                         <div className="modal-content">
@@ -384,7 +403,7 @@ const initializeRazorpay = () => {
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> */}
             {/*  */}
             {/* <MDBModal show={basicModal} setShow={setBasicModal} tabIndex='-1'>
                 <MDBModalDialog>
@@ -394,7 +413,7 @@ const initializeRazorpay = () => {
             {/*  */}
             {/* ///////////////////////////////// */}
             {/*  */}
-            <div className={Modal ? "" : "active"}>
+            {/* <div className={Modal ? "" : "active"}>
                 <div className="modal" id="myModal">
                     <div className="modal-dialog modal-lg  ">
                         <div className="modal-content">
@@ -411,7 +430,9 @@ const initializeRazorpay = () => {
                         </div>
                     </div>
                 </div>
-            </div>            {/*  */}
+            </div>           */}
+            
+              {/*  */}
             {/* <MDBModal id="accountToggle" show={Modal} setShow={setModal} tabIndex='-1'>
                 <MDBModalDialog>
                     <Account toggleShow={toggle} />

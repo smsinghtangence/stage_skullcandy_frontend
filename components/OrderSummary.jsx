@@ -18,12 +18,13 @@ function OrderSummary() {
     
         let sku = i?.SKU
                   
-        let activeSlide = (i?.Variation_Sliders)?.find(product => product?.SKU === sku)
+        // let activeSlide = (i?.Variation_Sliders)?.find(product => product?.SKU === sku)
          
           let quantity = i?.quantity
       
-          let price = activeSlide?.sales_price ? activeSlide?.sales_price :activeSlide?.Variations_Price;
-        
+        //   let price = activeSlide?.sales_price ? activeSlide?.sales_price :activeSlide?.Variations_Price;
+        let price = i?.sales_price ? i?.sales_price :i?.Variations_Price;
+
         return parseFloat(totalPrice + price * quantity);
       }, 0);
    
@@ -43,26 +44,27 @@ function OrderSummary() {
                                    <>
                                    {cart?.map((item, index) => {
                                     let sku = item?.SKU
-                                    let activeSlide = (item?.Variation_Sliders)?.find(product => product?.SKU === sku)
+                                    // let activeSlide = (item?.Variation_Sliders)?.find(product => product?.SKU === sku)
                                     // console.log(JSON.stringify(activeSlide))
                                     let quantity = item?.quantity
-                                    let price = activeSlide?.sales_price ? activeSlide?.sales_price :activeSlide?.Variations_Price;
-
+                                    // let price = activeSlide?.sales_price ? activeSlide?.sales_price :activeSlide?.Variations_Price;
+                                    let price = item?.sales_price ? item?.sales_price :item?.Variations_Price;
                                     return (
                                         <>
-                                    <div className="checkout-product"> 
+                                    <div className="checkout-product mb-3"> 
                                     <div className="checkout-product-list" key={index}>
                                         <div className="cpl-blk">
                                             <Link href={`/shop/${item?.slug}`}>
                                             <div className="cpl-img">
                                                
-                                                <img src={geturl(activeSlide?.Variant_Image)}  alt={activeSlide?.Variations_Color_Name} />
+                                                {/* <img src={geturl(activeSlide?.Variant_Image)}  alt={activeSlide?.Variations_Color_Name} /> */}
+                                                <img src={item?.Variant_Image_url}  alt={item?.Variations_Color_Name} />
                                                 <span className="badge">{quantity}</span>
                                             </div>
                                             </Link>
                                             <div className="cpl-content">
-                                                <p>{item?.title}</p>
-                                                <span>{activeSlide?.Variations_Color_Name}</span>
+                                                <p>{item?.name}</p>
+                                                <span>{item?.Variations_Color_Name}|{item?.SKU}</span>
                                             </div>
 
                                         </div>

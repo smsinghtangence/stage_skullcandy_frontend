@@ -8,6 +8,7 @@ import axios from 'axios'
 import { setCookie } from 'nookies'
 import { useDispatch, useSelector } from 'react-redux'
 import { loginWithGoogle, reset, userLogin, userRegister, loginWithFacebook as facebookLogin } from '@/features/authSlice'
+import { addToCartforGuestafterLogin, getCartData, getWishlist } from '@/features/Cart/cartnWishSlice'
 function Signin() {
 
     const API_URL =  process.env.API_URL || ''
@@ -36,39 +37,52 @@ const handleLogin = (e) => {
 }
 
 
+const { users, isError, isSuccess, message, isLoading } = useSelector(state => state.auth)
 
 
 
 
 
 
-
-    // async function handleLogin() {
-
-
-        
-
+useEffect(() => {
+  // if (isSuccess)
+  // {
+  //     setPop(false)
+  //     setActive(false)
+  //     setError(' ')
+  //     setMsgError(' ')   
+  //     hidePop()
+      
        
-    //     const loginResponse =  await axios.post(`${API_URL}/api/auth/local`,
-    //     { 
-    //         identifier: username,
-    //         password: password
-    //     });
-        
-////
-        // const loginResponse = await login.json();
+  // }
+  if (isSuccess && users?.id) {
+  
+  
+     
+      dispatch(getCartData())
+      dispatch(getWishlist())
+      const Cart = JSON.parse(localStorage?.getItem('cart'))
+      const lineItems = Cart?.map((item) => {
+          return {  
+              "product_id": item?.id,
+              "quantity": item?.quantity,
+              "SKU": item?.SKU,
+              "name": item?.name,
+              "Variations_Color_Name": item?.Variations_Color_Name,
+              "Variations_Price": item?.Variations_Price,
+              "Variant_Image_url": item?.Variant_Image_url,
+              "Sales_price": item?.Sales_price 
+          }
+      })
+      if (Cart?.length !== 0) {
+          dispatch(addToCartforGuestafterLogin(lineItems))
+      }
 
-        // console.log(loginResponse.data)
-
-        // setCookie(null, 'jwt', loginResponse.data.jwt , {
-        //     maxAge: 30 * 24 * 60 * 60,
-        //     path: '/',
-        // })
-
-        // Router.push('/payed-articles')
-    // }
-
-
+  }
+ 
+   
+   
+}, [users, isError,isSuccess])
 
     return(
         <>

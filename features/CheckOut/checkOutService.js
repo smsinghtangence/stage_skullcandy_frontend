@@ -40,26 +40,64 @@ const getAddress = async (users) => {
 }
 
 const saveAddress = async (address, shipping,users) => {
-   address = {  "user_id": users.id,"Address":[{...address},{...shipping}]  }
+   address = {  "id": users.id,"Address":[{...address},{...shipping}]  }
    console.log(address)
 
-   // const response = await axios.put(API_URL + `/api/users/${users?.id}`, address, {headers:{
-   //    "Authorization": `Bearer ${users?.token}`
-      const response = await axios.put(API_URL + `/api/user/me`, {"data":address}, {headers:{
-         "Authorization": `Bearer ${users?.token}`
+ 
+   //    const response = await axios.put(API_URL + `/api/user/me`, {address}, {headers:{
+   //       "Authorization": `Bearer ${users?.token}`
+   // }})
+
+   if (users?.id) {
+      const response = await axios.put(API_URL + `/api/users/${users.id}`, {...address}, {headers:{
+          "Authorization": `Bearer ${users?.token}`
+      }})
+      if(response.status == 200) {
+        
+         const response = await  getuserData(users)
+         return response.Cart
+     }
+     else
+     return response.data
+   }
+
+
+   else
+   return {"err":"Unauthorized"}
+   
+}
+const getuserData = async (users) => {
+   const response = await axios.get(API_URL + `/api/users/me?populate=*`, {headers:{
+      "Authorization": `Bearer ${users?.token}`
    }})
    return response.data
 }
-
 const updateAddress = async (users , id) => {
    // const response = await axios.put(API_URL + `/api/users/${users?.id}`, address, {headers:{
    //    "Authorization": `Bearer ${users?.token}`
-   const response = await axios.put(API_URL + `/api/user/me`, {"data":address}, {headers:{
-      "Authorization": `Bearer ${users?.token}`
-     }})
+   // const response = await axios.put(API_URL + `/api/user/me`, {"data":address}, {headers:{
+   //    "Authorization": `Bearer ${users?.token}`
+   //   }})
 
  
-   return response.data
+   // return response.data
+
+   // if (users?.id) {
+   //    const response = await axios.put(API_URL + `/api/users/${users.id}`, {...address}, {headers:{
+   //        "Authorization": `Bearer ${users?.token}`
+   //    }})
+   //    if(res.status == 200) {
+        
+   //       const response = await  getuserData(users)
+   //       return response.Cart
+   //   }
+   //   else
+   //   return res.data
+   // }
+
+
+   // else
+   return {"err":"Unauthorized"}
 
 } 
 const updateAddressDetails = async(addressId,shipping)=>{

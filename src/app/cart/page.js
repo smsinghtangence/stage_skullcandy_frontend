@@ -126,7 +126,7 @@ function page() {
                                 <p className="form-row form-row-wide" id="calc_shipping_country_field">
                                   <select name="calc_shipping_country" id="calc_shipping_country" className="country_to_state country_select" rel="calc_shipping_state">
                                     <option value="default">Select a country / region…</option>
-                                    <option value="IN" selected="selected">India</option>             </select>
+                                    <option value="India" selected="selected">India</option>             </select>
                                 </p>
                                 <p className="form-row form-row-wide validate-required" id="calc_shipping_state_field">
                                   <span>

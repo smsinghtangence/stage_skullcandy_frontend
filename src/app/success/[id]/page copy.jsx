@@ -153,13 +153,19 @@ const getorder = async () => {
       </tr>
     </thead>
     <tbody>
-     {order?.line_items?.map((item,i) => {
+     {/* {order?.line_items?.map((item,i) => ( */}
      
+     { product?.length !=0  &&  product?.map((item,i) => {
       
      
-     const quantity = item?.quantity;
-     const price = item?.Sales_price ? item?.Sales_price : item?.Variations_Price  
-      total = total + ( quantity * price);
+
+    // console.log("item?.id " +item?.id)
+    const current_item =  (order?.line_items).filter(pro => ([item?.id]).includes(pro?.product_id)); 
+
+     console.log(" current item  " + JSON.stringify(current_item))
+     const quantity = current_item[0]?.quantity;
+
+      total = total + ( quantity * item?.attributes?.price);
        
 
       return (
@@ -168,14 +174,14 @@ const getorder = async () => {
     
       <tr>
         <td>{i+1} </td>
-        <td><img width={60} height={60} src={item?.Variant_Image_url}/> </td>
-        <td><a href={`/shop/${item?.slug}`} >{item?.name}</a></td>
+        <td><img width={60} height={60} src={geturl(item?.attributes?.image)}/> </td>
+        <td><a href={`/shop/${item?.attributes?.slug}`} >{item?.attributes?.title}</a></td>
         {/* <td>{item?.product_id} </td> */}
         <td>{quantity} </td>
-        <td>{item?.SKU} </td>
-        <td>{price} </td>
+        <td>{item?.attributes?.sku} </td>
+        <td>{item?.attributes?.price} </td>
    
-        <td>{ quantity * price} </td>
+        <td>{item?.attributes?.price * quantity} </td>
         
         
       </tr>
@@ -185,20 +191,20 @@ const getorder = async () => {
     </>
      )})}
        <tr>
-        <td colSpan={6} style={{textAlign:"right"}}><strong>Discount</strong></td>
+        <td colSpan={5} style={{textAlign:"right"}}><strong>Discount</strong></td>
         <td>{order?.discount_total}</td>
       </tr>
        {/* shipping cost */}
        {order?.shipping_total  &&
       <tr>
-        <td colSpan={6} style={{textAlign:"right"}}><strong>Shipping Cost</strong></td>
+        <td colSpan={5} style={{textAlign:"right"}}><strong>Shipping Cost</strong></td>
         <td>{order?.shipping_total}</td>
       </tr>
       }
       {/*  */}
       <tr>
-        <td colSpan={6} style={{textAlign:"right"}}><strong>Total</strong></td>
-        <td>{total}</td>
+        <td colSpan={5} style={{textAlign:"right"}}><strong>Total</strong></td>
+        <td>{order?.total}</td>
       </tr>
      </tbody>
      

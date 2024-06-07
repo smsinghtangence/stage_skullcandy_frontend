@@ -27,7 +27,7 @@ function JoinCommunity() {
 
 <section className="join-comunity">
 
-<div className="container">
+<div className="container-fluid p-0">
 <div className="heading text-center">
   <h4>JOIN THE COMMUNITY</h4>
   <p>Follow us on social media and show us how you <strong>#skullcandy</strong></p>

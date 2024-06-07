@@ -140,6 +140,25 @@ const cartnWishSlice = createSlice({
         state.cart = []
 
       })
+      .addCase(updateCartforLogin.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(updateCartforLogin.fulfilled, (state, action) => {
+
+        state.isLoading = false
+        state.isError = false
+        state.isSuccess = 'success'
+        state.message = ''
+        state.cart = action.payload
+      })
+      .addCase(updateCartforLogin.rejected, (state, action) => {
+        state.isLoading = false
+        state.isError = true
+        state.isSuccess = false
+        state.message = action.payload
+        state.cart = []
+
+      })
       .addCase(getCartData.pending, (state, action) => {
         state.isLoading = 'getCartLoading'
       })
@@ -148,7 +167,7 @@ const cartnWishSlice = createSlice({
         state.isError = false
         state.isSuccess = 'success'
         state.message = ''
-        state.cart = action.payload.data
+        state.cart = action.payload
       })
       .addCase(getCartData.rejected, (state, action) => {
         state.isLoading = false
@@ -227,9 +246,10 @@ const cartnWishSlice = createSlice({
 
 export const addToCartforLogin = createAsyncThunk('/cart/add', async (cartObj, thunkAPI) => {
   try {
-    const user = thunkAPI.getState().auth.users
-    if (user) {
-      return await cartnWishService.addToCartforLogin(cartObj, user)
+    const users = thunkAPI.getState().auth.users
+    const cart = thunkAPI.getState().cartWish.cart
+    if (users) {
+      return await cartnWishService.addToCartforLogin(cartObj,cart, users)
     }
 
   } catch (error) {
@@ -238,20 +258,41 @@ export const addToCartforLogin = createAsyncThunk('/cart/add', async (cartObj, t
   }
 })
 
-export const getCartData = createAsyncThunk('/cart/getAll', async (_, thunkAPI) => {
+///////////
+export const updateCartforLogin = createAsyncThunk('/cart/update', async (cartObj, thunkAPI) => {
   try {
-    const user = thunkAPI.getState().auth.users
-    return cartnWishService.getCartData(user)
+    const users = thunkAPI.getState().auth.users
+    const cart = thunkAPI.getState().cartWish.cart
+
+    
+
+    if (users) {
+      return await cartnWishService.updateCartforLogin(cart, users)
+    }
+
   } catch (error) {
     const message = (error.response && error.response.data && error.response.data.message || error.message || error.toString())
     return thunkAPI.rejectWithValue(message)
   }
 })
 
-export const deleteFromCart = createAsyncThunk('/cart/delete', async (id, thunkAPI) => {
+ 
+///////////
+export const getCartData = createAsyncThunk('/cart/getAll', async (_, thunkAPI) => {
   try {
-    const user = thunkAPI.getState().auth.users
-    return await cartnWishService.deleteFromCart(id, user)
+    const users = thunkAPI.getState().auth.users
+    return cartnWishService.getCartData(users)
+  } catch (error) {
+    const message = (error.response && error.response.data && error.response.data.message || error.message || error.toString())
+    return thunkAPI.rejectWithValue(message)
+  }
+})
+
+export const deleteFromCart = createAsyncThunk('/cart/delete', async (SKU, thunkAPI) => {
+  try {
+    const users = thunkAPI.getState().auth.users
+    const cart = thunkAPI.getState().cartWish.cart
+    return await cartnWishService.deleteFromCart(SKU,cart, users)
   } catch (error) {
     const message = (error.response && error.response.data && error.response.data.message || error.message || error.toString())
     return thunkAPI.rejectWithValue(message)
@@ -299,8 +340,8 @@ export const deleteWishlist = createAsyncThunk('/wishlist/delete', async (id, th
 
 export const addToCartforGuestafterLogin = createAsyncThunk('/cart/add/afterlogin', async (lineItems, thunkAPI) => {
   try {
-    const user = thunkAPI.getState().auth.users
-    return await cartnWishService.addToCartforGuestafterLogin(lineItems, user)
+    const users = thunkAPI.getState().auth.users
+    return await cartnWishService.addToCartforGuestafterLogin(lineItems, users)
   } catch (error) {
     const message = (error.response && error.response.data && error.response.data.message || error.message || error.toString())
     return thunkAPI.rejectWithValue(message)

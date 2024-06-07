@@ -128,7 +128,7 @@ return (
 }
 
 {/* feel the stoke */}
-{product?.Product_Detail_Slider2?.length > 0 &&
+{product?.Product_Detail_Slider_2?.length > 0 &&
 <FeelTheStoke product={product} />
 }
 {/* feel the stoke */}

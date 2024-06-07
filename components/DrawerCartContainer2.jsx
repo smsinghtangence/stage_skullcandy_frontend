@@ -15,11 +15,16 @@ function DrawerCartContainer2({ i }) {
 
   let sku = i?.SKU
               
-  let activeSlide = (i?.Variation_Sliders)?.find(product => product?.SKU === sku)
+  // let activeSlide = (i?.Variation_Sliders)?.find(product => product?.SKU == sku)
    
-    let quantity = i?.quantity
+  //   let quantity = i?.quantity
 
-    let price = activeSlide?.sales_price ? activeSlide?.sales_price :activeSlide?.Variations_Price;
+  //   let price = activeSlide?.sales_price ? activeSlide?.sales_price :activeSlide?.Variations_Price;
+
+
+  let quantity = i?.quantity
+  let price = i?.sales_price ? i?.sales_price :i?.Variations_Price;
+
 
     const [val, setVal] = useState(quantity)
 
@@ -53,42 +58,18 @@ function DrawerCartContainer2({ i }) {
     return (
 
         <>
-            {/* <tr className=''>
-            <td >
-                <svg style={{ "color": "var(--danger)" }} onClick={() => Remove(i.id)} xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="ms-3 bi bi-trash3-fill cursorClass" viewBox="0 0 16 16">
-                    <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5Zm-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5ZM4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06Zm6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528ZM8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5Z" />
-                </svg>
-            </td>
-
-
-                <td className='w-25'>{geturl(i?.image) === null ? 'Not Available' : <img className='img-fluid' height="30%" width="30%" src={geturl(i?.image)} />}</td>
-                <td className='w-25'><Link href={`/productDetail/${i.id}`} className="text-decoration-none text-dark fw-bold ">{i.title}</Link></td>
-                <td>Rs&nbsp;&nbsp;{i.price}</td>
-                <td className='w-25'>
-                    <span className="input-group border-0 quantity d-flex align-items-center justify-content-center">
-                        <span className="input-group-text cursorClass" onClick={() => handleDec(val === 1 ? setVal(1) : setVal(val - 1))}>-</span>
-
-                        <input type="text" className="input-group-text w_50"   value={val} />
-                        <span className="input-group-text  cursorClass" onClick={() => handleInc(setVal(val + 1))}>+</span>
-                    </span>
-                </td>
-                <td>
-                    <i>Rs</i>&nbsp;&nbsp;{i.price * i.quantity}
-                </td>
-            </tr> */}
-
-
-
+            
+ 
             <div className="drawer-product-list">
               <div className="dpl-img">
                 {/* <img src={geturl(i?.image)} alt="" /> */}
-                <img src={geturl(activeSlide?.Variant_Image)} alt="" />
-                
+                {/* <img src={geturl(activeSlide?.Variant_Image)} alt="" /> */}
+                <img src={i?.Variant_Image_url} alt="" />
                 
               </div>
               <div className="dpl-title">
-                <Link href={`/productDetail/${i?.id}`} >{i.title}</Link>
-                <span className="product-option"> {activeSlide?.Variations_Color_Name} | {activeSlide?.SKU} </span>
+                <Link href={`/shop/${i?.slug}`} >{i.title}</Link>
+                <span className="product-option"> {i?.Variations_Color_Name} | {i?.SKU} </span>
                 <div className="quantity-wrapper">
                   <span className="quantity-dec"   onClick={() => handleDec(val === 1 ? setVal(1) : setVal(val - 1))}>--</span>
                   <input type="text" value={quantity} />
@@ -97,7 +78,7 @@ function DrawerCartContainer2({ i }) {
               </div>
               <div className="dpl-price">
                 {/* <h4>{i.price * i.quantity}</h4> */}
-                <h4>{price * quantity}</h4>
+                <h4><i class="fa fa-rupee"></i>{price * quantity}</h4>
                 <Link href="#" onClick={() => Remove(i?.SKU)}  className='drawer-product-remove'> Remove</Link>
               </div>
             </div>

@@ -46,7 +46,7 @@ function AddressSection() {
         if(address){
         const defaultAddress = address?.filter((item) => {
             return item.is_default_address == "1";
-        }).map(({ id, email, address_type, is_default_address, ...rest }) => rest);
+        }).map(({ id, email, is_default_address, ...rest }) => rest);
 
         //console.log(defaultAddress,'default')
         dispatch(addShippingDetails(defaultAddress[0]))
@@ -55,20 +55,24 @@ function AddressSection() {
 
 
     useEffect(() => {
+        if (users?.id) {
         dispatch(getAddress())
+        }
     }, [updatedAddress]) // for when someone change default address
 
-    useEffect(() => {
-        if (address?.length !== 0 && isSuccess) {
-            // console.log('from default address')
-            addDEfaultAddress()
+    // useEffect(() => {
+    //     if (address?.length !== 0 && isSuccess) {
+    //         // console.log('from default address')
+    //         addDEfaultAddress()
 
-        }
-        dispatch(reset())
-    }, [isSuccess])
+    //     }
+    //     dispatch(reset())
+    // }, [isSuccess])
 
     useEffect(() => {
+        if (users?.id) {
         dispatch(getAddress())
+        }
     }, [isSaveAddress])
     return (
         <>
@@ -105,34 +109,31 @@ function AddressSection() {
                                     address && <>
                                         {
                                             address?.map((item, index) => (
-                                               
-                    
-                                                    <div className="col-lg-12 col-md-12 col-sm-12 col-12 px-5 bg-light mt-1 py-2" style={{ overflowX: 'auto' }} 
-                                                    key={index}>
-                                                        <div className="items w-75  d-flex gap-4 align-items-start justify-content-start ">
-
-                                                            <div className='mt-2'>                                                           
-                                                                 <input type="radio" name="address" id="userAddress" className='' checked={item.is_default_address === "1" ? true : false} onChange={() => { handleClick(item) }} />
-                                                            
-                                                            </div>
-                                                            <div className='d-flex flex-column'>
-
-                                                                <div className='d-flex align-items-center gap-3'>
-                                                                    <p className='text-center mt-2 fs-6 text-capitalize'>{item.first_name}&nbsp;{item.last_name}</p>
-                                                                    <button className='btn btn-light btn btn-default text-capitalize border border-1 ' style={{ backgroundColor: '#F0F0F0' }}>{item.address_type}</button>
-                                                                    <p className='mt-2 fs-6'>{item.phone}</p>
-                                                                </div>
-
-                                                                <div className=''>
-                                                                    <label className='mt-2 text-capitalize'>{item.address_1}, {item.address_2}</label><br />
-                                                                    <label className='m-0  p-0 text-capitalize'>{item.city}, {item?.state}, {item?.country}</label>
-
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
-                                                 
+             <>                                  
+ 
+<div className="address_card" key={index}>
+<p><input type="radio" name="address" id="userAddress" className='' checked={item?.is_default_address === "1" ? true : false} onChange={() => { handleClick(item) }} /> 
+{/* <p  ><strong>Name:</strong>   */}
+ 
+{item.first_name}&nbsp;{item.last_name}</p>
+{/* <p  ><strong>Email:</strong> john@example.com</p> */}
+{/* <p  ><strong>Phone:</strong>  */}
+<p> 
+{item?.phone}</p>
+{/* <p  ><strong>Address:</strong>  */}
+<p> 
+{item.address_1}, {item.address_2}</p>
+{/* <p  ><strong>City:</strong>  */}
+<p> 
+    {item.city}, {item?.state}, {item?.country}</p>
+{/* <p  ><strong>State:</strong> State</p>
+<p  ><strong>Zip Code:</strong> 12345</p>
+<p  ><strong>Country:</strong> Country</p> */}
+ 
+</div>
+ 
+ 
+         </>                                        
 
                                             ))
                                         }
@@ -164,10 +165,11 @@ function AddressSection() {
             </MDBModal> */}
 
             {/*  */}
-            {address?.length !==0 ?
+            <ShippingForm  />
+            {/* {address?.length !==0 ?
                  <ShippingForm  />
             
-                                :""}
+                                :""} */}
             {/*  */}
         </>
     )

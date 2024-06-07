@@ -266,7 +266,16 @@ const hidePop =()=>{
             dispatch(getWishlist())
             const Cart = JSON.parse(localStorage?.getItem('cart'))
             const lineItems = Cart?.map((item) => {
-                return { product_id: item.id, quantity: item.quantity }
+                return {  
+                    "product_id": item?.id,
+                    "quantity": item?.quantity,
+                    "SKU": item?.SKU,
+                    "name": item?.name,
+                    "Variations_Color_Name": item?.Variations_Color_Name,
+                    "Variations_Price": item?.Variations_Price,
+                    "Variant_Image_url": item?.Variant_Image_url,
+                    "Sales_price": item?.Sales_price 
+                }
             })
             if (Cart?.length !== 0) {
                 dispatch(addToCartforGuestafterLogin(lineItems))

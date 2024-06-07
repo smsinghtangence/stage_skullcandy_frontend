@@ -270,7 +270,7 @@ function ShippingForm() {
                             </div>
                         </div>
 
-                        <div className="row">
+                        {/* <div className="row">
                             <div className="col-lg-12">
                                 <input
 
@@ -279,7 +279,7 @@ function ShippingForm() {
                                 <span className="text-danger">{address2Error}</span>
 
                             </div>
-                        </div>
+                        </div> */}
 
                         <div className="row">
                             <div className="col-lg-4">
@@ -338,7 +338,7 @@ function ShippingForm() {
                         {/*  */}
                         <div className="row">
                             <div className="col-lg-12">
-                                <button className=' btn btn-dark mt-5' type='submit' >Use This Address</button>
+                                <button className=' btn btn-dark mt-5' type='submit' >Add Address</button>
                             </div></div>
                         {/*  */}
                     </form>

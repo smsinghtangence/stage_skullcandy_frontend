@@ -24,10 +24,6 @@ const { cart, wishlist } = useSelector((state) => state.cartWish);
  $(".drawer-close").click(function(){
   $(".drawer").removeClass("active")
  });
- $(".CartDrawer-Checkout").click(function(){
-  
-  $(".drawer").removeClass("active")
- });
 
   }, [])
 
@@ -168,6 +164,7 @@ const _url = data?.attributes?.Annoucement_Url ? data?.attributes?.Annoucement_U
   return (
 
     <>
+    
       <div className="skull_popup_bg" />
       <div className='annoucement'>
         <Link href={_url} > {data?.attributes?.Annoucement_Heading}
@@ -179,16 +176,14 @@ const _url = data?.attributes?.Annoucement_Url ? data?.attributes?.Annoucement_U
         <div className="mobile-search-blk"  >
           <form>
             <input type="text" className='mobile-input' placeholder='Search' />
-            <img src="images/close.png" alt="" className='mobile-close' onClick={handleHide} />
+            <img src="/images/close.png" alt="" className='mobile-close' onClick={handleHide} />
           </form>
         </div>
       )}
         <div className="container-fluid top_header">
           <div className="container">
             <div className="row">
-              <div className='mobile-menu'>
-                {/* <MobileMenu  /> */}
-              </div>
+        
               <div className="col-lg-12">
                 <div className="header-blk">
 
@@ -255,7 +250,7 @@ const _url = data?.attributes?.Annoucement_Url ? data?.attributes?.Annoucement_U
                           <ul id="menu-right-menu" className="menu">
                             <li className='nav-search'>
                               <input type="search" className='search' />
-                              <img src="images/search.png" alt="" className='search-icon' />
+                              <img src="/images/search.png" alt="" className='search-icon' />
                             </li>
                          
                             <li className="megamenu menu-item-has-children locations_menu mobile_text_menu ">
@@ -348,49 +343,50 @@ const _url = data?.attributes?.Annoucement_Url ? data?.attributes?.Annoucement_U
                             </li>
                             <li className="no_hover mobile_text_menu ">
                               <Link href="/my-account/">
-                                <img src="/images/user.png" alt="" />
+                                {/* <img src="/images/user.png" alt="" /> */}
+                                <svg
+                                  version="1.1"
+                                  id="Layer_1"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  xmlnsXlink="http://www.w3.org/1999/xlink"
+                                  x="0px"
+                                  y="0px"
+                                  viewBox="0 0 24 24"
+                                  style={{ enableBackground: "new 0 0 24 24" }}
+                                  xmlSpace="preserve"
+                                >
+                                  <style
+                                    type="text/css"
+                                    dangerouslySetInnerHTML={{ __html: "\n\t.st0{fill:#FFFFFF;}\n" }}
+                                  />
+                                  <path
+                                    className="st0"
+                                    d="M12,12c3.3,0,6-2.7,6-6s-2.7-6-6-6S6,2.7,6,6S8.7,12,12,12z M12,15c-4,0-12,2-12,6v3h24v-3C24,17,16,15,12,15z"
+                                  />
+                                </svg>
+
                                 <span>Account</span>
                               </Link>
                             </li>
-                            {/* <li className="no_hover search_btn mobile_text_menu ">
-                   <Link href="#">
-                      <svg
-                        viewBox="0 0 22.922 22.158"
-                        id="search"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        {" "}
-                        <g
-                          id="Group_762"
-                          data-name="Group 762"
-                          transform="translate(-1079.439 -1360.5)"
-                        >
-                          {" "}
-                          <circle
-                            id="Ellipse_174"
-                            data-name="Ellipse 174"
-                            className="cls-1"
-                            cx="8.084"
-                            cy="8.084"
-                            r="8.084"
-                            transform="translate(1079.939 1361)"
-                          />{" "}
-                          <line
-                            id="Line_224"
-                            data-name="Line 224"
-                            className="cls-1"
-                            x2="7.571"
-                            y2="7.443"
-                            transform="translate(1094.44 1374.859)"
-                          />{" "}
-                        </g>{" "}
-                      </svg>
-                      <span>Search</span>
-                    </Link>
-                  </li> */}
+                           
                             <li className="no_hover cart_btn header-cart">
                               <Link href="#">
-                                <img src="/images/store.png" alt="" />
+                                {/* <img src="/images/store.png" alt="" /> */}
+                                <svg
+                                  className="icon icon-cart"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width={16}
+                                  height={16}
+                                  viewBox="0 0 16 16"
+                                >
+                                  <path
+                                    data-name="Icon material-shopping-cart"
+                                    d="M6.3,15.8a1.6,1.6,0,1,0,1.6,1.6A1.6,1.6,0,0,0,6.3,15.8ZM1.5,3V4.6H3.1l2.88,6.072L4.9,12.632a1.547,1.547,0,0,0-.2.768A1.6,1.6,0,0,0,6.3,15h9.6V13.4H6.636a.2.2,0,0,1-.2-.2l.024-.1.72-1.3h5.96a1.592,1.592,0,0,0,1.4-.824L17.4,5.784a.782.782,0,0,0,.1-.384.8.8,0,0,0-.8-.8H4.868L4.116,3ZM14.3,15.8a1.6,1.6,0,1,0,1.6,1.6A1.6,1.6,0,0,0,14.3,15.8Z"
+                                    transform="translate(-1.5 -3)"
+                                    fill="currentColor"
+                                  />
+                                </svg>
+
                                 <span className='badges'>{cart?.length}</span>
                               </Link>
                             </li>
@@ -435,6 +431,9 @@ const _url = data?.attributes?.Annoucement_Url ? data?.attributes?.Annoucement_U
                     <div className="mobile-right-blk">
                       <div className="mobile-search">
                         <img src="/images/search.png" alt="" onClick={handleShow} />
+                      </div>
+                      <div className='mobile-user'>
+                 
                       </div>
                       <div className="tab_cart_btn cart_btn ">
                         <img src="/images/store.png" alt="" className='mobile-store' />
@@ -514,135 +513,42 @@ const _url = data?.attributes?.Annoucement_Url ? data?.attributes?.Annoucement_U
           </div>
         </div>
       </header>
-      {/* <div
-    id="latest-offer"
-    style={{
-      width: "100%",
-      textAlign: "center",
-      color: "#fff",
-      padding: "1em",
-      backgroundColor: "#fff",
-      marginBottom: "-5px",
-      borderTop: "1px solid #2c2c2d"
-    }}
-  >
-   <Link href="#">
-      Use Coupon Code <b>MRP65</b> Get Flat{" "}
-      <b style={{ fontSize: 22, color: "#f47c35" }}>65% OFF</b> on MRP{" "}
-      <b>SHOP NOW &gt;</b>
-    </Link>
-  </div> */}
-      {/* <div style={{ width: "100%", height: "auto", mergin: "auto" }} className='ads-banner-top'>
-   <Link href="#">
-      <img
-        style={{ width: "100%" }}
-        src="/images/Deal-of-the-day-Smokin-Buds_Skullcandy_new_year.gif"
-      />
-    </Link>
-  </div> */}
-      {/* <marquee
-
-    style={{ color: "#fff", marginBottom: 0, padding: "-2px" }}
-  >
-    <span
-      style={{
-        backgroundColor: "#000",
-        fontSize: 17,
-        padding: "11px 41px 0px 41px",
-        fontWeight: 500,
-        color: "#fff",
-        lineHeight: 1
-      }}
-    >
-      Get Additional 5% off upto ₹500 on all prepaid orders
-    </span>
-  </marquee> */}
-
     
-
       <Drawer />
-
-
-
-
-
-    
-    
 
     {isVisible && (
         <div className='mmenu' >
          
           <div className='menu-close' onClick={hideDiv}><i className='fa fa-close' ></i></div>
          <div className="accordion" id="menu-blk">
-  <div className="card">
+
+         {parent_category?.map((m,mi)=>(<>
+  <div className="card" key={mi}>
     <div
       className="card-header collapsed"
       data-toggle="collapse"
-      data-target="#collapseOne"
+      data-target={`#collapse${mi}`}
       aria-expanded="true"
     >
-      <span className="title">Earbuds </span>
+      <span className="title">{m?.attributes?.Name} </span>
  
     </div>
     <div
-      id="collapseOne"
+      id={`collapse${mi}`}
       className="collapse "
       data-parent="#menu-blk"
     >
       <div className="card-body">
-         <ul className='menu-blk-list'>
-         <li><Link href="#">Wireless Earbuds</Link></li>
+         <ul className='menu-blk-list'  >
+          
+        {submenu(m?.attributes?.Name)}
          </ul>
       </div>
     </div>
   </div>
-  <div className="card">
-    <div
-      className="card-header collapsed"
-      data-toggle="collapse"
-      data-target="#collapseTwo"
-      aria-expanded="false"
-      aria-controls="collapseTwo"
-    >
-      <span className="title">Headphones</span>
- 
-    </div>
-    <div id="collapseTwo" className="collapse" data-parent="#menu-blk">
-      <div className="card-body">
-      <ul className='menu-blk-list'>
-            <li><Link href="#">Wireless Earbuds</Link></li>
-            <li><Link href="#">Wireless Headphones</Link></li>
-            <li><Link href="#">CRUSHER BASS</Link></li>
-            <li><Link href="#">NEW ARRIVALS</Link></li>
-         </ul>
-      </div>
-    </div>
-  </div>
-  <div className="card">
-    <div
-      className="card-header collapsed"
-      data-toggle="collapse"
-      data-target="#collapseThree"
-      aria-expanded="false"
-    >
-      <span className="title">Others</span>
- 
-    </div>
-    <div
-      id="collapseThree"
-      className="collapse"
-      data-parent="#menu-blk"
-    >
-      <div className="card-body">
-      <ul className='menu-blk-list'>
-            <li><Link href="#">Wireless Earbuds</Link></li>
-            <li><Link href="#">Wireless Headphones</Link></li>
-            <li><Link href="#">CRUSHER BASS</Link></li>
-            <li><Link href="#">NEW ARRIVALS</Link></li>
-         </ul>
-      </div>
-    </div>
-  </div>
+  </>))}
+
+
 </div>
 
 

@@ -44,7 +44,7 @@ return (
          <h4>You Might Also Love... </h4>
       </div>
       <div className="row">
-         <div className='col-lg-12'></div>
+         <div className='col-lg-12'>
          <Swiper
          className='what-slider-blk'
          modules={[Navigation, Pagination, A11y]}
@@ -150,6 +150,7 @@ return (
          )} }
          )}
          </Swiper>
+      </div>
       </div>
    </div>
 </section>

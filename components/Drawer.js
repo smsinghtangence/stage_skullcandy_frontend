@@ -35,21 +35,25 @@ function Drawer() {
   //   const total = cart?.reduce((p, c) => {
   //     return parseFloat(p + c.price * c.quantity)
   // }, [0])
-
-  const total = cart?.reduce((totalPrice, i) => {
+  let total = 0;
+  if(cart?.length > 0 )
+     {
+      
+      total = cart?.reduce((totalPrice, i) => {
     
     let sku = i?.SKU
               
-    let activeSlide = (i?.Variation_Sliders)?.find(product => product?.SKU === sku)
+    // let activeSlide = (i?.Variation_Sliders)?.find(product => product?.SKU === sku)
      
       let quantity = i?.quantity
   
-      let price = activeSlide?.sales_price ? activeSlide?.sales_price :activeSlide?.Variations_Price;
+      // let price = activeSlide?.sales_price ? activeSlide?.sales_price :activeSlide?.Variations_Price;
+      let price = i?.sales_price ? i?.sales_price :i?.Variations_Price;
     
     return parseFloat(totalPrice + price * quantity);
   }, 0);
 
-
+  }
   return (
    <>
 
@@ -74,31 +78,16 @@ function Drawer() {
 
 
             {/* /////////////////////////////////// */}
-            {/* <div className="drawer-product-list">
-              <div className="dpl-img">
-                <img src="https://cdn.shopify.com/s/files/1/0635/5114/3993/files/Hesh_ANC_buy_box_black_1.png" alt="" />
-              </div>
-              <div className="dpl-title">
-                <Link href="#">Hesh® ANC</Link>
-                <span className="product-option"> True Black </span>
-                <div className="quantity-wrapper">
-                  <span className="quantity-dec">--</span>
-                  <input type="text" value="1" />
-                  <span className="quantity-inc">+</span>
-                </div>
-              </div>
-              <div className="dpl-price">
-                <h4>$79.99</h4>
-                <Link href="#" className='drawer-product-remove'> Remove</Link>
-              </div>
-            </div> */}
-            {
-                                                    login === true ? <>
+         {  cart?.length > 0 ?
+
+            
+             
+                  <>                                {  login === true ? <>
                                                         {
                                                             cart?.map((i, index) => (
-                                                                // <DrawerCartContainer i={i} key={index} />
+                                                                <DrawerCartContainer i={i} key={index} />))
 
-                                                                <DrawerCartContainer2 i={i} key={index} />                                                              ))
+                                                                // <DrawerCartContainer2 i={i} key={index} /> ))                                                             ))
                                                         } </> : <>
                                                         {
                                                             cart?.map((i, index) => (
@@ -108,7 +97,10 @@ function Drawer() {
 
                                                         }
                                                     </>
-                                                }
+             
+                                                       } </>
+             :""
+}
             {/* /////////////////////////////////////////////////// */}
 
           </div>
@@ -116,7 +108,7 @@ function Drawer() {
           <div className="drawer-footer">
             <div className="sub-total">
               <h4>Subtotal</h4>
-              <span className="subtotal-value">{total}</span>
+              <span className="subtotal-value"><i class="fa fa-rupee"></i>{total}</span>
             </div>
             <p>Taxes and <Link href="#">shipping</Link> calculated at checkout </p>
             <Link href="/checkout" className='CartDrawer-Checkout'>Checkout</Link>
