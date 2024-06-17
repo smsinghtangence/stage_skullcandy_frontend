@@ -47,7 +47,7 @@ function HomeSlider() {
                       <img
                         src="/images/cb6d1e80-7ac0-4420-935f-8dcb0ea7e241_4_desktop_Dime-2__11.jpg"
                         alt=""
-                        title=""
+                         title="hover"
                       />
                       <button type="button" className="theme_btn">
                         Shop Now
@@ -74,7 +74,7 @@ function HomeSlider() {
                       <img
                         src="/images/cb6d1e80-7ac0-4420-935f-8dcb0ea7e241_4_desktop_Jib-True-2__11.jpg"
                         alt=""
-                        title=""
+                         title="hover"
                       />
                       <button type="button" className="theme_btn">
                         Shop Now
@@ -101,7 +101,7 @@ function HomeSlider() {
                       <img
                         src="/images/cb6d1e80-7ac0-4420-935f-8dcb0ea7e241_4_desktop_Mod__11.jpg"
                         alt=""
-                        title=""
+                         title="hover"
                       />
                       <button type="button" className="theme_btn">
                         Shop Now

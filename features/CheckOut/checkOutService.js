@@ -40,8 +40,41 @@ const getAddress = async (users) => {
 }
 
 const saveAddress = async (address, shipping,users) => {
-   address = {  "id": users.id,"Address":[{...address},{...shipping}]  }
-   console.log(address)
+//    let data_shipping1 = [...address]
+//    console.log("address " +JSON.stringify(data_shipping1))
+//   let data_shipping = data_shipping1?.forEach(obj => {
+//       // Check if the object has an 'id' property
+//       if (obj.hasOwnProperty('id')) {
+//           // Delete the 'id' property
+//           delete obj.id;
+//       }
+//       // if ('id' in obj) {
+//       //    delete obj.id;
+//       // }
+//   });
+
+//   console.log("data_shipping " +JSON.stringify(data_shipping))
+  
+//   if (Array.isArray(data_shipping)) {
+//    // If `myArray` is an array, append `newObject` to it
+//    data_shipping.push(shipping);
+// } else {
+//    // If `myArray` is not an array, initialize it as an array containing `newObject`
+//    data_shipping = [shipping];
+// }
+// //   const filteredData = data_shipping?.filter(obj => Object.keys(obj).length !== 0);
+
+// console.log("data_shipping " +JSON.stringify(data_shipping))
+  
+
+  let address_array = {  
+   "id": users.id,
+   "Company_Name":shipping?.Company_Name,
+   "GSTIN":shipping?.GSTIN ,
+   "Address":[...address,shipping]  
+}
+   // let address_array = {  "id": users.id,"Address":[{...data_shipping}]  }
+ 
 
  
    //    const response = await axios.put(API_URL + `/api/user/me`, {address}, {headers:{
@@ -49,13 +82,13 @@ const saveAddress = async (address, shipping,users) => {
    // }})
 
    if (users?.id) {
-      const response = await axios.put(API_URL + `/api/users/${users.id}`, {...address}, {headers:{
+      const response = await axios.put(API_URL + `/api/users/${users.id}`, {...address_array}, {headers:{
           "Authorization": `Bearer ${users?.token}`
       }})
       if(response.status == 200) {
         
          const response = await  getuserData(users)
-         return response.Cart
+         return response
      }
      else
      return response.data

@@ -9,7 +9,7 @@ let config = {
 const PopUpDetails = async () => {
 
     const response = await axios.get(API_URL + '/custom/v1/page/popup-shop', config)
-    console.log(response.data)
+    // console.log(response.data)
     return response.data
 }
 

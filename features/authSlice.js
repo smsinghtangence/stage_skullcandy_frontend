@@ -106,6 +106,9 @@ const authSlice = createSlice({
         state.message = action.payload
         state.users = null
       })
+      .addCase(userLogout.pending,(state=>{
+        state.users=null
+      }))
       .addCase(userLogout.fulfilled,(state)=>{
         state.users=null
       })
@@ -156,12 +159,14 @@ export const userLogin  = createAsyncThunk('/auth/login',async(userData,thunkAPI
     return await authService.userLogin(userData)
   } catch (error) {
     const message  = (error.response &&  error.response.data && error.response.data.message || error.message || error.toString() )
-    return thunkAPI.rejectWithValue(message)
+    return thunkAPI.rejectWithValue(error.response.data.error.message)
+  // return error.response.data.error.message
   }
 })
 
 export const userLogout = createAsyncThunk('auth/logout',async(_,thunkAPI)=>{
 try {
+  
    return await authService.userLogout()
 } catch (error) {
   const message  = (error.response &&  error.response.data && error.response.data.message || error.message || error.toString() )

@@ -15,15 +15,40 @@ import {
 } from "@/features/Cart/cartnWishSlice";
 import { resetAllState, setCheckOutUserType } from "@/features/CheckOut/checkOutSlice";
  
-import { useRouter } from 'next/navigation'
+import { useRouter,useSearchParams  } from 'next/navigation'
 import { useDispatch, useSelector } from "react-redux";
 function page() {
   
   const dispatch = useDispatch();
  
   const router = useRouter();
+ 
+ 
+
+
   const { users, isError, isSuccess, message, isLaoding, loginTimestamp } =
   useSelector((state) => state.auth);
+  
+
+
+  const searchParams = useSearchParams();
+  const q= Object.fromEntries(searchParams.entries());
+
+  const query = q?.r
+  // console.log("Query "+ query)
+
+  if (users?.id) {
+    const redirectUrl = localStorage.getItem('redirectAfterLogin');
+    // localStorage.removeItem('redirectAfterLogin');
+    
+    if (query!=undefined && query!="") {
+      // router.push(redirectUrl);
+      router.push(`/${query}`);
+    } else {
+      router.push('/my-account');
+    }
+  }
+  
 
 
 

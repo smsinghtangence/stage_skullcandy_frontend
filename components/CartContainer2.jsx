@@ -9,66 +9,106 @@ import { useEffect } from "react";
 import { fetchCurrency } from "@/features/Currency/currencySlice";
 import { htmlToText } from "html-to-text";
 import { getDataWithQuery,geturl } from "@/utils/api"
+function CartContainer({ i }) {
 
-function CartContainer2({ i }) {
+
+    let sku = i?.SKU
+              
+    // let activeSlide = (i?.Variation_Sliders)?.find(product => product?.SKU == sku)
+     
+    //   let quantity = i?.quantity
+  
+    //   let price = activeSlide?.Sales_price ? activeSlide?.Sales_price :activeSlide?.Variations_Price;
+  
+  
     let quantity = i?.quantity
-    const [val, setVal] = useState(quantity)
+    let price = i?.Sales_price ? i?.Sales_price :i?.Variations_Price;
+  
+  
+      const [val, setVal] = useState(quantity)
+  
+      const dispatch = useDispatch()
+  
+      const handleInc = () => {
+          dispatch(increment(i))
+      }
+  
+      const handleDec = () => {
 
-    const dispatch = useDispatch()
-
-    const handleInc = () => {
-        dispatch(increment(i))
-    }
-
-    const handleDec = () => {
-        dispatch(decrement(i))
-    }
-    const Remove = (id) => {
-        confirmAlert({
-            message: 'Are you sure You Want To Delete This Item..?',
-            buttons: [
-              {
-                label: 'Yes',
-                onClick: () =>  dispatch(removeFromCart(id))
-              },
-              {
-                label: 'No',
-                onClick: () =><></>
-              }
-            ],
-          });
-        
-    }
-
-    
+        if (quantity === 1) {
+            // Perform delete function when quantity is one
+            Remove(i?.SKU);
+          } else {
+            dispatch(decrement(i))
+          }
+          
+      }
+      const Remove = (SKU) => {
+          confirmAlert({
+              message: 'Are you sure You Want To Delete This Item..?',
+              buttons: [
+                {
+                  label: 'Yes',
+                  onClick: () =>  dispatch(removeFromCart(SKU))
+                },
+                {
+                  label: 'No',
+                  onClick: () =><></>
+                }
+              ],
+            });
+          
+      }
+  
+      
     return (
 
         <>
-            <tr className=''>
-            <td >
-                <svg style={{ "color": "var(--danger)" }} onClick={() => Remove(i.id)} xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="ms-3 bi bi-trash3-fill cursorClass" viewBox="0 0 16 16">
-                    <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5Zm-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5ZM4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06Zm6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528ZM8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5Z" />
-                </svg>
-            </td>
+            
 
+{/* ////////////////////////////////////////// */}
 
-                <td className='w-25'>{geturl(i?.image) === null ? 'Not Available' : <img className='img-fluid' height="30%" width="30%" src={geturl(i?.image)} />}</td>
-                <td className='w-25'><Link href={`/productDetail/${i.id}`} className="text-decoration-none text-dark fw-bold ">{i.title}</Link></td>
-                <td>Rs&nbsp;&nbsp;{i.price}</td>
-                <td className='w-25'>
-                    <span className="input-group border-0 quantity d-flex align-items-center justify-content-center">
-                        <span className="input-group-text cursorClass" onClick={() => handleDec(val === 1 ? setVal(1) : setVal(val - 1))}>-</span>
+            
 
-                        <input type="text" className="input-group-text w_50"   value={val} />
-                        <span className="input-group-text  cursorClass" onClick={() => handleInc(setVal(val + 1))}>+</span>
-                    </span>
-                </td>
-                <td>
-                    <i>Rs</i>&nbsp;&nbsp;{i.price * i.quantity}
-                </td>
-            </tr>
+            <tr>
+                            <td>
+                            <div className="cart-proudct-detail">
+                            <div className="cpd-img">
+                            <img src={i?.Variant_Image_url} alt={i?.Variations_Color_Name} className='cart-product-img' />
+                            </div>
+                            <div className="cpd-content">
+                            <Link href={`/shop/${i?.slug}`}>{i.name}</Link>
+                            <p className='cart-price'><i class="fa fa-rupee"></i>{price} </p>
+                            <p><span>Color:</span>{i?.Variations_Color_Name} | {i?.SKU} </p>
+                            </div>
+                            </div>
+
+                            </td>
+
+                            <td>
+                            <div className="cart-item-quantity">
+                            <div className="ciq-blk">
+                            <button className="ciq-dec" onClick={() => handleDec(val === 1 ? setVal(1) : setVal(val - 1))}>--</button>
+                            <input type="text" value={quantity} />
+                            <button className="ciq-Inc" onClick={() => handleInc(setVal(val + 1))}>+</button>
+                            </div>
+                            <div className="ciq-delete">
+                            <Link href="#" onClick={() => Remove(i?.SKU)}>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" aria-hidden="true" focusable="false" role="presentation" class="icon icon-remove">
+                            <path d="M14 3h-3.53a3.07 3.07 0 00-.6-1.65C9.44.82 8.8.5 8 .5s-1.44.32-1.87.85A3.06 3.06 0 005.53 3H2a.5.5 0 000 1h1.25v10c0 .28.22.5.5.5h8.5a.5.5 0 00.5-.5V4H14a.5.5 0 000-1zM6.91 1.98c.23-.29.58-.48 1.09-.48s.85.19 1.09.48c.2.24.3.6.36 1.02h-2.9c.05-.42.17-.78.36-1.02zm4.84 11.52h-7.5V4h7.5v9.5z" fill="currentColor"></path>
+                            <path d="M6.55 5.25a.5.5 0 00-.5.5v6a.5.5 0 001 0v-6a.5.5 0 00-.5-.5zM9.45 5.25a.5.5 0 00-.5.5v6a.5.5 0 001 0v-6a.5.5 0 00-.5-.5z" fill="currentColor"></path>
+                            </svg>
+                            </Link>
+                            </div>
+                            </div>
+
+                            </td>
+                            <td>
+                            <i className="fa fa-rupee"></i>{price * quantity}
+                            </td>
+                            </tr>
         </>
     )
 }
 
-export default CartContainer2
+export default CartContainer

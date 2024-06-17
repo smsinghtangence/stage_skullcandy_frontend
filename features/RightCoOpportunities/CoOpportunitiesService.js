@@ -9,9 +9,9 @@ let config ={
   //    },
 }
 const fetchOppotunityDetails = async()=>{
-    console.log('from service')
+    // console.log('from service')
     const response = await axios.get(API_URL+ '/custom/v1/page/opportunities',config)
-   console.log(response.data)
+  //  console.log(response.data)
    return response.data
  }
 

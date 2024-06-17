@@ -75,10 +75,12 @@ export default function Home() {
             <div className="row">
               <div className="col-lg-12">
                 <div className="banner-content-inner ">
-                  <h1>{data?.attributes?.Heading}</h1>
-
+                 
+                  <h1 style={{ color: data?.attributes?.Top_Banner_Color }}
+                    dangerouslySetInnerHTML={{ __html: data?.attributes?.Heading }}
+                  />
                   {/* <p>{JSON.stringify(data?.attributes?.HomeBanner)}</p> */}
-                  <p>{data?.attributes?.SubHeading}</p>
+                  <p style={{ color: data?.attributes?.Sub_Heading_Color }}>{data?.attributes?.SubHeading}</p>
                   <a href={data?.attributes?.url} className='banner-btn' >{data?.attributes?.ButtonText}</a>
                 </div>
               </div>
@@ -98,11 +100,11 @@ export default function Home() {
                 <img src={geturl(item?.AdsImg)} loading="lazy" width={950} height={948} className="dt" alt={item?.Heading} />
 
                 <div className="two-column-info media_Gjwp8U">
-                  <h3
+                  <h3 style={{ color: item?.Text_Color }}
                     dangerouslySetInnerHTML={{ __html: item?.Heading }}
                   />
 
-                  <span className="two-cloumn-btn button button--inverted dt  column-simple-btn" >{item?.ButtonText} ECOBUDS <span>&gt;</span></span>
+                  <span  className="two-cloumn-btn button button--inverted dt  column-simple-btn" style={{ color: item?.Text_Color }}>{item?.ButtonText} </span>
 
                 </div>
               </Link>

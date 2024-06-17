@@ -19,11 +19,11 @@ function DrawerCartContainer2({ i }) {
    
   //   let quantity = i?.quantity
 
-  //   let price = activeSlide?.sales_price ? activeSlide?.sales_price :activeSlide?.Variations_Price;
+  //   let price = activeSlide?.Sales_price ? activeSlide?.Sales_price :activeSlide?.Variations_Price;
 
 
   let quantity = i?.quantity
-  let price = i?.sales_price ? i?.sales_price :i?.Variations_Price;
+  let price = i?.Sales_price ? i?.Sales_price :i?.Variations_Price;
 
 
     const [val, setVal] = useState(quantity)
@@ -35,7 +35,13 @@ function DrawerCartContainer2({ i }) {
     }
 
     const handleDec = () => {
+      if (quantity === 1) {
+        // Perform delete function when quantity is one
+        Remove(i?.SKU);
+      } else {
         dispatch(decrement(i))
+      }
+         
     }
     const Remove = (SKU) => {
         confirmAlert({
@@ -59,8 +65,8 @@ function DrawerCartContainer2({ i }) {
 
         <>
             
- 
-            <div className="drawer-product-list">
+ {/* Guest */}
+            <div className="drawer-product-list Guest">
               <div className="dpl-img">
                 {/* <img src={geturl(i?.image)} alt="" /> */}
                 {/* <img src={geturl(activeSlide?.Variant_Image)} alt="" /> */}
@@ -68,7 +74,7 @@ function DrawerCartContainer2({ i }) {
                 
               </div>
               <div className="dpl-title">
-                <Link href={`/shop/${i?.slug}`} >{i.title}</Link>
+                <Link href={`/shop/${i?.slug}`} >{i.name}</Link>
                 <span className="product-option"> {i?.Variations_Color_Name} | {i?.SKU} </span>
                 <div className="quantity-wrapper">
                   <span className="quantity-dec"   onClick={() => handleDec(val === 1 ? setVal(1) : setVal(val - 1))}>--</span>
@@ -78,7 +84,7 @@ function DrawerCartContainer2({ i }) {
               </div>
               <div className="dpl-price">
                 {/* <h4>{i.price * i.quantity}</h4> */}
-                <h4><i class="fa fa-rupee"></i>{price * quantity}</h4>
+                <h4><i className="fa fa-rupee"></i>{price * quantity}</h4>
                 <Link href="#" onClick={() => Remove(i?.SKU)}  className='drawer-product-remove'> Remove</Link>
               </div>
             </div>

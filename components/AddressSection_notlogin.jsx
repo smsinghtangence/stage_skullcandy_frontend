@@ -3,7 +3,7 @@ import loginuserimg from '@/images/Login.svg'
 import delivery from '@/images/Delivery Address.svg'
 import check from '@/images/Group 2061.svg'
 import { useDispatch, useSelector } from 'react-redux'
-import { addShippingDetails,addBilling , getAddress, reset, updateAddress } from '@/features/CheckOut/checkOutSlice'
+import { addShippingDetails, getAddress, reset, updateAddress } from '@/features/CheckOut/checkOutSlice'
 import { MDBModal, MDBModalDialog } from 'mdb-react-ui-kit'
 import ShippingForm from '@/components/ShippingForm'
 // import ContentLoader from 'react-content-loader'
@@ -23,7 +23,7 @@ function AddressSection() {
 
     const handleClick = (item) => {
 
-        // document.getElementById('userAddress').checked = true
+        document.getElementById('userAddress').checked = true
 
         const { first_name, last_name, phone, address_1, address_2, country, postcode, state, city } = item
 
@@ -39,11 +39,7 @@ function AddressSection() {
             phone,
         }
         dispatch(addShippingDetails(shipping))
-         dispatch(addBilling(shipping))
-
-        
         // dispatch(updateAddress(item.id))
-        
     }
     const addDEfaultAddress = () => {
 
@@ -98,7 +94,7 @@ function AddressSection() {
                     </div>
 
                 </div>
-                {address?.length>0 && 
+
                 <div className='table-responsive' >
                     <div className="row ">
                         <div className="col-lg-12">
@@ -132,12 +128,7 @@ function AddressSection() {
                                                                             {/* checked={item?.is_default_address === "1" ? true : false} */}
                                                                             <div className="form-check">
                                                                                 <label class="form-check-label">
-                                                                                    <input type="radio" 
-                                                                                    className="form-check-input" 
-                                                                                    name="address" 
-                                                                                    id="userAddress"
-                                                                                    value={"add"+index} 
-                                                                                    onChange={() => { handleClick(item) }} />
+                                                                                    <input type="radio" className="form-check-input" name="address" id="userAddress" onChange={() => { handleClick(item) }} />
                                                                                 </label>
                                                                             </div>
                                                                         </td>
@@ -175,7 +166,7 @@ function AddressSection() {
 
                     </div>
                 </div>
-}
+
 
 
 

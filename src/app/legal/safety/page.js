@@ -1,6 +1,25 @@
-import React from 'react'
+'use client'
+import React from 'react';
+import { useEffect, useState } from 'react';
+import { getDataWithQuery } from "@/utils/api"
+import Link from 'next/link';
+import { NavLink } from 'react-bootstrap';
 
 function page() {
+  const [data, setData] = useState();
+  const getdata = async () =>{
+    const response = await getDataWithQuery("/api/safty",
+     { 
+        // pagesize: 1000, typeId: blogId 
+    });
+    setData(response.data)
+      console.log( JSON.stringify(response));
+      return response;
+}
+useEffect(() => {
+    getdata();
+
+  }, []);
   return (
     <>
   <div className="container-fluid">
@@ -10,12 +29,12 @@ function page() {
           <div className="skull_breadcrumbs">
             <ul>
               <li>
-                <a href="/support/">
+                <Link href="/support/">
                   Skullcandy Support
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/support/legal/">LEGAL.</a>
+                <Link href="/support/legal/">LEGAL.</Link>
               </li>
               <li>Safety</li>
             </ul>
@@ -99,68 +118,15 @@ function page() {
         <div className="row m-0">
           <div className="col-md-12">
             <div className="skull_title big big_text mb-5 pb-3">
-              <h2>Safety</h2>
+              <h2>{data?.attributes?.Heading}</h2>
             </div>
           </div>
           <div className="col-md-12">
             <div className="support_content">
               <div className="article-body">
-                <p>
-                  Listening to audio at excessive volumes can cause permanent
-                  hearing damage.
-                </p>
-                <h4>USE AS LOW VOLUME AS POSSIBLE</h4>
-                <p>
-                  Over exposure to excessive sound levels can damage your ears
-                  resulting in permanent noise-induced hearing loss (NIHL).
-                  Please use the following guidelines established by the
-                  Occupational Safety Health Administration (OSHA) on maximum
-                  time exposure to sound pressure levels before hearing damage
-                  occurs.
-                </p>
-                <h6>90 dB SPL</h6>
-                <p>at 8 hours</p>
-                <h6>95 dB SPL</h6>
-                <p>at 4 hours</p>
-                <h6>100 dB SPL</h6>
-                <p>at 2 hours</p>
-                <h6>105 dB SPL</h6>
-                <p>at 1 hour</p>
-                <h6>110 dB SPL</h6>
-                <p>at ½ hour</p>
-                <h6>115 dB SPL</h6>
-                <p>at 12 minutes</p>
-                <h6>120 dB SPL</h6>
-                <p>Avoid, or damage may occur</p>
-                <p>&nbsp;</p>
-                <h4>SAFE USE &amp; HAZARD WARNINGS</h4>
-                <p>
-                  Keep this product and its accessories out of reach of
-                  children. Handling or use by children may pose a risk of death
-                  or serious injury. Contains small parts and cords that may
-                  pose a risk of choking or strangulation. Failure to use,
-                  clean, or maintain earphone sleeves and nozzles according to
-                  manufacturers instructions may increase the risk of sleeves
-                  detaching from the nozzle and becoming lodged in your ear. If
-                  a sleeve becomes lodged in your ear,<strong>&nbsp;</strong>
-                  SEEK SKILLED MEDICAL ASSISTANCE TO REMOVE THE SLEEVE. Damage
-                  to the ear may be caused by non-professionals attempting to
-                  remove the sleeve. Do not use when a failure to hear your
-                  surroundings could be dangerous, such as when driving, biking,
-                  walking, or jogging where traffic is present. Use a slow
-                  twisting motion to remove the earphones. Never pull on the
-                  earphone cord. Prior to inserting the earphone, always recheck
-                  the sleeve to make sure it is firmly attached to the nozzle.
-                  Turn up the volume control only far enough to hear properly.
-                  Ringing in the ears may indicate that the volume level is too
-                  high. Try lowering the volume. If you connect these earphones
-                  to an airplane’s sound system, listen at low levels so that
-                  loud messages from the pilot do not cause discomfort. Have
-                  your hearing checked by an audiologist on a regular basis. If
-                  you experience wax buildup, discontinue use until a medical
-                  professional has examined your ears. Stop using the earphones
-                  if they are causing great discomfort or irritation.
-                </p>
+              <div
+      dangerouslySetInnerHTML={{__html: data?.attributes?.Content}}
+    />
               </div>
             </div>
           </div>

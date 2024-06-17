@@ -1,7 +1,7 @@
 'use client'
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { addToCartforLogin, deleteAllItemsFromCart, deleteFromCart } from '@/features/Cart/cartnWishSlice'
+import { addToCartforLogin, updateCartforLogin,deleteAllItemsFromCart, deleteFromCart, increment , decrement} from '@/features/Cart/cartnWishSlice'
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 import Link from 'next/link'
@@ -14,35 +14,51 @@ function CartContainer({ i }) {
 
     const dispatch = useDispatch()
    
-   
+    let sku = i?.SKU
+    
+    
 
     let quantity = i?.quantity
+    let price = i?.Sales_price ? i?.Sales_price :i?.Variations_Price;
+
 
     const { users } = useDispatch(state => state.auth)
    
+   
+
+
     const handleInc = () => {
 
-        const obj = {
-            id: i.id, quantity: quantity + 1
-        }
-        dispatch(addToCartforLogin(obj))
-        //console.log(obj)
+
+        dispatch(increment(i))
+
+        
+        dispatch(updateCartforLogin())
     }
 
     const handleDec = () => {
+        
 
-        const obj = {
-            id: i.id, quantity: quantity == 1 ? 1 : (quantity - 1)
-        }
-        dispatch(addToCartforLogin(obj))
+        if (quantity === 1) {
+            // Perform delete function when quantity is one
+            handleRemove(i?.SKU);
+          } else {
+            dispatch(decrement(i))
+             dispatch(updateCartforLogin())
+          }
+
+
     }
-    const handleRemove = (id) => {
+
+
+
+    const handleRemove = (SKU) => {
         confirmAlert({
             message: 'Are you sure You Want To Delete This Item..?',
             buttons: [
                 {
                     label: 'Yes',
-                    onClick: () => dispatch(deleteFromCart(id))
+                    onClick: () => dispatch(deleteFromCart(SKU))
                 },
                 {
                     label: 'No',
@@ -56,27 +72,49 @@ function CartContainer({ i }) {
     return (
 
         <>
-            <tr className=''>
-            <td ><svg style={{ "color": "var(--danger)" }} onClick={() => handleRemove(i.id)} xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="ms-3 bi bi-trash3-fill cursorClass" viewBox="0 0 16 16">
-                    <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5Zm-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5ZM4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06Zm6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528ZM8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5Z" />
-                </svg></td>
-                <td className='w-25'>{geturl(i?.image) === null ? 'Not Available' : <img className='img-fluid' height="30%" width="30%" src={geturl(i?.image)} />}</td>
-                <td className='w-25'><Link href={`/productDetail/${i.id}`} className="fw-bold text-decoration-none text-dark">{i.title}</Link></td>
-                <td>
-                    <i>Rs</i>&nbsp;&nbsp;{i.price}</td>
-                <td className='w-25'>
-                    <span className="input-group border-0 quantity d-flex align-items-center justify-content-center">
-                        <span className="input-group-text cursorClass " onClick={() => handleDec()}>-</span>
-                        <input type="text" className="input-group-text w_50"   value={quantity} />
+            
 
-                        <span className="input-group-text cursorClass" onClick={() => handleInc()}>+</span>
-                    </span>
-                </td>
-                <td>
-                    <i>Rs</i>&nbsp;&nbsp;{i.price * i.quantity}
-                </td>
-              
-            </tr>
+{/* ////////////////////////////////////////// */}
+
+            
+
+            <tr>
+                            <td>
+                            <div className="cart-proudct-detail">
+                            <div className="cpd-img">
+                            <img src={i?.Variant_Image_url} alt={i?.Variations_Color_Name} className='cart-product-img' />
+                            </div>
+                            <div className="cpd-content">
+                            <Link href={`/shop/${i?.slug}`}>{i.name}</Link>
+                            <p className='cart-price'><i class="fa fa-rupee"></i>{price} </p>
+                            <p><span>Color:</span>{i?.Variations_Color_Name} | {i?.SKU} </p>
+                            </div>
+                            </div>
+
+                            </td>
+
+                            <td>
+                            <div className="cart-item-quantity">
+                            <div className="ciq-blk">
+                            <button className="ciq-dec" onClick={() => handleDec()}>--</button>
+                            <input type="text" value={quantity} />
+                            <button className="ciq-Inc" onClick={() => handleInc()}>+</button>
+                            </div>
+                            <div className="ciq-delete">
+                            <Link href="#" onClick={() => handleRemove(i?.SKU)}>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" aria-hidden="true" focusable="false" role="presentation" class="icon icon-remove">
+                            <path d="M14 3h-3.53a3.07 3.07 0 00-.6-1.65C9.44.82 8.8.5 8 .5s-1.44.32-1.87.85A3.06 3.06 0 005.53 3H2a.5.5 0 000 1h1.25v10c0 .28.22.5.5.5h8.5a.5.5 0 00.5-.5V4H14a.5.5 0 000-1zM6.91 1.98c.23-.29.58-.48 1.09-.48s.85.19 1.09.48c.2.24.3.6.36 1.02h-2.9c.05-.42.17-.78.36-1.02zm4.84 11.52h-7.5V4h7.5v9.5z" fill="currentColor"></path>
+                            <path d="M6.55 5.25a.5.5 0 00-.5.5v6a.5.5 0 001 0v-6a.5.5 0 00-.5-.5zM9.45 5.25a.5.5 0 00-.5.5v6a.5.5 0 001 0v-6a.5.5 0 00-.5-.5z" fill="currentColor"></path>
+                            </svg>
+                            </Link>
+                            </div>
+                            </div>
+
+                            </td>
+                            <td>
+                            <i className="fa fa-rupee"></i>{price * quantity}
+                            </td>
+                            </tr>
         </>
     )
 }

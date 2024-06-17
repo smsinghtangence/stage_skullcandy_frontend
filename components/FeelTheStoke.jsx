@@ -17,7 +17,7 @@ function FeelTheStoke({product}) {
       <section className="feel-the-stoke">
         <div className="container">
           <div className="row">
-            <div className="col-lg-3">
+            <div className="col-lg-3 col-sm-3">
               <div className="feel-the-stoke-left">
                 <div className="ftsl-content">
                 <h2>FEEL THE STOKE.</h2>
@@ -25,7 +25,7 @@ function FeelTheStoke({product}) {
                 </div>
               </div>
             </div>
-            <div className="col-lg-9">
+            <div className="col-lg-9 col-sm-9">
               <div className="feel-the-stoke-right">
                       <Swiper
     // install Swiper modules

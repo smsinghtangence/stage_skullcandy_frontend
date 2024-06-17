@@ -9,6 +9,9 @@ import { setCookie } from 'nookies'
 import { useDispatch, useSelector } from 'react-redux'
 import { loginWithGoogle, reset, userLogin, userRegister, loginWithFacebook as facebookLogin } from '@/features/authSlice'
 import { addToCartforGuestafterLogin, getCartData, getWishlist } from '@/features/Cart/cartnWishSlice'
+import { toast } from 'react-toastify';
+
+
 function Signin() {
 
     const API_URL =  process.env.API_URL || ''
@@ -42,47 +45,81 @@ const { users, isError, isSuccess, message, isLoading } = useSelector(state => s
 
 
 
+if (users!=undefined && users?.id) {
+
+
+     dispatch(getCartData())
+    dispatch(getWishlist())
+    const Cart = JSON.parse(localStorage?.getItem('cart'))
+    const lineItems = Cart?.map((item) => {
+        return {  
+            "product_id": item?.id,
+            "quantity": item?.quantity,
+            "SKU": item?.SKU,
+            "name": item?.name,
+            "Variations_Color_Name": item?.Variations_Color_Name,
+            "Variations_Price": item?.Variations_Price,
+            "Variant_Image_url": item?.Variant_Image_url,
+            "Sales_price": item?.Sales_price 
+        }
+    })
+    // console.log("lineItems "+lineItems)
+    if (Cart?.length != 0) {
+        dispatch(addToCartforGuestafterLogin(lineItems))
+    }
+
+}
 
 
 useEffect(() => {
-  // if (isSuccess)
-  // {
-  //     setPop(false)
-  //     setActive(false)
-  //     setError(' ')
-  //     setMsgError(' ')   
-  //     hidePop()
+
+if(isError){
+   
+  toast.error(message);
+}
+
+  if (isSuccess)
+
+  {
+    toast.success(`Welcome ${users?.username}`);
+      // setPop(false)
+      setActive(false)
+      setError(' ')
+      setMsgError(' ')   
+      // hidePop()
       
        
-  // }
-  if (isSuccess && users?.id) {
+  } 
+//  alert(users?.id)
+//   if (users?.id) {
   
   
-     
-      dispatch(getCartData())
-      dispatch(getWishlist())
-      const Cart = JSON.parse(localStorage?.getItem('cart'))
-      const lineItems = Cart?.map((item) => {
-          return {  
-              "product_id": item?.id,
-              "quantity": item?.quantity,
-              "SKU": item?.SKU,
-              "name": item?.name,
-              "Variations_Color_Name": item?.Variations_Color_Name,
-              "Variations_Price": item?.Variations_Price,
-              "Variant_Image_url": item?.Variant_Image_url,
-              "Sales_price": item?.Sales_price 
-          }
-      })
-      if (Cart?.length !== 0) {
-          dispatch(addToCartforGuestafterLogin(lineItems))
-      }
+//     alert("hi 12")
+//       dispatch(getCartData())
+//       dispatch(getWishlist())
+//       const Cart = JSON.parse(localStorage?.getItem('cart'))
+//       const lineItems = Cart?.map((item) => {
+//           return {  
+//               "product_id": item?.id,
+//               "quantity": item?.quantity,
+//               "SKU": item?.SKU,
+//               "name": item?.name,
+//               "Variations_Color_Name": item?.Variations_Color_Name,
+//               "Variations_Price": item?.Variations_Price,
+//               "Variant_Image_url": item?.Variant_Image_url,
+//               "Sales_price": item?.Sales_price 
+//           }
+//       })
+//       console.log("lineItems "+lineItems)
+//       if (Cart?.length != 0) {
+//           dispatch(addToCartforGuestafterLogin(lineItems))
+//       }
 
-  }
+//   }
  
    
    
-}, [users, isError,isSuccess])
+}, [users,isError,isSuccess])
 
     return(
         <>

@@ -177,6 +177,8 @@ const checkOutSlice = createSlice({
         state.isError = false
         state.message = ""
         state.address = action.payload.Address
+        // state.shipping = action.payload.Address
+        // state.billing = action.payload.Address
       })
       .addCase(getAddress.rejected, (state, action) => {
         state.isLoading = false
@@ -193,7 +195,13 @@ const checkOutSlice = createSlice({
         state.isSuccess = true
         state.isError = false
         state.isSaveAddress = true
+        // state.shipping = action.payload 
+        // state.billing = action.payload
+        state.address =  action.payload.Address
         state.message = ""
+ 
+
+
       })
       .addCase(saveAddress.rejected, (state, action) => {
         state.isLoading = false
@@ -439,7 +447,7 @@ export const getAddress = createAsyncThunk('/checkout/getaddress', async (_, thu
 export const saveAddress = createAsyncThunk('/checkout/saveAddress', async (shipping, thunkAPI) => {
   try {
     const users = thunkAPI.getState().auth.users
-    let address = thunkAPI.getState().checkOut.shipping
+    let address = thunkAPI.getState().checkOut.address
     return await checkoutService.saveAddress(address, shipping, users)
   } catch (error) {
     const message = (error.response && error.response.data && error.response.data.message || error.message || error.toString())

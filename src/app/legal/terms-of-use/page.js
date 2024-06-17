@@ -2,6 +2,8 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
 import { getDataWithQuery } from "@/utils/api"
+import Link from 'next/link';
+
 function page() {
   const [data, setData] = useState();
   const getdata = async () =>{
@@ -10,13 +12,11 @@ function page() {
         // pagesize: 1000, typeId: blogId 
     });
     setData(response.data)
-      console.log( JSON.stringify(response));
+      // console.log( JSON.stringify(response));
       return response;
 }
 useEffect(() => {
-  
     getdata();
-
 
   }, []);
   return (
@@ -28,12 +28,12 @@ useEffect(() => {
           <div className="skull_breadcrumbs">
             <ul>
               <li>
-                <a href="/support/">
+                <Link href="/support/">
                   Skullcandy Support
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/support/legal/">LEGAL.</a>
+                <Link href="/support/legal/">LEGAL.</Link>
               </li>
               <li>Terms of Use</li>
             </ul>
@@ -117,7 +117,7 @@ useEffect(() => {
         <div className="row m-0">
           <div className="col-md-12">
             <div className="skull_title big big_text mb-5 pb-3">
-            <h2>{data?.attributes?.Heading}</h2>
+            <h2>{data?.attributes?.heading}</h2>
             </div>
           </div>
           <div className="col-md-12">

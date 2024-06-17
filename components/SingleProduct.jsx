@@ -12,7 +12,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { getDataWithQuery, geturl } from "@/utils/api"
 import { useDispatch, useSelector } from 'react-redux'
 import { adddToBuyNow, addToCart, compareCartState, addToCartforLogin, addToWishlist, deleteWishlist, setBuyNowStatus, resetBuyNowStatus, } from '@/features/Cart/cartnWishSlice'
-
+import $ from 'jquery'
 
 const API_URL =  process.env.API_URL || '';
 
@@ -20,6 +20,14 @@ const API_URL =  process.env.API_URL || '';
 
 function SingleProduct({product}) {
 
+   useEffect(() => {
+   
+      $(".notify-btn").click(function(){
+        $(".drawer").addClass("active")
+      })
+   
+  
+    }, [])
 
 
    //
@@ -45,7 +53,14 @@ function SingleProduct({product}) {
         dispatch(addToCart(product))
     }
 
+
+ 
+
 }
+
+
+
+
 useEffect(() => {
     // Fetch cart items from the cart state
     const cartItems = cart?.map(item => item?.SKU);
@@ -178,7 +193,7 @@ productColorImgList.forEach((item) => {
         onSwiper={setThumbsSwiper}
         loop={true}
         spaceBetween={10}
-        slidesPerView={7.5}
+        slidesPerView={5}
         freeMode={true}
         watchSlidesProgress={true}
         modules={[FreeMode, Navigation, Thumbs]}
@@ -206,10 +221,10 @@ productColorImgList.forEach((item) => {
             <div className="sp-price">
                <span>
                {activeSlide?.Variations_Price && <i className="fa fa-rupee"></i>} 
-               {activeSlide?.sales_price ? activeSlide?.sales_price :activeSlide?.Variations_Price}
+               {activeSlide?.Sales_price ? activeSlide?.Sales_price :activeSlide?.Variations_Price}
                </span>
                {/* price */}
-              {activeSlide?.sales_price && <s><i className="fa fa-rupee"></i> {activeSlide?.Variations_Price}</s>}
+              {activeSlide?.Sales_price && <s><i className="fa fa-rupee"></i> {activeSlide?.Variations_Price}</s>}
                {/*  */}
             </div>
 
@@ -297,7 +312,7 @@ productColorImgList.forEach((item) => {
                   </button>
                   </> : <>
                   <button
-                     className="notify-btn"
+                     className="notify-btn cartadd"
                      type="button"
                      id="cart-btn"
                      onClick={(e) => {

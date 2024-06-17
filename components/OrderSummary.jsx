@@ -22,8 +22,8 @@ function OrderSummary() {
          
           let quantity = i?.quantity
       
-        //   let price = activeSlide?.sales_price ? activeSlide?.sales_price :activeSlide?.Variations_Price;
-        let price = i?.sales_price ? i?.sales_price :i?.Variations_Price;
+        //   let price = activeSlide?.Sales_price ? activeSlide?.Sales_price :activeSlide?.Variations_Price;
+        let price = i?.Sales_price ? i?.Sales_price :i?.Variations_Price;
 
         return parseFloat(totalPrice + price * quantity);
       }, 0);
@@ -34,7 +34,7 @@ function OrderSummary() {
         <>
         
         
-            <div className="col-lg-5">
+            <div className="col-lg-5 col-sm-6">
                             <div className="checkout-right">
                                 
                                   
@@ -47,8 +47,8 @@ function OrderSummary() {
                                     // let activeSlide = (item?.Variation_Sliders)?.find(product => product?.SKU === sku)
                                     // console.log(JSON.stringify(activeSlide))
                                     let quantity = item?.quantity
-                                    // let price = activeSlide?.sales_price ? activeSlide?.sales_price :activeSlide?.Variations_Price;
-                                    let price = item?.sales_price ? item?.sales_price :item?.Variations_Price;
+                                    // let price = activeSlide?.Sales_price ? activeSlide?.Sales_price :activeSlide?.Variations_Price;
+                                    let price = item?.Sales_price ? item?.Sales_price :item?.Variations_Price;
                                     return (
                                         <>
                                     <div className="checkout-product mb-3"> 

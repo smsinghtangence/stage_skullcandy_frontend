@@ -1,6 +1,27 @@
+'use client'
 import React from 'react'
+import InnerPageSearch from '@/components/InnerPageSearch'
+import { useEffect, useState  } from 'react';
+import { getDataWithQuery } from "../../../../utils/api"
+import Link from 'next/link';
 
 function page() {
+  const [data, setData] = useState();  
+  const getdata = async () =>{
+    const response = await getDataWithQuery("/api/how-to-submit-a-warranty-claim",
+     { 
+        // pagesize: 1000, typeId: blogId 
+    });
+    setData(response.data)
+      //console.log( JSON.stringify(response));
+      return response;
+}
+useEffect(() => {
+  
+    getdata();
+
+
+  }, []);
   return (
     <>
   <div className="container-fluid">
@@ -10,14 +31,14 @@ function page() {
           <div className="skull_breadcrumbs">
             <ul>
               <li>
-                <a href="/support/">
+                <Link href="/support/">
                   Skullcandy Support
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/support/warranty/">
+                <Link href="/support/warranty/">
                   Warranty.
-                </a>
+                </Link>
               </li>
               <li>How to Submit a Warranty Claim</li>
             </ul>
@@ -101,50 +122,15 @@ function page() {
         <div className="row m-0">
           <div className="col-md-12">
             <div className="skull_title big big_text mb-5 pb-3">
-              <h2>How to Submit a Warranty Claim</h2>
+              <h2>{data?.attributes?.Heading}</h2>
             </div>
           </div>
           <div className="col-md-12">
             <div className="support_content">
-              <h5>
-                <span className="wysiwyg-font-size-large">
-                  <strong>DEFECTIVE PRODUCT?</strong>
-                </span>
-              </h5>
-              <p>
-                Let’s solve it. Here’s a summary of how the process works:
-                <br />
-                1.&nbsp;
-                <a href="/warranty/submit-a-claim/" target="_self">
-                  Submit a Warranty Claim by clicking the link below and filling
-                  out the form.
-                </a>
-                <br />
-                2. Receive an email with shipping instructions.
-                <br />
-                3. Send in your Skullcandy product.
-                <br />
-                4. Receive a package with your replacement product.
-              </p>
-              <p>
-                <a href="/warranty/submit-a-claim/" target="_self">
-                  <strong>SUBMIT A WARRANTY CLAIM</strong>
-                </a>
-              </p>
-              <h4>1-YEAR GLOBAL WARRANTY ON ALL HEADPHONES</h4>
-              <p>
-                All Skullcandy products (“Products”) are backed by a 1-year
-                limited warranty. If it doesn’t work the way we promised, we’ll
-                make it right.
-              </p>
-              <h4>ALREADY COMPLETED A CLAIM?</h4>
-              <p>
-                Once your warranty claim has been processed and verified, we
-                will send you a replacement product and an email with tracking
-                information.&nbsp;Please allow up to Seven&nbsp;business days
-                from the time we receive your product for your warranty to be
-                processed.
-              </p>
+            <div
+                dangerouslySetInnerHTML={{__html: data?.attributes?.Content}}
+              />
+
             </div>
           </div>
         </div>

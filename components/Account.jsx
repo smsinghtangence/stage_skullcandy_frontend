@@ -256,6 +256,7 @@ const hidePop =()=>{
              
         }
         if (isSuccess && users?.success === true && users?.id) {
+           
             // console.log('from')
             //router.push('/')
             // alert("hello");
@@ -277,7 +278,9 @@ const hidePop =()=>{
                     "Sales_price": item?.Sales_price 
                 }
             })
-            if (Cart?.length !== 0) {
+
+            
+            if (Cart?.length != 0) {
                 dispatch(addToCartforGuestafterLogin(lineItems))
             }
 

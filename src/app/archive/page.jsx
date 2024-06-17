@@ -108,7 +108,16 @@ const [products, setProducts] = useState();
                         <h4 className="wnc-heading"><Link href="#">{product?.title}</Link></h4>
                         <p>{product?.Product_Tag_Line_Heading}</p>
                         <div className="wnc-price">
-                          <h5>{product?.price} <s>$199.99</s></h5>
+                        <h5><i className="fa fa-rupee"></i>
+                        
+                        
+                        {item?.attributes?.Variation_Sliders[0]?.Sales_price ? item?.attributes?.Variation_Sliders[0]?.Sales_price :item?.attributes?.Variation_Sliders[0]?.Variations_Price}
+
+
+                        {item?.attributes?.Variation_Sliders[0]?.Sales_price && <s><i className="fa fa-rupee"></i> {item?.attributes?.Variation_Sliders[0]?.Variations_Price}</s>}
+
+                       
+                        </h5>
                         </div>
 
                         <Swiper

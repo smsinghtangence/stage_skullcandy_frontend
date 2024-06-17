@@ -25,6 +25,10 @@ function ShippingForm() {
     const [stateError, setStateError] = useState('');
     const [countryError, setCountryError] = useState('');
     const [postcodeError, setPostcodeError] = useState('')
+    const [CompanyNameError, setCompanyNameError] = useState('')
+    const [GSTINError, setGSTINError] = useState('')
+    
+        
     let billing = {
         "email": email
     }
@@ -37,13 +41,16 @@ function ShippingForm() {
         city: "",
         state: "",
         postcode: "",
-        country: "",
-        phone: ""
+        country: "INDIA",
+        phone: "",
+        Company_Name:users?.Company_Name?users?.Company_Name:"",
+        GSTIN:users?.GSTIN?users?.GSTIN:""
+
     })
 
 
 
-    const { first_name, last_name, address_1, address_2, city, state, postcode, country, phone } = shipping
+    const { first_name, last_name, address_1, address_2, city, state, postcode, country, phone,Company_Name,GSTIN } = shipping
 
     const dispatch = useDispatch()
 
@@ -147,14 +154,17 @@ function ShippingForm() {
         }
 
         // console.log(shipping)
-        dispatch(addBilling(billing))
+        // dispatch(addBilling(billing))
 
-        dispatch(addShippingDetails(shipping))
+        // dispatch(addShippingDetails(shipping))
 
         if (users?.id) {
 
             // dispatch(saveAddress(addType))
             dispatch(saveAddress(shipping))
+            // .then(()=>dispatch(addBilling(shipping)))
+            // .then(()=>dispatch(addShippingDetails(shipping)))
+            
 
         }
         setShipping({
@@ -165,8 +175,11 @@ function ShippingForm() {
             city: "",
             state: "",
             postcode: "",
-            country: "",
-            phone: ""
+            country: "INDIA",
+            phone: "",  
+            Company_Name:"",
+            GSTIN:""
+            
         })
         setEmail('')
         setAddType('')
@@ -190,7 +203,8 @@ function ShippingForm() {
             {/*  */}
             <div className="form-delivery">
                 <h4>Delivery</h4>
-                <div className="row">
+                <p>{users?.email}</p>
+                <div>
                     <form onSubmit={handleSubmit}>
 
                         <div className="row">
@@ -205,8 +219,8 @@ function ShippingForm() {
                                 onChange={handleChange}
                                
                                 >
-                                    <option   >Country</option>
-                                    <option value="IN">INDIA</option>
+                                     
+                                    <option value="INDIA" selected disabled>INDIA</option>
                                 </select>
                                 <span className="text-danger">{countryError}</span>
                                 
@@ -235,18 +249,7 @@ function ShippingForm() {
                             </div>
                         </div>
 
-                        {/* <div className="row">
-                            <div className="col-lg-12">
-                                <input
-                                    required
-                                    type="text"
-                                    placeholder='Email'
-                                    className='form-control'
-                                    value={billing.email}
-                                    onChange={(e) => { setEmail(e.target.value) }} />
-                                <span className="text-danger">{emailError}</span>
-                            </div>
-                        </div> */}
+                        
                         <div className="row">
                             <div className="col-lg-12">
                                 <input
@@ -329,16 +332,57 @@ function ShippingForm() {
                             <div className="col-lg-12">
                                 <input
                                     required
-                                    className='form-control' placeholder='phone'
-                                    type="number" value={phone} name='phone' onChange={handleChange} />
+                                    className='form-control' placeholder='Phone'
+                                    type="number" value={phone} name='phone' 
+                                    maxLength={10}
+                                     onChange={handleChange} />
                                 <span className="text-danger">{phoneError}</span>
                             </div>
                         </div>
-
+                        {/* <div className="row">
+                            <div className="col-lg-12">
+                                <input
+                                    required
+                                    type="text"
+                                    placeholder='Email'
+                                    className='form-control'
+                                    value={email}
+                                    onChange={(e) => { setEmail(e.target.value) }} />
+                                <span className="text-danger">{emailError}</span>
+                            </div>
+                        </div> */}
+                        <div className="row">
+                            <div className="col-lg-12">
+                                <input
+                                    required
+                                    type="text"
+                                    placeholder='Company Name (Optional)'
+                                    className='form-control'
+                                    name='Company_Name'
+                                    value={Company_Name}
+                                    onChange={handleChange}
+                                />
+                                <span className="text-danger">{CompanyNameError}</span>
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="col-lg-12">
+                                <input
+                                    required
+                                    type="text"
+                                    placeholder='GSTIN (Use Capital Letter) (Optional)'
+                                    className='form-control'
+                                    name='GSTIN'
+                                    value={GSTIN}
+                                    onChange={handleChange}
+                                />
+                                <span className="text-danger">{GSTINError}</span>
+                            </div>
+                        </div>
                         {/*  */}
                         <div className="row">
                             <div className="col-lg-12">
-                                <button className=' btn btn-dark mt-5' type='submit' >Add Address</button>
+                                <button className=' btn btn-dark mt-2' type='submit' >Add Address</button>
                             </div></div>
                         {/*  */}
                     </form>

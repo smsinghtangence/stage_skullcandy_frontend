@@ -1,6 +1,21 @@
-import React from 'react'
+'use client'
 import Link from 'next/link'
+import React from 'react'
+import { useEffect, useState } from 'react';
+import { getDataWithQuery, geturl } from "@/utils/api"
 function page() {
+  const [data, setData] = useState();  
+  const getdata = async () =>{
+    const response = await getDataWithQuery("/api/warranty",
+     { 
+        // pagesize: 1000, typeId: blogId 
+    });
+    setData(response.data)
+       return response;
+}
+useEffect(() => {  
+    getdata();
+  }, []);
   return (
     <>
     <div className="container-fluid">
@@ -10,9 +25,9 @@ function page() {
             <div className="skull_breadcrumbs">
               <ul>
                 <li>
-                  <a href="/support/">
+                  <Link href="/support/">
                     Skullcandy Support
-                  </a>
+                  </Link>
                 </li>
                 <li>Warranty.</li>
               </ul>
@@ -96,12 +111,13 @@ function page() {
           <div className="row">
             <div className="col-md-12">
               <div className="skull_title big big_text mb-5 pb-3">
-                <h2>Warranty.</h2>
-                <p>How to submit a warranty claim.</p>
-                <h5>CONTACT US</h5>
-                <p>Email :- customercare@brandeyes.in</p>
-                <p>Phone :- 011-42700400</p>
-                <p>Mon-Friday, 10:00am – 4:00pm</p>
+                <h2>{data?.attributes?.Main_Heading}</h2>
+                <p>{data?.attributes?.Heading_Below_Text}</p>
+                <h5>{data?.attributes?.Heading}</h5>
+                <p>Email :-   <Link href={`mailto:${data?.attributes?.Email}`}>
+                  {data?.attributes?.Email} </Link></p>
+                <p>Phone :- <Link href={`tel:${data?.attributes?.Phone}`}>{data?.attributes?.Phone}</Link></p>
+                <p>{data?.attributes?.Date_Time}</p>
               </div>
             </div>
             <div className="col-lg-6 col-sm-12">

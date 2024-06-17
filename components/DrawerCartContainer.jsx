@@ -19,10 +19,10 @@ function DrawerCartContainer({ i }) {
     // let activeSlide = (i?.Variation_Sliders)?.find(product => product?.SKU == sku)
     // console.log(JSON.stringify(activeSlide))
     // let quantity = i?.quantity
-    // let price = activeSlide?.sales_price ? activeSlide?.sales_price :activeSlide?.Variations_Price;
+    // let price = activeSlide?.Sales_price ? activeSlide?.Sales_price :activeSlide?.Variations_Price;
 
     let quantity = i?.quantity
-    let price = i?.sales_price ? i?.sales_price :i?.Variations_Price;
+    let price = i?.Sales_price ? i?.Sales_price : i?.Variations_Price;
 
 
     const { users } = useDispatch(state => state.auth)
@@ -52,11 +52,21 @@ function DrawerCartContainer({ i }) {
 
         
         dispatch(updateCartforLogin())
+
     }
 
     const handleDec = () => {
-        dispatch(decrement(i))
-        dispatch(updateCartforLogin())
+        // dispatch(decrement(i))
+        // dispatch(updateCartforLogin())
+        if (quantity === 1) {
+          // Perform delete function when quantity is one
+          handleRemove(i?.SKU);
+        } else {
+          dispatch(decrement(i))
+           dispatch(updateCartforLogin())
+        }
+
+
     }
 
 
@@ -81,17 +91,17 @@ function DrawerCartContainer({ i }) {
     return (
 
         <>
-            
+            {/* login */}
 
 {/* ////////////////////////////////////////// */}
 
-            <div className="drawer-product-list">
+            <div className="drawer-product-list user">
               <div className="dpl-img">
                 {/* <img src={geturl(i?.image)} alt="" /> */}
                 <img src={i?.Variant_Image_url} alt={i?.Variations_Color_Name} />
               </div>
               <div className="dpl-title">
-                <Link href={`/shop/${i?.slug}`} >{i.title}</Link>
+                <Link href={`/shop/${i?.slug}`} >{i.name}</Link>
                 <span className="product-option"> {i?.Variations_Color_Name} | {i?.SKU}  </span>
                 <div className="quantity-wrapper">
                   <span className="quantity-dec"  onClick={() => handleDec()}>--</span>
@@ -101,7 +111,7 @@ function DrawerCartContainer({ i }) {
               </div>
               <div className="dpl-price">
                 {/* <h4>{i.price * i.quantity}</h4> */}
-                <h4><i class="fa fa-rupee"></i>{price * quantity}</h4>
+                <h4><i className="fa fa-rupee"></i>{price * quantity}</h4>
                 <Link href="#" onClick={() => handleRemove(i?.SKU)}  className='drawer-product-remove'> Remove</Link>
               </div>
             </div>

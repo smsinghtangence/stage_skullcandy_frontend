@@ -455,7 +455,7 @@ $(document).ready(function () {
             }
             updateCheckoutGuestEmailData(email);
             $("#billing_email").val(email)
-            console.log(checkoutData);
+            // console.log(checkoutData);
         }
 
     });
@@ -1128,6 +1128,14 @@ $(document).ready(function () {
 
     //Pincode
     $(".wczp_cookie_check_div input[type='text']").attr("placeholder", "Pincode")
+
+    $(".CartDrawer-Checkout").click(function(){
+  
+        $(".drawer").removeClass("active")
+       });
+       $("#cart-btn").click(function(){
+        $(".drawer").addClass("active")
+      })
 
 });
 

@@ -25,7 +25,7 @@ const TOKEN = process.env.TOKEN || '';
 ////
 
 const id = params.id;
-console.log("orderid "+id)
+// console.log("orderid "+id)
          
 var ciphertext = id?.replace(/p1L2u3S/g, '+' )?.replace(/s1L2a3S4h/g, '/')?.replace(/e1Q2u3A4l/g, '=');
 var bytes = CryptoJS.AES.decrypt(ciphertext, '');
@@ -82,10 +82,10 @@ const getorder = async () => {
 };
 //////
     useEffect(()=>{
-      if(users?.id){
-        dispatch(getCartData());
+      // if(users?.id){
+      //   dispatch(getCartData());
        
-      }
+      // }
       dispatch(payWithCardReset())
       dispatch(reset())
       dispatch(resetAllState())
@@ -141,7 +141,7 @@ const getorder = async () => {
       <table className='table table-bordered w-100'>
     <thead>
       <tr>
-        <th>SNo</th>
+        <th>SrNo</th>
         <th>Image</th>
         <th>Name</th>
         {/* <th>Product Id</th> */}
@@ -173,9 +173,9 @@ const getorder = async () => {
         {/* <td>{item?.product_id} </td> */}
         <td>{quantity} </td>
         <td>{item?.SKU} </td>
-        <td>{price} </td>
+        <td><i className="fa fa-rupee"></i>{price} </td>
    
-        <td>{ quantity * price} </td>
+        <td><i className="fa fa-rupee"></i>{ quantity * price} </td>
         
         
       </tr>
@@ -198,7 +198,7 @@ const getorder = async () => {
       {/*  */}
       <tr>
         <td colSpan={6} style={{textAlign:"right"}}><strong>Total</strong></td>
-        <td>{total}</td>
+        <td><i className="fa fa-rupee"></i>{total}</td>
       </tr>
      </tbody>
      

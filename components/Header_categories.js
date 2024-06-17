@@ -11,7 +11,7 @@ import Button from 'react-bootstrap/Button';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import Accordion from 'react-bootstrap/Accordion';
 import { addToCartforGuestafterLogin, getCartData, getWishlist } from '@/features/Cart/cartnWishSlice'
-function header() {
+function header_categories() {
 
   const { users, isError, isSuccess, message, isLaoding, loginTimestamp } =
 useSelector((state) => state.auth);
@@ -22,6 +22,11 @@ const { cart, wishlist } = useSelector((state) => state.cartWish);
       $(".drawer").addClass("active")
     })
  $(".drawer-close").click(function(){
+  $(".drawer").removeClass("active")
+ });
+
+ $(".CartDrawer-Checkout").click(function(){
+  
   $(".drawer").removeClass("active")
  });
 
@@ -134,7 +139,7 @@ useEffect(() => {
               "Sales_price": item?.Sales_price 
           }
       })
-      if (Cart?.length !== 0) {
+      if (Cart?.length != 0) {
           dispatch(addToCartforGuestafterLogin(lineItems))
       }
 
@@ -566,4 +571,4 @@ const _url = data?.attributes?.Annoucement_Url ? data?.attributes?.Annoucement_U
   )
 }
 
-export default header
+export default header_categories

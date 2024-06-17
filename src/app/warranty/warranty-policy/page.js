@@ -12,7 +12,7 @@ function page() {
         // pagesize: 1000, typeId: blogId 
     });
     setData(response.data)
-      console.log( JSON.stringify(response));
+      //console.log( JSON.stringify(response));
       return response;
 }
 useEffect(() => {
@@ -54,14 +54,14 @@ useEffect(() => {
           <div className="row m-0">
             <div className="col-md-12">
               <div className="skull_title big big_text mb-5 pb-3">
-              <h2>{data?.attributes?.heading}</h2>
+              <h2>{data?.attributes?.Heading}</h2>
               </div>
             </div>
             <div className="col-md-12">
               <div className="support_content">
 
               <div
-                dangerouslySetInnerHTML={{__html: data?.attributes?.content}}
+                dangerouslySetInnerHTML={{__html: data?.attributes?.Content}}
               />
 
 

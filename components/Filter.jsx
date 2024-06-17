@@ -11,10 +11,19 @@ function Filter({ products, setFilteredProducts }) {
 
     ///////////
     const [batteryRange, setBatteryRange] = useState(0);
+    const [batteryfilterOptions, setbatteryFilteredProducts] = useState({
+        moreThan40: false,
+        between3040: false,
+        lessThan30: false,
+      });
+   
     const [Feature, setFeature] = useState();
     const [Filter_Collection, setFilter_Collection] = useState();
     const [Filter_color, setFilter_color] = useState();
     const [checkedActivity_Filter, setCheckedActivity_Filter] = useState();
+
+
+    
     // const [checkedActivity_Filter, setCheckedActivity_Filter] = useState({
     //     textValue:"Initial Value",
     //    Activity_Filter:{
@@ -34,56 +43,111 @@ function Filter({ products, setFilteredProducts }) {
     const filterProducts = () => {
 
         let filteredProducts = products;
-
-////////////////
-const checkboxValues = Object.values(checkedActivity_Filter);
  
-/////////////
+        const checkboxValues = Object.values(checkedActivity_Filter);
+ 
+ 
 
         if (!checkboxValues.every(value => value === false)) {
-
-         filteredProducts = products?.filter((product) => {
-
-
-            // console.log("product id " + product?.id)
-
-            //  console.log("product?.attributes?.Filters "+ JSON.stringify(product?.attributes?.Filters ))      
-
-            if (product?.attributes?.Filters != null || product?.attributes?.Filters != undefined) {
-                ///////////////
-                //  console.log("deep")
-                if(checkedActivity_Filter){
-                for (const [key, value] of Object?.entries(checkedActivity_Filter)) {
-
-                    // console.log("product?.attributes?.Filters[key] "+ product?.attributes?.Filters[key])
-                    // console.log("key "+key);
-                    // console.log("value "+value)
-                    
-                    if(product?.attributes?.Filters?.Activity_Filter != null || product?.attributes?.Filters?.Activity_Filter != undefined){
+            // filteredProducts = products?.filter((product) => {
+            filteredProducts = filteredProducts?.filter((product) => {
 
 
-                    if ((value == true) && product?.attributes?.Filters?.Activity_Filter[key]) { 
-                        return true;
+                // console.log("product id " + product?.id)
+
+                //  console.log("product?.attributes?.Filters "+ JSON.stringify(product?.attributes?.Filters ))      
+
+                if (product?.attributes?.Filters != null || product?.attributes?.Filters != undefined) {
+                    ///////////////
+                    //  console.log("deep")
+                    if (checkedActivity_Filter) {
+                        for (const [key, value] of Object?.entries(checkedActivity_Filter)) {
+
+                            // console.log("product?.attributes?.Filters[key] "+ product?.attributes?.Filters[key])
+                            // console.log("key "+key);
+                            // console.log("value "+value)
+
+                            if (product?.attributes?.Filters?.Activity_Filter != null || product?.attributes?.Filters?.Activity_Filter != undefined) {
+
+
+                                if ((value == true) && product?.attributes?.Filters?.Activity_Filter[key]) {
+                                    return true;
+                                }
+                            }
+                        }
+
                     }
-                 }
-                }
-                 
-                }
 
-                ///////////
-                // if(batteryRange){
-                    
-                // if(product?.attributes?.Filters?.Battery_Life?.Hours <= batteryRange)
-                // {
-                //     console.log(product?.attributes?.Filters?.Battery_Life?.Hours)
-                //     return true;
-                // }
-                // }
 
-            }
-        });
+
+                }
+            });
 
         }
+
+
+        // ////batter fillter start/////////
+  
+        if (batteryfilterOptions.moreThan40) {
+            
+            filteredProducts = filteredProducts.filter(product =>product?.attributes?.Filters?.Battery_Life.Hours > 40);
+          }
+          if (batteryfilterOptions[between3040]) {
+            filteredProducts = filteredProducts.filter(product =>product?.attributes?.Filters?.Battery_Life.Hours >= 30 && product?.attributes?.Filters?.Battery_Life.Hours <= 40);
+          }
+          
+          if (batteryfilterOptions.lessThan30) {
+            filteredProducts = filteredProducts.filter(product =>product?.attributes?.Filters?.Battery_Life.Hours < 30);
+          }
+        // }
+        ///////batter fillter end
+
+
+
+
+            /////////////////////
+
+            filteredProducts = filteredProducts?.filter((product) => {
+
+
+                
+                if (product?.attributes?.Filters != null || product?.attributes?.Filters != undefined) {
+                    ///////////////
+                   
+                  
+    
+                
+                    
+                    if(Feature){
+                        for (const [key, value] of Object?.entries(Feature)) {
+        
+                            // console.log("product?.attributes?.Filters[key] "+ product?.attributes?.Filters[key])
+                            // console.log("key "+key);
+                            // console.log("value "+value)
+                            
+                            if(product?.attributes?.Filters?.Feature != null || product?.attributes?.Filters?.Feature != undefined){
+        
+        
+                            if ((value == true) && product?.attributes?.Filters?.Feature[key]) { 
+                                return true;
+                            }
+                         }
+                        }
+                         
+                        }
+    
+                }
+            });
+    
+            
+
+
+            /////////////////////
+
+
+
+
+
         setFilteredProducts(filteredProducts)
         //   console.log("filteredProducts sam"+ JSON.stringify(filteredProducts))
     }
@@ -107,6 +171,9 @@ const checkboxValues = Object.values(checkedActivity_Filter);
     };
 
 
+    /////////////////
+    //////////////////
+
     const handleFeature = (event) => {
         let state = Feature;
 
@@ -122,11 +189,43 @@ const checkboxValues = Object.values(checkedActivity_Filter);
 
     };
 
-    const handleBatteryRangeChange = (event) => {
-        // console.log(event.target.value)
-        setBatteryRange(parseInt(event.target.value));
+    // const handleBatteryRangeChange = (event) => {
+    //     // console.log(event.target.value)
+    //     setBatteryRange(parseInt(event.target.value));
+        
+    // };
+
+
+    // const handleBatteryRangeChange = (event) => {
+    //     setbatteryFilteredProducts({
+    //       ...batteryfilterOptions,
+    //       [event.target.name]: event.target.checked,
+    //     });
+
+    //     console.log("name "+ event.target.name+ "  value "+ event.target.checked+ " batteryfilterOptions " + JSON.stringify(batteryfilterOptions))
+    //     filterProducts()
+    //   };
+
+      
+
+      const handleBatteryRangeChange = async (event) => {
+       
+
+        
+
+
+        let state = batteryfilterOptions;
+
+        // console.log("state " + JSON.stringify(state))
+        // console.log("event.target.value " + event.target.name)
+        state[event.target.name] = event.target.checked;
+
+
+        await setbatteryFilteredProducts(state);
+        // console.log("name "+ event.target.name+ "  value "+ event.target.checked+ " batteryfilterOptions " + JSON.stringify(batteryfilterOptions))
+
         filterProducts()
-    };
+      };
     ////////////
 
 
@@ -204,7 +303,7 @@ const checkboxValues = Object.values(checkedActivity_Filter);
                                     {checkedActivity_Filter &&
                                         <>
                                             {Object.keys(checkedActivity_Filter).map((item, index) => (
-                                                <li key={index}>
+                                                <li key={"filter"+index}>
                                                     <div className="form-group">
                                                         <span>{item.replace(/_/g, ' ')}</span>
                                                         <input
@@ -227,9 +326,9 @@ const checkboxValues = Object.values(checkedActivity_Filter);
                         </Accordion.Item>
 
 
-                        {/* <Accordion.Item eventKey="1">
+                        <Accordion.Item eventKey="1">
                             <Accordion.Header> <h3 onClick={handleToggle}>Battery Life </h3></Accordion.Header>
-                            <Accordion.Body>
+                            {/* <Accordion.Body>
 
                             <p>Selected Battery Range: {batteryRange}</p>
                                 <input
@@ -240,10 +339,48 @@ const checkboxValues = Object.values(checkedActivity_Filter);
                                     value={batteryRange}
                                     onChange={handleBatteryRangeChange}
                                 />Hours
-
  
+                            </Accordion.Body> */}
 
+                            <Accordion.Body>
+                            <ul className="filter-list">
+                                    <li><div className="form-group">
+                                        <span>{"<40 hrs"}</span>
+                                        <input
+                                            type="checkbox"
+                                            id="moreThan40"
+                                            name="moreThan40"
+                                            onChange={handleBatteryRangeChange}
+                                        />
+                                        <label htmlFor="moreThan40"></label>
+                                    </div>
+                                    </li>
+                                    <li> <div className="form-group">
+                                        <span>{"30-40 hrs"}</span>
+                                        <input
+                                            type="checkbox"
+                                            id="between3040"
+                                            name="between3040"
+                                            onChange={handleBatteryRangeChange}
+                                        />
+                                        <label htmlFor="between3040"></label>
+                                    </div>
+                                    </li>
+                                    <li><div className="form-group">
+                                        <span>{" <30 hrs"}</span>
+                                        <input
+                                            type="checkbox"
+                                            id="lessThan30"
+                                            name="lessThan30"
+                                            onChange={handleBatteryRangeChange}
+                                        />
+                                        <label htmlFor="lessThan30"></label>
+                                    </div>
+                                    </li>
+                            </ul>
                             </Accordion.Body>
+
+
                         </Accordion.Item>
 
                         <Accordion.Item eventKey="2">
@@ -273,7 +410,7 @@ const checkboxValues = Object.values(checkedActivity_Filter);
                                     }
                                 </ul>
                             </Accordion.Body>
-                        </Accordion.Item> */}
+                        </Accordion.Item>
 
 
 

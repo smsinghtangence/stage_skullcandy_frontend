@@ -87,7 +87,7 @@ useEffect(() => {
         </div>
         <div className="col-50-content">
           <div className="col-50-content-inner">        
-          <span dangerouslySetInnerHTML={{ __html: data?.attributes?.Last_Section_Right_Content }} />;
+          <span dangerouslySetInnerHTML={{ __html: data?.attributes?.Last_Section_Right_Content }} />
           </div>
         </div>
       </div>

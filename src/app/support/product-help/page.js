@@ -1,6 +1,25 @@
+'use client'
 import React from 'react'
-
+import Link from 'next/link'  
+import { useEffect, useState } from 'react';
+import { getDataWithQuery } from "@/utils/api"
 function page() {
+
+  const [data, setData] = useState();  
+  const getdata = async () =>{
+
+    const response = await getDataWithQuery("/api/product-helps",
+     { 
+        // pagesize: 1000, typeId: blogId 
+    });
+    setData(response.data)
+      // console.log( JSON.stringify(response.data));
+      return response;
+}
+useEffect(() => {  
+    getdata();
+  }, []);
+
   return (
     <>
     <div className="container-fluid">
@@ -98,94 +117,28 @@ function page() {
                 <p>Setup videos, user guides, and troubleshooting information.</p>
               </div>
             </div>
+            
+           {/* <h2>{"hello" +  JSON.stringify(data[0]?.attributes?.Heading)}</h2> */}
+            {data?.map((item, i) => (
+           
+
             <div className="col-lg-6 col-sm-12">
               <div className="support_items support_item_manage">
                 <div className="skull_title_2 tab_fix_big">
                   <h2>
                     <a href="/categories-list/true-wireless-earbuds/">
-                      TRUE WIRELESS EARBUDS
+                     {item?.attributes?.Help_Category}
                     </a>
                   </h2>
                 </div>
                 <ul>
                   <li>
                     <a href="/product_help/skullcandy-dime-2/">
-                      {" "}
-                      Skullcandy Dime® 2
+                     
+                    {item?.attributes?.Heading}
                     </a>
                   </li>
-                  <li>
-                    <a href="/product_help/jib-true-2/">
-                      {" "}
-                      Jib™ True 2
-                    </a>
-                  </li>
-                  <li>
-                    <a href="/product_help/push-active/">
-                      {" "}
-                      Push Active
-                    </a>
-                  </li>
-                  <li>
-                    <a href="/product_help/grind-grind-fuel/">
-                      {" "}
-                      Grind &amp; Grind Fuel
-                    </a>
-                  </li>
-                  <li>
-                    <a href="/product_help/dime-true-wireless/">
-                      {" "}
-                      Dime True Wireless
-                    </a>
-                  </li>
-                  <li>
-                    <a href="/product_help/indy-anc/">
-                      {" "}
-                      Indy ANC
-                    </a>
-                  </li>
-                  <li>
-                    <a href="/product_help/push-ultra/">
-                      {" "}
-                      Push Ultra
-                    </a>
-                  </li>
-                  <li>
-                    <a href="/product_help/indy-fuel/">
-                      {" "}
-                      Indy Fuel
-                    </a>
-                  </li>
-                  <li>
-                    <a href="/product_help/indy-evo/">
-                      {" "}
-                      Indy Evo
-                    </a>
-                  </li>
-                  <li>
-                    <a href="/product_help/sesh-evo/">
-                      {" "}
-                      Sesh Evo
-                    </a>
-                  </li>
-                  <li>
-                    <a href="/product_help/indy/">
-                      {" "}
-                      Indy
-                    </a>
-                  </li>
-                  <li>
-                    <a href="/product_help/jib-true/">
-                      {" "}
-                      Jib True
-                    </a>
-                  </li>
-                  <li>
-                    <a href="/product_help/dime-true/">
-                      {" "}
-                      Dime True
-                    </a>
-                  </li>
+                
                   <li className="remain_item_num">
                     <a href="/categories-list/true-wireless-earbuds/">
                       See all 13 articles
@@ -194,6 +147,13 @@ function page() {
                 </ul>
               </div>
             </div>
+
+))}
+
+
+
+
+{/* 
             <div className="col-lg-6 col-sm-12">
               <div className="support_items support_item_manage">
                 <div className="skull_title_2 tab_fix_big">
@@ -417,7 +377,10 @@ function page() {
                   </li>
                 </ul>
               </div>
-            </div>
+            </div> */}
+
+
+
           </div>
         </div>
       </div>

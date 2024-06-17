@@ -1,6 +1,27 @@
+'use client'
 import React from 'react'
+import InnerPageSearch from '@/components/InnerPageSearch'
+import { useEffect, useState  } from 'react';
+import { getDataWithQuery } from "../../../../utils/api"
+import Link from 'next/link';
 
 function page() {
+  const [data, setData] = useState();  
+  const getdata = async () =>{
+    const response = await getDataWithQuery("/api/how-to-submit-a-warranty-claim",
+     { 
+        // pagesize: 1000, typeId: blogId 
+    });
+    setData(response.data)
+      //console.log( JSON.stringify(response));
+      return response;
+}
+useEffect(() => {
+  
+    getdata();
+
+
+  }, []);
   return (
     <>
   <div className="container-fluid">
@@ -10,14 +31,14 @@ function page() {
           <div className="skull_breadcrumbs">
             <ul>
               <li>
-                <a href="/support/">
+                <Link href="/support/">
                   Skullcandy Support
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/support/warranty/">
+                <Link href="/support/warranty/">
                   Warranty.
-                </a>
+                </Link>
               </li>
               <li>Checking the Status of a Warranty Claim</li>
             </ul>
@@ -101,27 +122,14 @@ function page() {
         <div className="row m-0">
           <div className="col-md-12">
             <div className="skull_title big big_text mb-5 pb-3">
-              <h2>Checking the Status of a Warranty Claim</h2>
+              <h2>{data?.attributes?.Heading}</h2>
             </div>
           </div>
           <div className="col-md-12">
             <div className="support_content">
-              <p>
-                WARRANTY CLAIM STATUS
-                <br />
-                Please check to see if the product you are returning has been
-                received by us by looking up the tracking number on the mail
-                carrier’s website.
-              </p>
-              <p>&nbsp;</p>
-              <p>
-                If your returned product has been delivered, and more than 10
-                business days have passed, check your email to see if you have
-                received a claim status update. If more than 10 business days
-                have passed and you have not received an update via email please
-                contact us and we can assist. Please include your warranty claim
-                number and tracking number in any correspondence.
-              </p>
+            <div
+                dangerouslySetInnerHTML={{__html: data?.attributes?.Content}}
+              />
             </div>
           </div>
         </div>

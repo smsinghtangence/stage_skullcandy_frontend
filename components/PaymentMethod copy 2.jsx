@@ -22,8 +22,6 @@ function PaymentMethod() {
     
 ////////////////
     //////////
-    const [hasProcessed, setHasProcessed] = useState(false);
-
     const dispatch = useDispatch()
 
     // const navigate = userouter.push()
@@ -117,28 +115,23 @@ function PaymentMethod() {
 
 
 
-        // if (order?.id && razorpay === true && isRazorPayPopUp) {
-        //     dispatch(compareCartState(cart))
+        if (order?.id && razorpay === true && isRazorPayPopUp) {
+            dispatch(compareCartState(cart))
             
-        //     dispatch(updateOrderAfterPayment(
-        //         {
-        //             "amount": parseInt(total),
-        //             "order_id": (order?.ref_order_id).toString
-        //         }))
+            dispatch(updateOrderAfterPayment(
+                {
+                    "amount": parseInt(total),
+                    "order_id": (order?.ref_order_id).toString
+                }))
                 
-        //     // dispatch(deleteAllItemsFromCart())
-        //     // dispatch(reset())
-        // }
+            // dispatch(deleteAllItemsFromCart())
+            // dispatch(reset())
+        }
 
 
 
         // 
-        if(isOrder)
-            {
-                // console.log("Order "+JSON.stringify(order))
-                callAfterOrderCreate()
-            } 
-
+        
         // 
     }, [order, razorpay, isRazorPayPopUp])
 
@@ -204,10 +197,10 @@ function PaymentMethod() {
                     // console.log(cartSnapshot)
                     // console.log(hasCartChanged)
                     if (hasCartChanged) {
-                        // console.log('order created again')
+                        console.log('order created again')
                         dispatch(createOrder(lineItems))
                     } else {
-                        // console.log('order update  again')
+                        console.log('order update  again')
                         
                         const data = {
                             "payment_method": payment.payment_method == 'cod' ? 'cod' : 'razor pay',
@@ -219,10 +212,9 @@ function PaymentMethod() {
                     }
 
                 } else {
-                    
+                    alert("hi")
                     console.log("create oreder " + JSON.stringify(lineItems))
                     dispatch(createOrder(lineItems))
-                     
 
                 }
             } else {
@@ -236,79 +228,77 @@ function PaymentMethod() {
     }
      //////////////////////
 
-//   if(order?.ref_order_id){
-//     const res = await initializeRazorpay();
+  if(order?.ref_order_id){
+    const res = await initializeRazorpay();
   
-//     if (!res) {
-//       alert("Razorpay SDK Failed to load");
-//       return;
-//     }
+    if (!res) {
+      alert("Razorpay SDK Failed to load");
+      return;
+    }
   
-//     // Make API call to the serverless API
+    // Make API call to the serverless API
 
-//     const response = await axios.post(API_URL + '/api/razorpay' , {
+    const response = await axios.post(API_URL + '/api/razorpay' , {
         
-//         "amount":parseInt(total),
-//         "currency": "INR",
-//         "order_id": (order?.ref_order_id).toString
+        "amount":parseInt(total),
+        "currency": "INR",
+        "order_id": (order?.ref_order_id).toString
 
-//      }, {headers: {
-//         "Authorization": `Bearer ${TOKEN}`
+     }, {headers: {
+        "Authorization": `Bearer ${TOKEN}`
          
-//       }})
-//     //   "amount": response?.data?.amount,
-//    const updateobj = {
+      }})
+    //   "amount": response?.data?.amount,
+   const updateobj = {
          
    
-//         "amount": parseInt(total),
-//         "order_id":response?.data?.razorpay_order_id,
-//         "customer_id": users?.id
-//     }
-//     dispatch(updateOrderAfterPayment(updateobj));
-//     // console.log("data s " + JSON.stringify(updateobj));
-//     var options = {
-//       // key: process.env.RAZORPAY_KEY, // Enter the Key ID generated from the Dashboard
-//       //rzp_test_XyZej6YBl2vSjA
-//       key: "rzp_test_hTSzc7KeSl5FzN", 
-//       name: "Skullcandy",
-//       currency: response?.data?.currency,
-//       amount: response?.data?.amount,
-//       order_id: response?.data?.id,
-//       description: "Skullcandy",
-//       image: "",
-//       handler: function (response) {
-//         // console.log(JSON.stringify(response))
-//         // Validate payment at server - using webhooks is a better idea.
-//         // alert(response.razorpay_payment_id);
-//         // alert(response.razorpay_order_id);
-//         // alert(response.razorpay_signature);
+        "amount": parseInt(total),
+        "order_id":response?.data?.razorpay_order_id,
+        "customer_id": users?.id
+    }
+    dispatch(updateOrderAfterPayment(updateobj));
+    // console.log("data s " + JSON.stringify(updateobj));
+    var options = {
+      // key: process.env.RAZORPAY_KEY, // Enter the Key ID generated from the Dashboard
+      //rzp_test_XyZej6YBl2vSjA
+      key: "rzp_test_hTSzc7KeSl5FzN", 
+      name: "Skullcandy",
+      currency: response?.data?.currency,
+      amount: response?.data?.amount,
+      order_id: response?.data?.id,
+      description: "Skullcandy",
+      image: "",
+      handler: function (response) {
+        // console.log(JSON.stringify(response))
+        // Validate payment at server - using webhooks is a better idea.
+        // alert(response.razorpay_payment_id);
+        // alert(response.razorpay_order_id);
+        // alert(response.razorpay_signature);
 
         
-//         const update_object = {
-//             "payment_id": response.razorpay_payment_id,
-//             "order_id": response.razorpay_order_id,
-//             "signature":response.razorpay_signature,
-//             "customer_id": users?.id
-//         }
-//         dispatch(updateOrderAfterPayment(update_object));
-//         dispatch(setPyamentRazorpayStatus())
+        const update_object = {
+            "payment_id": response.razorpay_payment_id,
+            "order_id": response.razorpay_order_id,
+            "signature":response.razorpay_signature,
+            "customer_id": users?.id
+        }
+        dispatch(updateOrderAfterPayment(update_object));
+        dispatch(setPyamentRazorpayStatus())
 
 
-//       },
-//       prefill: {
-//         name: users?.Address?.first_name,
-//         email: users?.email,
-//         contact: users?.phone,
-//       },
-//     };
+      },
+      prefill: {
+        name: users?.Address?.first_name,
+        email: users?.email,
+        contact: users?.phone,
+      },
+    };
   
-//     const paymentObject = new window.Razorpay(options);
-//     paymentObject.open();
-//          };
+    const paymentObject = new window.Razorpay(options);
+    paymentObject.open();
+         };
  //////////
 }
-
-
 const initializeRazorpay = () => {
     return new Promise((resolve) => {
       const script = document.createElement("script");
@@ -327,81 +317,7 @@ const initializeRazorpay = () => {
   };
   ////////////////////////
 
-const callAfterOrderCreate = async ()=>{
-    if (hasProcessed) return;
 
-      if(order?.ref_order_id){
-        setHasProcessed(true);
-            const res = await initializeRazorpay();
-          
-            if (!res) {
-              alert("Razorpay SDK Failed to load");
-              return;
-            }
-          
-            // Make API call to the serverless API
-        
-            const response = await axios.post(API_URL + '/api/razorpay' , {
-                
-                "amount":parseInt(total),
-                "currency": "INR",
-                "order_id": (order?.ref_order_id).toString
-        
-             }, {headers: {
-                "Authorization": `Bearer ${TOKEN}`
-                 
-              }})
-            //   "amount": response?.data?.amount,
-           const updateobj = {
-                 
-           
-                "amount": parseInt(total),
-                "order_id":response?.data?.razorpay_order_id,
-                "customer_id": users?.id
-            }
-            dispatch(updateOrderAfterPayment(updateobj));
-            // console.log("data s " + JSON.stringify(updateobj));
-            var options = {
-              // key: process.env.RAZORPAY_KEY, // Enter the Key ID generated from the Dashboard
-              //rzp_test_XyZej6YBl2vSjA
-              key: "rzp_test_hTSzc7KeSl5FzN", 
-              name: "Skullcandy",
-              currency: response?.data?.currency,
-              amount: response?.data?.amount,
-              order_id: response?.data?.id,
-              description: "Skullcandy",
-              image: "",
-              handler: function (response) {
-                // console.log(JSON.stringify(response))
-                // Validate payment at server - using webhooks is a better idea.
-                // alert(response.razorpay_payment_id);
-                // alert(response.razorpay_order_id);
-                // alert(response.razorpay_signature);
-        
-                
-                const update_object = {
-                    "payment_id": response.razorpay_payment_id,
-                    "order_id": response.razorpay_order_id,
-                    "signature":response.razorpay_signature,
-                    "customer_id": users?.id
-                }
-                dispatch(updateOrderAfterPayment(update_object));
-                dispatch(setPyamentRazorpayStatus())
-        
-        
-              },
-              prefill: {
-                name: users?.Address?.first_name,
-                email: users?.email,
-                contact: users?.phone,
-              },
-            };
-          
-            const paymentObject = new window.Razorpay(options);
-            paymentObject.open();
-                 };
-
-}
 
   
     return (

@@ -33,14 +33,40 @@ const cartnWishSlice = createSlice({
       state.buyNow = []
     },
     addToCart: (state, action) => {
+      const { 
+        product_id, 
+        quantity ,
+        SKU ,
+        name ,
+        Variations_Color_Name ,
+        Variations_Price ,
+        Variant_Image_url ,
+        Sales_price ,
+        slug ,
+        Variant_Image  } = action.payload
+        const  Item = 
+           {
+              "product_id":product_id,
+              "quantity":quantity,
+              "SKU":SKU,
+              "name":name,
+              "Variations_Color_Name":Variations_Color_Name,
+              "Variations_Price":Variations_Price,
+              "Variant_Image_url":Variant_Image_url,
+              "Sales_price":Sales_price,
+              "slug":slug,
+              "Variant_Image":Variant_Image,
+              }
+         
       const cartIndex = state?.cart?.findIndex((item) => {
         return item?.SKU == action.payload?.SKU
       })
       
       if (cartIndex <= -1) {
-        const cartItem = { ...action.payload, quantity: 1 }
+
+        const cartItem = { ...Item, quantity: 1 }
         state.cart.push(cartItem)
-        if (state.cart?.length !== 0) { localStorage.setItem('cart', JSON.stringify(state?.cart)) }
+        if (state.Cart?.length != 0) { localStorage.setItem('cart', JSON.stringify(state?.cart)) }
 
       }
       state.isSuccess = 'success'
@@ -80,7 +106,7 @@ const cartnWishSlice = createSlice({
     //   })
     //   if (wishIndex <= -1) {
     //     localStorage.setItem('wishlist',JSON.stringify(action.payload))
-    //     // if (state.cart?.length !== 0) { localStorage.setItem('cart', JSON.stringify(state?.cart)) }
+    //     // if (state.Cart?.length != 0) { localStorage.setItem('cart', JSON.stringify(state?.cart)) }
     //   }
     // },
     adddToBuyNow: (state, action) => {
@@ -187,6 +213,15 @@ const cartnWishSlice = createSlice({
       .addCase(deleteAllItemsFromCart.rejected, (state, action) => {
 
         state.message = action.payload
+
+      })
+      .addCase(deleteAllItemsFromCart.fulfilled, (state, action) => {
+
+        state.isLoading = false
+        state.isSuccess = true
+        state.message = ''
+        state.isError = false
+        state.cart = []
 
       })
       .addCase(getWishlist.pending, (state, action) => {
@@ -301,8 +336,8 @@ export const deleteFromCart = createAsyncThunk('/cart/delete', async (SKU, thunk
 
 export const deleteAllItemsFromCart = createAsyncThunk('cart/deleteAll', async (_, thunkAPI) => {
   try {
-    const user = thunkAPI.getState().auth.users
-    return await cartnWishService.deleteAllItemsFromCart(user)
+    const users = thunkAPI.getState().auth.users
+    return await cartnWishService.deleteAllItemsFromCart(users)
   } catch (error) {
     const message = (error.response && error.response.data && error.response.data.message || error.message || error.toString())
     return thunkAPI.rejectWithValue(message)
@@ -341,7 +376,8 @@ export const deleteWishlist = createAsyncThunk('/wishlist/delete', async (id, th
 export const addToCartforGuestafterLogin = createAsyncThunk('/cart/add/afterlogin', async (lineItems, thunkAPI) => {
   try {
     const users = thunkAPI.getState().auth.users
-    return await cartnWishService.addToCartforGuestafterLogin(lineItems, users)
+    const cart = thunkAPI.getState().cartWish.cart
+    return await cartnWishService.addToCartforGuestafterLogin(lineItems,cart, users)
   } catch (error) {
     const message = (error.response && error.response.data && error.response.data.message || error.message || error.toString())
     return thunkAPI.rejectWithValue(message)

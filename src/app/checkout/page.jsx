@@ -23,6 +23,11 @@ function page() {
 
     const toggleShow = () => setBasicModal(!basicModal);
 
+    const handleLoginRedirect = () => {
+        const currentUrl = window.location.href;
+        localStorage.setItem('redirectAfterLogin', currentUrl);
+        router.push('/my-account?r=checkout');
+      };
 
     return (
         <>
@@ -36,9 +41,9 @@ function page() {
                                     !users?.id &&
                                 <div className="row">
                                     <div className="col-lg-12 text-center">
-                                        <Link href="/my-account">
-                                            <button className='btn btn-dark mt-5' >Login / Signup</button>
-                                        </Link>
+                                       
+                                            <button onClick={handleLoginRedirect} className='btn btn-dark mt-5' >Login / Signup</button>
+                                        
                                     </div>
                                     <div className="col-lg-12 text-center">
                                         <hr />
@@ -231,7 +236,7 @@ function page() {
 
 
                                 </div> */}
-                                <div className="checkout-links">
+                                {/* <div className="checkout-links">
                                     <ul>
                                         <li><Link href="#">Refund policy</Link></li>
                                         <li><Link href="#">Shipping policy</Link></li>
@@ -239,7 +244,7 @@ function page() {
                                         <li><Link href="#">Terms of service</Link></li>
                                         <li><Link href="#">Contact information</Link></li>
                                     </ul>
-                                </div>
+                                </div> */}
                             </div>
                         </div>
 

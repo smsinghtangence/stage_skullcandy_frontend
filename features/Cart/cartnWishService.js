@@ -65,18 +65,50 @@ const getuserData = async (users) => {
     }})
     return response.data
  }
-const addToCartforGuestafterLogin = async (lineItems, users) => {
+ 
+const addToCartforGuestafterLogin = async (lineItems,cart, users) => {
 
+    const users_cart = await  getuserData(users)
+     
+
+    let Cart1 = [];
+    // console.log("users_cart "+JSON.stringify(users_cart?.Cart))
+    // console.log("lineItems "+JSON.stringify(lineItems))
+    // if (lineItems) {
+    //     Cart = [...lineItems];
+    //   }
+    
+    //   if (users_cart && users_cart?.Cart) {
+    //     Cart = [...users_cart.Cart];
+    //   }
+
+     
+
+      if (lineItems && lineItems.length > 0) {
+        Cart1 = [...lineItems];
+      }
+      
+      if (users_cart?.Cart && users_cart?.Cart?.length > 0) {
+        Cart1 = [...Cart1, ...users_cart?.Cart];
+      }
+    
+ 
+
+
+    // const cartItem = {
+    //     "id": users?.id,
+    //     "Cart": [
+    //        ...users_cart?.Cart,
+    //        cart  
+            
+    //     ]
+    // }
     const cartItem = {
         "id": users?.id,
-        "Cart": [
-            ...users?.Cart,
-            ... lineItems 
-            
-        ]
+        "Cart": Cart1
     }
 
-    if (users?.id) {
+    if (users?.id && Cart1?.length >0) {
     const res = await axios.put(API_URL + `/api/users/${users.id}`, {...cartItem}, {headers:{
         "Authorization": `Bearer ${users?.token}`
     }})
@@ -89,7 +121,11 @@ const addToCartforGuestafterLogin = async (lineItems, users) => {
         return response.Cart
     }
     else
-    return res.data
+    {
+        
+        const response = await  getuserData(users)
+        return response.Cart
+    }
 } 
      
 
@@ -136,8 +172,7 @@ const deleteFromCart = async (SKU,cart, users ) => {
      
 
 /////////
-
-const newcart = cart.filter(item => item.SKU !== SKU)
+ const newcart = cart.filter(item => item.SKU !== SKU)
  
 
 
@@ -171,10 +206,31 @@ if (users?.id) {
 }
 }
 
-const deleteAllItemsFromCart = async (user) => {
-    // console.log("user", user)
-    const response = await axios.delete(API_URL + `/custom/v1/users/${user.id}/delete-all/cart`, config)
-    // console.log(response.data)
+const deleteAllItemsFromCart = async (users) => {
+    // console.log("user", user)\
+
+
+    const cartItem = {
+        "id": users?.id,
+        "Cart": [  ]
+    }
+
+    if (users?.id) {
+    
+    
+        const res = await axios.put(API_URL + `/api/users/${users.id}`, {...cartItem}, {headers:{
+            "Authorization": `Bearer ${users?.token}`
+        }})
+    
+        if(res.status == 200) {
+            const response = await  getuserData(users)
+            return response.Cart
+         
+        }
+        
+        else
+        return res.data
+    }
 }
 const addToWishlist = async (user, id) => {
 

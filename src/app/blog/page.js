@@ -13,7 +13,7 @@ function page() {
         // pagesize: 1000, typeId: blogId 
     });
     setData(response.data)
-      console.log( JSON.stringify(response));
+      // console.log( JSON.stringify(response));
       return response;
 }
 useEffect(() => {  
@@ -46,7 +46,7 @@ useEffect(() => {
               </div>
               <div className="blog_content_snipt">
                 <h3>
-                  <a href={"blog/" + item?.attributes?.slug}>{item?.attributes?.title}</a>
+                  <a href={"blog/" + item?.attributes?.Slug}>{item?.attributes?.title}</a>
                 </h3>
                 <p className="meta_box">
                   September 7, 2022 {item?.attributes?.blogDate} | Categories:{" "}
@@ -58,7 +58,7 @@ useEffect(() => {
                 <p> [...]</p>
               </div>
               <Link
-                href={"blog/" + item?.attributes?.slug}
+                href={"blog/" + item?.attributes?.Slug}
                 className="detail_link"
               >
                 Read More

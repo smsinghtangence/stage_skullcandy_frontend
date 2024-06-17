@@ -47,8 +47,8 @@ function Drawer() {
      
       let quantity = i?.quantity
   
-      // let price = activeSlide?.sales_price ? activeSlide?.sales_price :activeSlide?.Variations_Price;
-      let price = i?.sales_price ? i?.sales_price :i?.Variations_Price;
+      // let price = activeSlide?.Sales_price ? activeSlide?.Sales_price :activeSlide?.Variations_Price;
+      let price = i?.Sales_price ? i?.Sales_price :i?.Variations_Price;
     
     return parseFloat(totalPrice + price * quantity);
   }, 0);
@@ -61,15 +61,15 @@ function Drawer() {
         <div className="drawer-content">
          
           <div className="drawer-header">
-          <h2>Your Bag</h2>
+          <h2>{cart?.length > 0?"Your Bag":""}</h2>
           <span className="drawer-close">
             <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" role="presentation" className="icon icon-close" fill="none" viewBox="0 0 30 30">
               <g data-name="Ellipse 40" fill="#000" stroke="#000" strokeWidth="2">
                 <circle cx="15" cy="15" r="15" stroke="none"></circle>
                 <circle cx="15" cy="15" r="14" fill="none"></circle>
               </g>
-              <line data-name="Line 92" y2="20" transform="translate(22.57 8.429) rotate(45)" fill="none" stroke="#fff" stroke-linecap="round" strokeWidth="2"></line>
-              <line data-name="Line 93" x2="20" transform="translate(8.43 8.429) rotate(45)" fill="none" stroke="#fff" stroke-linecap="round" strokeWidth="2"></line>
+              <line data-name="Line 92" y2="20" transform="translate(22.57 8.429) rotate(45)" fill="none" stroke="#fff" strokeLinecap="round" strokeWidth="2"></line>
+              <line data-name="Line 93" x2="20" transform="translate(8.43 8.429) rotate(45)" fill="none" stroke="#fff" strokeLinecap="round" strokeWidth="2"></line>
             </svg>
           </span>
           </div>
@@ -82,7 +82,7 @@ function Drawer() {
 
             
              
-                  <>                                {  login === true ? <>
+                  <>                                {  users?.id ? <>
                                                         {
                                                             cart?.map((i, index) => (
                                                                 <DrawerCartContainer i={i} key={index} />))
@@ -99,21 +99,33 @@ function Drawer() {
                                                     </>
              
                                                        } </>
-             :""
+             :
+             
+             
+             <>
+             <div className="center">
+             <h3>Your cart is empty</h3>
+             <a class="CartDrawer-Checkout" href="/shop">Continue shopping</a>
+             </div>
+             </>
 }
             {/* /////////////////////////////////////////////////// */}
 
           </div>
+          {  cart?.length > 0 ?
 
+            
+             
+<>           
           <div className="drawer-footer">
             <div className="sub-total">
               <h4>Subtotal</h4>
-              <span className="subtotal-value"><i class="fa fa-rupee"></i>{total}</span>
+              <span className="subtotal-value"><i className="fa fa-rupee"></i>{total}</span>
             </div>
-            <p>Taxes and <Link href="#">shipping</Link> calculated at checkout </p>
-            <Link href="/checkout" className='CartDrawer-Checkout'>Checkout</Link>
+            <p>Taxes and shipping calculated at checkout </p>
+            <Link href="/checkout" className='CartDrawer-Checkout'  >Checkout</Link>
           </div>
-
+</>:""}
 
         </div>
       </section>

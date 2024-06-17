@@ -21,47 +21,46 @@ function ProductList({products}) {
 
         <>
           {products?.map((item, index) => {
-            const product = item?.attributes;
+            const product = item.attributes;
 
          
             return (
               <>
               {product?.slug && <>
 
-              {/* ///////////////// */}
-              { products.length > 3  ? <> 
               
-              {index ==3  ? 
+              { products.length > 3  ? 
               
-              <>
-               {/* product */}
-                  <div className="pr-list" key={index+"stat"}>
-                    <Link href="#">
+              /////////////////////
+              <> 
+              
+                      {index ==3  ? 
+                      
+                      <>
+                      {/* product */}
+                          <div className="pr-list" key={index+"stat"}>
+                            <Link href="#">
 
-                      <div className="collection-add-card-image">
-                        <img src="https://www.skullcandy.com/cdn/shop/files/Merch_Tile_TT_1x2_headphones.png?format=pjpg&v=1709654885&width=1500" alt="" />
-                        <div className="cadi-content">
-                          <h4>EXPLORE TRIPLE THREAT</h4>
-                        </div>
+                              <div className="collection-add-card-image">
+                                <img src="https://www.skullcandy.com/cdn/shop/files/Merch_Tile_TT_1x2_headphones.png?format=pjpg&v=1709654885&width=1500" alt="" />
+                                <div className="cadi-content">
+                                  <h4>EXPLORE TRIPLE THREAT</h4>
+                                </div>
 
-                      </div>
-                    </Link>
-                  </div>
-                  {/* product */}
-              </>
+                              </div>
+                            </Link>
+                          </div>
+                          {/* product */}
+                      </>
 
-              :""
-              }
+                      :""
+                      }
               </>
                           
                 :
                 ""
                           
                                    }
-
-          {/* ///////////////// */}
-
-
 
 
                 <div className="pr-list" key={"prolist"+index}>
@@ -70,19 +69,13 @@ function ProductList({products}) {
                     <div className="whats-new-list">
                       <div className="whats-new-img">
 
-                      {/* {item?.attributes?.Variation_Sliders[0]?.Sales_price 
+                      {item?.attributes?.Variation_Sliders[0]?.Sales_price 
                       &&
                         <span className="wnl-bladge text-uppercase sale-bladge">on sale </span>
-                      } */}
-                      {item?.attributes?.Product_Tag &&
-  <span 
-      id='wnl-bladge' 
-      className={`wnl-bladge text-uppercase ${item?.attributes?.Product_Tag}`}>
-      {item?.attributes?.Product_Tag}
-    </span>
-          }
-                        <Link href={"/shop/" + product?.slug}>
-                          {/* <Swiper
+                      }
+
+                        <Link href={"/shop/" + product.slug}>
+                          <Swiper
                             style={{
                               '--swiper-navigation-color': '#fff',
                               '--swiper-pagination-color': '#fff',
@@ -94,18 +87,18 @@ function ProductList({products}) {
                             modules={[FreeMode, Navigation, Thumbs]}
                             className="mySwiper2"
                             key={"prolistslider_main"+index}
-                          > */}
-                            {/* {item?.attributes?.Variation_Sliders?.map((variation, i) => ( */}
+                          >
+                            {item?.attributes?.Variation_Sliders?.map((variation, i) => (
                               <>
                               
-                                {/* <SwiperSlide key={"prolistslider"+i}> */}
-                                  <img src={geturl(item?.attributes?.Variation_Sliders[0]?.Variant_Image)}  alt={item?.attributes?.title}/>
-                                {/* </SwiperSlide> */}
+                                <SwiperSlide key={"prolistslider"+i}>
+                                  <img src={geturl(variation?.Variant_Image)}  alt={item?.attributes?.title}/>
+                                </SwiperSlide>
                               </>
-                            {/* ))} */}
+                            ))}
                            
 
-                          {/* </Swiper> */}
+                          </Swiper>
                         </Link>
                       </div>
                       <div className="what-new-content">

@@ -102,12 +102,12 @@ function LoveProduct() {
                           </h4>
                           <p>{item?.attributes?.Product_Tag_Line_Heading}</p>
                           <div className="wnc-price">
-                          <h5> <i class="fa fa-rupee"></i>
-                           {item?.attributes?.Variation_Sliders[0]?.sales_price ? item?.attributes?.Variation_Sliders[0]?.sales_price :item?.attributes?.Variation_Sliders[0]?.Variations_Price}
+                          <h5> <i className="fa fa-rupee"></i>
+                           {item?.attributes?.Variation_Sliders[0]?.Sales_price ? item?.attributes?.Variation_Sliders[0]?.Sales_price :item?.attributes?.Variation_Sliders[0]?.Variations_Price}
 
 
 
-                           {item?.attributes?.Variation_Sliders[0]?.sales_price && <s><i className="fa fa-rupee"></i> {item?.attributes?.Variation_Sliders[0]?.Variations_Price}</s>}
+                           {item?.attributes?.Variation_Sliders[0]?.Sales_price && <s><i className="fa fa-rupee"></i> {item?.attributes?.Variation_Sliders[0]?.Variations_Price}</s>}
                         </h5>
                           </div>
                           <Swiper

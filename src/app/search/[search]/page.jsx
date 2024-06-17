@@ -10,11 +10,15 @@ import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
 import { getDataWithQuery, geturl } from "@/utils/api"
-function page() {
-    const [thumbsSwiper, setThumbsSwiper] = useState(null);
-const [products, setProducts] = useState();
+function page({ params }) {
+
+
+  const slug = params.search;
+  
+  const [thumbsSwiper, setThumbsSwiper] = useState(null);
+  const [products, setProducts] = useState();
   const getdata = async () => {
-    const response = await getDataWithQuery(`/api/products/?populate[1]=image,Feature_List.Icons,Variation_Sliders.Desktop_Image,Variation_Sliders.Mobile_Image,Variation_Sliders.Variant_Image,Extra_Features,Video_Section.Video_Desktop_Image,Video_Section.Video_Tab_Image,Content_Section.Desktop_Image,Logo_Background_content.Skull_Logo,Logo_Background_content.Quotes_Hash_Tag_Sign,Left_Image_Content,Left_Right_Image_Section&populate[0]=image,Feature_List,Variation_Sliders,Extra_Features,Video_Section,Content_Section,Logo_Background_content,Left_Image_Content.Desktop_Image,Left_Image_Content.Image_Icon,Left_Right_Image_Section.Left_Image,Left_Right_Image_Section.Right_Image,Product_Usp.Icon,Product_Detail_Slider.Image,Product_Detail_Slider_2.Image,Product_Slider.Product_Slider,Product_Accordion,Product_Hover_Image`,
+    const response = await getDataWithQuery(`/api/products/?filters[title][$contains]=${slug}&populate[1]=image,Feature_List.Icons,Variation_Sliders.Desktop_Image,Variation_Sliders.Mobile_Image,Variation_Sliders.Variant_Image,Extra_Features,Video_Section.Video_Desktop_Image,Video_Section.Video_Tab_Image,Content_Section.Desktop_Image,Logo_Background_content.Skull_Logo,Logo_Background_content.Quotes_Hash_Tag_Sign,Left_Image_Content,Left_Right_Image_Section&populate[0]=image,product_categories,Feature_List,Variation_Sliders,Extra_Features,Video_Section,Content_Section,Logo_Background_content,Left_Image_Content.Desktop_Image,Left_Image_Content.Image_Icon,Left_Right_Image_Section.Left_Image,Left_Right_Image_Section.Right_Image,Product_Usp.Icon,Product_Detail_Slider.Image,Product_Detail_Slider_2.Image,Product_Slider.Product_Slider,Product_Accordion,Product_Hover_Image,Product_Video_Section.video1,Product_Video_Section.video2,Product_Video_Section.video3,,Product_Video_Section.video4,Product_Video_Section.video5,Product_Video_Section.image1,Product_Video_Section.image2,Product_Video_Section.image3,Product_Video_Section.image4,Product_Video_Section.image5`,
 
       {
         // pagesize: 1000, typeId: blogId 
@@ -41,7 +45,7 @@ const [products, setProducts] = useState();
                   </svg></Link>
                 </li>
                 <li>
-                  Shop
+                  Search
                 </li>
               </ol>
             </div>
@@ -55,7 +59,7 @@ const [products, setProducts] = useState();
        <div className="arcive-prouct">
        
 {/* {JSON.stringify(products)} */}
-
+ 
 {products?.map((item, index) => {
     
       const product = item?.attributes;

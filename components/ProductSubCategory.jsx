@@ -56,7 +56,7 @@ useEffect(() => {
           <div className="col-lg-12">
           <div className="cbl-wrapper  cat-desktop">
           {category?.map((item, i) => (
-            <div className="clb-list">
+            <div className="clb-list" key={"pro"+i}>
              
             <Link href={`/collection/${item?.attributes?.slug}`}>
             {/* {console.log(item?.attributes?.Product_Category_Img?.data)} */}

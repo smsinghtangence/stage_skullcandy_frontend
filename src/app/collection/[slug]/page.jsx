@@ -32,7 +32,7 @@ function page({ params }) {
  
   const getdata = async () =>{
 
-        const response = await getDataWithQuery(`/api/product-categories?filters[slug][$eq]=${slug}&populate[1]=parent_category,products,products.Variation_Sliders.Variant_Image,products.Variation_Sliders.Mobile_Image,products.Product_Hover_Image,products.Filters&populate[2]=products.image,products.Variation_Sliders.Desktop_Image,products.Variation_Sliders.Variant_Image,products.Variation_Sliders.Mobile_Image,products.Product_Hover_Image,products.Filters.Activity,products.Filters.Battery_Life,products.Filters.Feature,products.Filters.Filter_Collection,products.Filters.Filter,products.Filters.Filter_color,,products.Filters.Activity_Filter`,  
+        const response = await getDataWithQuery(`/api/product-categories?filters[slug][$eq]=${slug}&populate[1]=parent_category,products,products.Variation_Sliders.Variant_Image,products.Variation_Sliders.Mobile_Image,products.Product_Hover_Image,products.Filters&populate[2]=products.image,products.Variation_Sliders.Desktop_Image,products.Variation_Sliders.Variant_Image,products.Variation_Sliders.Mobile_Image,products.Product_Hover_Image,products.Filters.Activity,products.Filters.Battery_Life,products.Filters.Feature,products.Filters.Filter_Collection,products.Filters.Filter,products.Filters.Filter_color,products.Filters.Activity_Filter,products.Filters.Battery_Life`,  
     
     { 
         // pagesize: 1000, typeId: blogId 
