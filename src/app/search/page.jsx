@@ -13,11 +13,38 @@ import { getDataWithQuery, geturl } from "@/utils/api"
 import { useRouter } from 'next/router';
 function page() {
 
-  const router = useRouter();
-  const { query } = router;
-const slug = query.s;
+  // const router = useRouter();
+  // const { query } = router;
+    // const slug = query.s;
+    const [slug, setslug] = useState();
   // const slug = params.search;
   // console.log("slug "+ JSON.stringify(router))
+////////////////////////////
+  const [isMounted, setIsMounted] = useState(false);
+ 
+ 
+
+  const router = useRouter();
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (isMounted && router.query.s) {
+      setslug(router.query.s)
+      getdata();
+    }
+  }, [isMounted, router.query.s]);
+
+/////////////////////////////
+
+
+
+
+
+
+
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
   const [products, setProducts] = useState();
   const getdata = async () => {
@@ -31,9 +58,13 @@ const slug = query.s;
 
     return response;
   }
-  useEffect(() => {
-    getdata();
-  }, []);
+  // useEffect(() => {
+  //   getdata();
+  // }, []);
+
+
+    
+
   return (
     <>
 
@@ -55,6 +86,56 @@ const slug = query.s;
           </div>
         </div>
       </div>
+
+
+      <section className="search-page">
+                <div className="container">
+                <div className="row">
+                    <div className="col-lg-12">
+                        <div className="search-page-blk">
+                            <h1>Search</h1>
+                            <form onSubmit={getdata}>
+                                <div className="form-group">
+                                    <input 
+                                    type="text" 
+                                    className='form-conrol'
+                                    value={slug}
+                                     onChange={(e) => setslug(e.target.value)}
+                                     placeholder="Search..."
+                                    />
+                                    {/* <label htmlFor="">Search</label> */}
+                                    <button
+                                        type="submit"
+                                        className="search__button field__button"
+                                        aria-label="Search"
+                                        >
+                                       <img src="/images/search-black.png" alt="" />
+                                        </button>
+                                </div>
+                               {/* <div className="search-result">
+                                <h5>Products</h5>
+                                <div className="search-proudct-list">
+                                    <div className="spl-img">
+                                        <img src="https://cdn.shopify.com/s/files/1/0635/5114/3993/files/dime_3_buy_box_black_orange_1.png?v=1709652319&width=150" alt="" />
+                                    </div>
+                                    <div className="spl-content">
+                                        <h3>Dime® 3</h3>
+                                    </div>
+                                    
+                                </div>
+                                <Link href="" className="product-search-btn"> Search for</Link>
+                               </div> */}
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </section>
+
+
+
+      
 <div className='archive'>
 <div className="container">
     <div className="row">

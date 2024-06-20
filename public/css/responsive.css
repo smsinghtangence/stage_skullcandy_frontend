@@ -129,7 +129,7 @@ max - 540
     .skull_mobile_menu .skull_menu ul#menu-main-menu > li:nth-child(n+7){border:none;}
     .skull_mobile_menu.is_open{transform:translate3d(0,0,0);}
     .skull_nav_button{position:relative;width:21px;}
-    .skull_nav_button span{display:block;width:100%;height:1px;background:#fff;margin:6px 0;}
+    .skull_nav_button span{display:block;width:100%;height:3px;background:#fff;margin:6px 0;}
     .tab_header .logo_box img{width:150px;}
     .tab_cart_btn{position:relative;display:inline-block;}
     .tab_cart_btn svg{width:23px;color:#fff;height:23px;cursor: pointer;}

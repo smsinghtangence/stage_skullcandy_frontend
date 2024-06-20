@@ -135,8 +135,8 @@ return (
 {product?.product_categories?.data[0]?.attributes?.slug &&
 <LoveProduct  slug={product?.product_categories?.data[0]?.attributes?.slug}/>
 }
-{/* 
-<Review /> */}
+
+<Review />
 
 
 <section className='right-for-you-blk'>

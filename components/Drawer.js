@@ -5,9 +5,13 @@ import { payWithCardReset } from '@/features/CheckOut/checkOutSlice'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import Link from 'next/link'
-
+import useCart  from '@/components/hooks/useCart'
 
 function Drawer() {
+  
+  const { openCart, isCartOpen, closeCart } = useCart();
+
+   
 
     const { cart, wishlist, isLoading } = useSelector(state => state.cartWish)
 
@@ -28,10 +32,11 @@ function Drawer() {
             setLogin(false)
 
         }
+         
         // dispatch(payWithCardReset())
     }, [])
 
-
+    console.log(isCartOpen)
   //   const total = cart?.reduce((p, c) => {
   //     return parseFloat(p + c.price * c.quantity)
   // }, [0])
@@ -52,17 +57,19 @@ function Drawer() {
     
     return parseFloat(totalPrice + price * quantity);
   }, 0);
-
+ 
   }
   return (
    <>
 
-   <section className="drawer">
+   {/* <section className={isCartOpen=="true" ? "drawer active ":"drawer"   }> */}
+
+   <section className={isCartOpen =="true" ? 'drawer active' : 'drawer'}> 
         <div className="drawer-content">
          
           <div className="drawer-header">
           <h2>{cart?.length > 0?"Your Bag":""}</h2>
-          <span className="drawer-close">
+          <span className="drawer-close" onClick={()=>closeCart()} >
             <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" role="presentation" className="icon icon-close" fill="none" viewBox="0 0 30 30">
               <g data-name="Ellipse 40" fill="#000" stroke="#000" strokeWidth="2">
                 <circle cx="15" cy="15" r="15" stroke="none"></circle>
@@ -105,7 +112,7 @@ function Drawer() {
              <>
              <div className="center">
              <h3>Your cart is empty</h3>
-             <a class="CartDrawer-Checkout" href="/shop">Continue shopping</a>
+             <Link class="CartDrawer-Checkout" href="/shop">Continue shopping</Link>
              </div>
              </>
 }
@@ -124,6 +131,7 @@ function Drawer() {
             </div>
             <p>Taxes and shipping calculated at checkout </p>
             <Link href="/checkout" className='CartDrawer-Checkout'  >Checkout</Link>
+            <Link href="/cart" className='CartDrawer-Checkout cart-btn'  >Cart</Link>
           </div>
 </>:""}
 

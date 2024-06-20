@@ -12,9 +12,10 @@ import Offcanvas from 'react-bootstrap/Offcanvas';
 import Accordion from 'react-bootstrap/Accordion';
 import { addToCartforGuestafterLogin, getCartData, getWishlist } from '@/features/Cart/cartnWishSlice'
 import { useRouter } from 'next/navigation'
+import useCart  from '@/components/hooks/useCart'
 
 function header() {
-
+  const { openCart, isCartOpen, closeCart } = useCart();
   const { users, isError, isSuccess, message, isLaoding, loginTimestamp } =
 useSelector((state) => state.auth);
 const { cart, wishlist } = useSelector((state) => state.cartWish);
@@ -135,12 +136,36 @@ useEffect(() => {
 }, []);
  
 const _url = data?.attributes?.Annoucement_Url ? data?.attributes?.Annoucement_Url : "";
+///////
+const [menuOpen, setMenuOpen] = useState(false);
+const [activePanel, setActivePanel] = useState(null);
+const [isOpen, setIsOpen] = useState(false);
+const toggleMenu = () => {
+  setMenuOpen(!menuOpen);
+  setIsOpen(!isOpen);
+};
+
+const handlePanelClick = (panel) => {
+  setActivePanel(panel);
+};
+
+const handleBodyClick = (e) => {
+  if (!e.target.closest('#menu-toggle') && menuOpen) {
+    setMenuOpen(false);
+    setActivePanel(null);
+
+  }
+};
+///////
+
+
+
 
 let k =0;
 
 //////
 const router = useRouter();
-const [query, setQuery] = useState('');
+const [query, setQuery] = useState('search');
 const [searchResults, setSearchResults] = useState([]);
 const handleSearch = async (e) => {
   e.preventDefault();
@@ -175,7 +200,7 @@ const handleSearch = async (e) => {
 
             <input
           type="text"
-          value={query}
+          value={query=="search"?"":query}
           onChange={(e) => setQuery(e.target.value)}
           className='mobile-input' placeholder='Search' 
         />
@@ -285,7 +310,7 @@ const handleSearch = async (e) => {
 <form onSubmit={handleSearch}>
         <input
           type="text"
-          value={query}
+          value={query=="search"?"":query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder=""
           className='search'
@@ -412,7 +437,7 @@ const handleSearch = async (e) => {
                               </Link>
                             </li>
                            
-                            <li className="no_hover cart_btn header-cart">
+                            <li className="no_hover cart_btn header-cart" onClick={()=>openCart()}>
                               <Link href="#">
                                 {/* <img src="/images/store.png" alt="" /> */}
                                 <svg
@@ -453,7 +478,7 @@ const handleSearch = async (e) => {
                </div> */}
                 <div className="row">
                   <div className="col-md-3 col-3">
-                    <div className="skull_nav_button"  onClick={showDiv}>
+                  <div className={`skull_nav_button ${isOpen ? 'open' : ''}`}  id="menu-toggle"  onClick={toggleMenu}>
                       <span />
                       <span />
                       <span />
@@ -555,11 +580,93 @@ const handleSearch = async (e) => {
             <span className="close_btn" />
           </div>
         </div>
+
+
+        {/*  */}
+        <div onClick={handleBodyClick} className='mobile-menu'>
+      <div className={menuOpen ? 'active' : ''}>
+        <nav className="navbar">
+         
+          <nav className={`slide-out-menu ${menuOpen ? 'active' : ''}`} onClick={(e) => e.stopPropagation()}>
+            <div className="menu-panels">
+              <div className="primary-menu-panel">
+                <ul>
+                  <li>
+                    <button type="button" className="menu-link" onClick={() => handlePanelClick('my-account')}>
+                      My Account
+                      <svg className="arrow-right d-sm-ib" fill="#111" height="30px" width="30px" viewBox="0 0 185.4 300">
+                        <path d="M7.3 292.7c-9.8-9.8-9.8-25.6 0-35.4L114.6 150 7.3 42.7c-9.8-9.8-9.8-25.6 0-35.4s25.6-9.8 35.4 0L185.4 150 42.7 292.7c-4.9 4.8-11.3 7.3-17.7 7.3-6.4 0-12.7-2.5-17.7-7.3z"></path>
+                      </svg>
+                    </button>
+                  </li>
+                  <li>
+                    <button type="button" className="menu-link" onClick={() => handlePanelClick('help')}>
+                      Help
+                      <svg className="arrow-right d-sm-ib" fill="#111" height="30px" width="30px" viewBox="0 0 185.4 300">
+                        <path d="M7.3 292.7c-9.8-9.8-9.8-25.6 0-35.4L114.6 150 7.3 42.7c-9.8-9.8-9.8-25.6 0-35.4s25.6-9.8 35.4 0L185.4 150 42.7 292.7c-4.9 4.8-11.3 7.3-17.7 7.3-6.4 0-12.7-2.5-17.7-7.3z"></path>
+                      </svg>
+                    </button>
+                  </li>
+                  <li>
+                    <button type="button" className="menu-link" onClick={() => handlePanelClick('wishlists')}>
+                      Wishlists
+                      <svg className="arrow-right d-sm-ib" fill="#111" height="30px" width="30px" viewBox="0 0 185.4 300">
+                        <path d="M7.3 292.7c-9.8-9.8-9.8-25.6 0-35.4L114.6 150 7.3 42.7c-9.8-9.8-9.8-25.6 0-35.4s25.6-9.8 35.4 0L185.4 150 42.7 292.7c-4.9 4.8-11.3 7.3-17.7 7.3-6.4 0-12.7-2.5-17.7-7.3z"></path>
+                      </svg>
+                    </button>
+                  </li>
+                </ul>
+              </div>
+              <div className={`menu-panel ${activePanel === 'my-account' ? 'is-active' : ''}`} data-menu="my-account">
+                <button type="button" className="menu-link menu-header" onClick={() => setActivePanel(null)}>
+                  <svg className="arrow-left" fill="#111" height="30px" width="30px" viewBox="0 0 185.4 300">
+                    <path d="M160.4 300c-6.4 0-12.7-2.5-17.7-7.3L0 150 142.7 7.3c9.8-9.8 25.6-9.8 35.4 0 9.8 9.8 9.8 25.6 0 35.4L70.7 150 178 257.3c9.8 9.8 9.8 25.6 0 35.4-4.9 4.8-11.3 7.3-17.6 7.3z"></path>
+                  </svg>
+                  My Account
+                </button>
+                <ul>
+                  <li><a href="#">Profile</a></li>
+                  <li><a href="#">Account Balance</a></li>
+                  <li><a href="#">Settings</a></li>
+                </ul>
+              </div>
+              <div className={`menu-panel ${activePanel === 'help' ? 'is-active' : ''}`} data-menu="help">
+                <button type="button" className="menu-link menu-header" onClick={() => setActivePanel(null)}>
+                  <svg className="arrow-left" fill="#111" height="30px" width="30px" viewBox="0 0 185.4 300">
+                    <path d="M160.4 300c-6.4 0-12.7-2.5-17.7-7.3L0 150 142.7 7.3c9.8-9.8 25.6-9.8 35.4 0 9.8 9.8 9.8 25.6 0 35.4L70.7 150 178 257.3c9.8 9.8 9.8 25.6 0 35.4-4.9 4.8-11.3 7.3-17.6 7.3z"></path>
+                  </svg>
+                  Help
+                </button>
+                <ul>
+                  <li><a href="#">Contact Us</a></li>
+                  <li><a href="#">Help Centre</a></li>
+                  <li><a href="#">FAQ</a></li>
+                </ul>
+              </div>
+              <div className={`menu-panel ${activePanel === 'wishlists' ? 'is-active' : ''}`} data-menu="wishlists">
+                <button type="button" className="menu-link menu-header" onClick={() => setActivePanel(null)}>
+                  <svg className="arrow-left" fill="#111" height="30px" width="30px" viewBox="0 0 185.4 300">
+                    <path d="M160.4 300c-6.4 0-12.7-2.5-17.7-7.3L0 150 142.7 7.3c9.8-9.8 25.6-9.8 35.4 0 9.8 9.8 9.8 25.6 0 35.4L70.7 150 178 257.3c9.8 9.8 9.8 25.6 0 35.4-4.9 4.8-11.3 7.3-17.6 7.3z"></path>
+                  </svg>
+                  Wishlists
+                </button>
+                <ul>
+                  <li><a href="#">Birthday</a></li>
+                  <li><a href="#">Christmas</a></li>
+                  <li><a href="#">General</a></li>
+                </ul>
+              </div>
+            </div>
+          </nav>
+        </nav>
+      </div>
+    </div>
+        {/*  */}
       </header>
     
       <Drawer />
 
-    {isVisible && (
+    {/* {isVisible && (
         <div className='mmenu' >
          
           <div className='menu-close' onClick={hideDiv}><i className='fa fa-close' ></i></div>
@@ -604,7 +711,7 @@ const handleSearch = async (e) => {
 
 
         </div>
-      )}
+      )} */}
 
 
 

@@ -1,143 +1,91 @@
-import React from 'react'
+'use client'
+import React, { useEffect, useState } from 'react'
 import Accountnav from '@/components/Accountnav'
+import { useRouter } from 'next/navigation'
+import { useDispatch, useSelector } from "react-redux";
 function page() {
+
+  
+// const router = useRouter();
+const { users, isError, isSuccess, message, isLaoding, loginTimestamp } =
+useSelector((state) => state.auth);
+
+const [shipping, setShipping] = useState({
+  first_name: '',
+  last_name: '',
+  address_1: "",
+  address_2: "",
+  city: "",
+  state: "",
+  postcode: "",
+  country: "INDIA",
+  phone: "",
+  Company_Name:users?.Company_Name?users?.Company_Name:"",
+  GSTIN:users?.GSTIN?users?.GSTIN:""
+
+})
+const [errors, setErrors] = useState({});
+const handleChange = (e) => {
+  e.preventDefault()
+  // console.log("target "+ e.target.name +" valye "+ e.target.value)
+  setShipping({ ...shipping, [e.target.name]: e.target.value })
+
+  console.log(" s " + JSON.stringify(shipping)) 
+}
   return (
     <>
     <Accountnav/>
-    <form
-  className="woocommerce-EditAccountForm edit-account"
-  action=""
-  method="post"
->
-  <p className="woocommerce-form-row woocommerce-form-row--first form-row form-row-first">
-    <label htmlFor="account_first_name">
-      First name&nbsp;<span className="required">*</span>
-    </label>
-    <input
-      type="text"
-      className="woocommerce-Input woocommerce-Input--text input-text"
-      name="account_first_name"
-      id="account_first_name"
-      autoComplete="given-name"
-      defaultValue=""
-    />
-  </p>
-  <p className="woocommerce-form-row woocommerce-form-row--last form-row form-row-last">
-    <label htmlFor="account_last_name">
-      Last name&nbsp;<span className="required">*</span>
-    </label>
-    <input
-      type="text"
-      className="woocommerce-Input woocommerce-Input--text input-text"
-      name="account_last_name"
-      id="account_last_name"
-      autoComplete="family-name"
-      defaultValue=""
-    />
-  </p>
-  <div className="clear" />
-  <p className="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
-    <label htmlFor="account_display_name">
-      Display name&nbsp;<span className="required">*</span>
-    </label>
-    <input
-      type="text"
-      className="woocommerce-Input woocommerce-Input--text input-text"
-      name="account_display_name"
-      id="account_display_name"
-      defaultValue="test"
-    />{" "}
-    <span>
-      <em>
-        This will be how your name will be displayed in the account section and
-        in reviews
-      </em>
-    </span>
-  </p>
-  <div className="clear" />
-  <p className="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
-    <label htmlFor="account_email">
-      Email address&nbsp;<span className="required">*</span>
-    </label>
-    <input
-      type="email"
-      className="woocommerce-Input woocommerce-Input--email input-text"
-      name="account_email"
-      id="account_email"
-      autoComplete="email"
-      defaultValue="test@gmail.com"
-    />
-  </p>
-  <fieldset>
-    <legend>Password change</legend>
-    <p className="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
-      <label htmlFor="password_current">
-        Current password (leave blank to leave unchanged)
-      </label>
-      <span className="password-input">
-        <input
-          type="password"
-          className="woocommerce-Input woocommerce-Input--password input-text"
-          name="password_current"
-          id="password_current"
-          autoComplete="off"
-        />
-        <span className="show-password-input" />
-      </span>
-    </p>
-    <p className="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
-      <label htmlFor="password_1">
-        New password (leave blank to leave unchanged)
-      </label>
-      <span className="password-input">
-        <input
-          type="password"
-          className="woocommerce-Input woocommerce-Input--password input-text"
-          name="password_1"
-          id="password_1"
-          autoComplete="off"
-        />
-        <span className="show-password-input" />
-      </span>
-    </p>
-    <p className="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
-      <label htmlFor="password_2">Confirm new password</label>
-      <span className="password-input">
-        <input
-          type="password"
-          className="woocommerce-Input woocommerce-Input--password input-text"
-          name="password_2"
-          id="password_2"
-          autoComplete="off"
-        />
-        <span className="show-password-input" />
-      </span>
-    </p>
-  </fieldset>
-  <div className="clear" />
-  <p>
-    <input
-      type="hidden"
-      id="save-account-details-nonce"
-      name="save-account-details-nonce"
-      defaultValue="f931737a43"
-    />
-    <input
-      type="hidden"
-      name="_wp_http_referer"
-      defaultValue="/be/sign-in/edit-account/"
-    />{" "}
-    <button
-      type="submit"
-      className="woocommerce-Button button"
-      name="save_account_details"
-      value="Save changes"
-    >
-      Save changes
-    </button>
-    <input type="hidden" name="action" defaultValue="save_account_details" />
-  </p>
-</form>
+  
+  <form>
+
+  <div className="row">
+          <div className="col-lg-6">
+            <input
+              required
+              type="text"
+              placeholder='User name'
+              className='form-control'
+              name='user_name'
+              value={users?.username}
+              onChange={handleChange}
+            />
+            <span className="text-danger">
+              {errors[`shippingfirst_name`]}
+
+            </span>
+          </div>
+  </div>
+  <div className="row">
+          <div className="col-lg-6">
+            <input
+              required
+              type="text"
+              placeholder='First name'
+              className='form-control'
+              name='first_name'
+              value={shipping["first_name"]}
+              onChange={handleChange}
+            />
+            <span className="text-danger">
+              {errors[`shippingfirst_name`]}
+
+            </span>
+          </div>
+  </div>
+
+        <div className="row">
+          <div className="col-lg-12">
+            <input
+              required
+              type="text"
+              placeholder='Email'
+              className='form-control'
+              value={users?.email}
+              onChange={(e) => { setEmail(e.target.value) }} />
+            <span className="text-danger">{errors[`shippingemail`]}</span>
+          </div>
+        </div> 
+  </form>
 
     </>
   )

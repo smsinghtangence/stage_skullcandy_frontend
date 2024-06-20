@@ -328,7 +328,8 @@ export const createOrder = createAsyncThunk('checkout/order/place', async (lineI
       payment_method_title: stateObj.payment.payment_method_title,
       set_paid: stateObj.payment.set_paid,
       status: 'Processing',
-      billing: stateObj.shipping,
+       phone:stateObj.billing.phone,
+      billing: stateObj.billing,
       shipping: stateObj.shipping,
       shipping_lines : [
         stateObj.payment.payment_method === 'cod' ?  
@@ -352,7 +353,8 @@ export const createOrder = createAsyncThunk('checkout/order/place', async (lineI
         payment_method_title: stateObj.payment.payment_method_title,
         set_paid: stateObj.payment.set_paid,
         status: 'Processing',
-        billing: stateObj.shipping,
+         phone:stateObj.billing.phone,
+      billing: stateObj.billing,
         shipping: stateObj.shipping,
         shipping_lines : [
           stateObj.payment.payment_method === 'cod' ?  
@@ -377,7 +379,8 @@ export const createOrder = createAsyncThunk('checkout/order/place', async (lineI
       payment_method_title: stateObj.payment.payment_method_title,
       set_paid: stateObj.payment.set_paid,
       status: 'Processing',
-      billing: stateObj.shipping,
+       phone:stateObj.billing.phone,
+      billing: stateObj.billing,
       customer_id: users?.id,
       shipping: stateObj.shipping,
       shipping_lines : [
@@ -403,7 +406,8 @@ export const createOrder = createAsyncThunk('checkout/order/place', async (lineI
         payment_method_title: stateObj.payment.payment_method_title,
         set_paid: stateObj.payment.set_paid,
         status: 'Processing',
-        billing: stateObj.shipping,
+         phone:stateObj.billing.phone,
+      billing: stateObj.billing,
         customer_id: users?.id,
         shipping: stateObj.shipping,
         shipping_lines : [
@@ -446,6 +450,9 @@ export const getAddress = createAsyncThunk('/checkout/getaddress', async (_, thu
 })
 export const saveAddress = createAsyncThunk('/checkout/saveAddress', async (shipping, thunkAPI) => {
   try {
+    // const users = thunkAPI.getState().auth.users
+    // let address = thunkAPI.getState().checkOut.address
+    // return await checkoutService.saveAddress(address, shipping, users)
     const users = thunkAPI.getState().auth.users
     let address = thunkAPI.getState().checkOut.address
     return await checkoutService.saveAddress(address, shipping, users)
@@ -505,7 +512,8 @@ export const updateOrderAfterPayment = createAsyncThunk('/checkout/updateOrderAf
       payment_method_title: stateObj.payment.payment_method_title,
       set_paid: stateObj.payment.set_paid,
       status: 'Processing',
-      billing: stateObj.shipping,
+       phone:stateObj.billing.phone,
+      billing: stateObj.billing,
       shipping: stateObj.shipping,
       
 
@@ -515,7 +523,8 @@ export const updateOrderAfterPayment = createAsyncThunk('/checkout/updateOrderAf
         payment_method_title: stateObj.payment.payment_method_title,
         set_paid: stateObj.payment.set_paid,
         status: 'Processing',
-        billing: stateObj.shipping,
+         phone:stateObj.billing.phone,
+      billing: stateObj.billing,
         shipping: stateObj.shipping,
          
         coupon_lines: stateObj.couponLines
@@ -526,7 +535,8 @@ export const updateOrderAfterPayment = createAsyncThunk('/checkout/updateOrderAf
       payment_method_title: stateObj.payment.payment_method_title,
       set_paid: stateObj.payment.set_paid,
       status: 'Processing',
-      billing: stateObj.shipping,
+       phone:stateObj.billing.phone,
+      billing: stateObj.billing,
       customer_id: users?.id,
       shipping: stateObj.shipping,
      
@@ -537,7 +547,8 @@ export const updateOrderAfterPayment = createAsyncThunk('/checkout/updateOrderAf
         payment_method_title: stateObj.payment.payment_method_title,
         set_paid: stateObj.payment.set_paid,
         status: 'Processing',
-        billing: stateObj.shipping,
+         phone:stateObj.billing.phone,
+      billing: stateObj.billing,
         customer_id: users?.id,
         shipping: stateObj.shipping,
      
