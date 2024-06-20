@@ -33,7 +33,7 @@ function Signin() {
     username: "",
     password: "",
   });
-  const [mobile, setMobile] = useState("");
+  const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
   const [test, setTest] = useState("");
   const [isMobileLogin, setIsMobileLogin] = useState(false);
@@ -49,17 +49,16 @@ function Signin() {
 
   const handleSendOtp = async (e) => {
     // debugger
-    alert("lkjdnflkdnlvbknj");
-    if (!mobile || mobile.length !== 10) {
-      alert("Please enter a valid 10-digit mobile number.");
-      return;
-    }
+    // if (!mobile || mobile.length !== 10) {
+    //   alert("Please enter a valid 10-digit mobile number.");
+    //   return;
+    // }
 
     try {
       const response = await axios.post(
-        "http://localhost:1337/api/login",
+        "http://localhost:1337/api/send/otp",
         {
-          mobile: mobile,
+          email: email,
         },
         {
           headers: {
@@ -67,7 +66,7 @@ function Signin() {
           },
         }
       );
-      console.log(response.config.data);
+      alert("Otp Send Successfully");
       setTest(JSON.parse(response.config.data).mobile);
     } catch (error) {
       console.error("Login error:", error);
@@ -77,11 +76,10 @@ function Signin() {
   };
 
   const handleVerifyOtp = async (e) => {
-    alert("lllllllllllllllllll");
-    const loginItems = { mobile, otp };
+    const loginItems = { email, otp };
     try {
       const response = await axios.post(
-        `http://localhost:1337/api/login/verify/${test}`,
+        `http://localhost:1337/api/verify-otp/`,
         loginItems,
         {
           headers: {
@@ -89,7 +87,12 @@ function Signin() {
           },
         }
       );
+    alert("OTP Verified Successfully");
+    console.log(response.data.token,"ksjdghb.lkdfhblkxdjfnhbd,.jlfkyhbvkbdflkvbnh.kdfjhdlkfyhbg");
+    localStorage.setItem("token", response.data.token);
+    window.location.href ="/"
     } catch (error) {
+      alert("OTP is not Verified");
       console.error("Verification error:", error);
     }
   };
@@ -175,17 +178,17 @@ function Signin() {
           onSubmit={(e) => e.preventDefault()}
         >
           <p className="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
-            <label htmlFor="mobileno">
-              Mobile Number&nbsp;
+            <label htmlFor="email">
+              Email&nbsp;
               <span className="required">*</span>
             </label>
             <input
-              type="number"
+              type="email"
               className="woocommerce-Input woocommerce-Input--text input-text"
               // onChange={e => setUsername(e.target.value) }
-              value={mobile}
-              onChange={(e) => setMobile(e.target.value)}
-              name="mobileno"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              name="email"
             />{" "}
           </p>
           <p className="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
@@ -241,9 +244,6 @@ function Signin() {
             >
               Log in
             </button> */}
-          </p>
-          <p className="woocommerce-LostPassword lost_password">
-            <Link href="/sign-in/lost-password/">Resend OTP?</Link>
           </p>
           <span className="loginmethod_btn" onClick={handleLoginMethod}>
             Login with Username & Password
@@ -311,7 +311,7 @@ function Signin() {
             <Link href="/sign-in/lost-password/">Lost your password?</Link>
           </p>
           <span className="loginmethod_btn" onClick={handleLoginMethod}>
-            Login with Mobile No.
+            Login with Email OTP
           </span>
         </form>
       )}
