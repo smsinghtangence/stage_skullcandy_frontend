@@ -11,7 +11,8 @@ const initialState = {
   isSuccess: false,
   isError: false,
   message: "",
-  isLoading: false
+  isLoading: false,
+  drawerOpen: false,
 };
 
 const cartnWishSlice = createSlice({
@@ -70,6 +71,9 @@ const cartnWishSlice = createSlice({
 
       }
       state.isSuccess = 'success'
+    },
+    toggleDrawer: (state, action) => {
+      state.drawerOpen = action.payload;
     },
     decrement: (state, action) => {
       const cartIndex = state?.cart?.findIndex((item) => {
@@ -383,5 +387,5 @@ export const addToCartforGuestafterLogin = createAsyncThunk('/cart/add/afterlogi
     return thunkAPI.rejectWithValue(message)
   }
 })
-export const {resetBuyNow, reset,setBuyNowStatus,resetCartAfterPaymentForGustUser,resetBuyNowStatus, addToCart, removeFromCart, increment, decrement, adddToBuyNow ,removeFromBuyNow,compareCartState} = cartnWishSlice.actions
+export const {resetBuyNow, reset,setBuyNowStatus,resetCartAfterPaymentForGustUser,resetBuyNowStatus, addToCart, removeFromCart, increment, decrement, adddToBuyNow ,removeFromBuyNow,compareCartState, toggleDrawer } = cartnWishSlice.actions
 export default cartnWishSlice.reducer

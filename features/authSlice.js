@@ -30,6 +30,23 @@ const authSlice = createSlice({
     },
     extraReducers : (builder)=>{
       builder
+      .addCase(verifyOtp.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(verifyOtp.fulfilled, (state, action) => {
+        state.isLoading=false
+        state.isError = false;
+        state.isSuccess = true;
+        state.message = 'OTP Verified Successfully';
+        state.users= {...action.payload.user,"token":action.payload.jwt}
+        state.loginTimestamp = JSON.parse(localStorage.getItem('loginTime'))
+      })
+      .addCase(verifyOtp.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
       .addCase(userRegister.pending,(state)=>{
         state.isLoading = true
       })
@@ -163,6 +180,15 @@ export const userLogin  = createAsyncThunk('/auth/login',async(userData,thunkAPI
   // return error.response.data.error.message
   }
 })
+
+export const verifyOtp = createAsyncThunk('/auth/verifyOtp', async (loginItems, thunkAPI) => {
+  try {
+    return await authService.verifyOtp(loginItems);
+  } catch (error) {
+    const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+    return thunkAPI.rejectWithValue(message);
+  }
+});
 
 export const userLogout = createAsyncThunk('auth/logout',async(_,thunkAPI)=>{
 try {
