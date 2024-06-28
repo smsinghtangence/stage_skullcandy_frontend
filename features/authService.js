@@ -9,7 +9,7 @@ let config = {
 const API_URL = process.env.API_URL;
 const BASE_URL = process.env.BASE_URL;
 const userRegister = async (userData) => {
-  const response = await axios.post(API_URL + "/wc/v3/customers", userData);
+  const response = await axios.post(BASE_URL + "/wc/v3/customers", userData);
 
   localStorage.setItem(
     "user",
@@ -20,7 +20,7 @@ const userRegister = async (userData) => {
 };
 
 const userLogin = async (userData) => {
-  const response = await axios.post(BASE_URL + "/auth/local", {
+  const response = await axios.post(BASE_URL + "/api/auth/local", {
     identifier: userData.username,
     password: userData.password,
   });
@@ -43,7 +43,7 @@ const userLogin = async (userData) => {
 };
 
 const verifyOtp = async (loginItems) => {
-  const response = await axios.post(`${BASE_URL}/verify-otp`, loginItems, {
+  const response = await axios.post(`${BASE_URL}/api/verify-otp`, loginItems, {
     headers: {
       "Content-Type": "application/json",
     },
@@ -59,9 +59,50 @@ const verifyOtp = async (loginItems) => {
   return response.data;
 };
 
+const verifyGuestVerifyOtp = async (loginItems) => {
+  const response = await axios.post(
+    BASE_URL + "/api/guest/verify/otp",
+    loginItems,
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
+  response.status == 200
+    ? localStorage.setItem(
+        "user",
+        JSON.stringify({ ...response?.data?.user, token: response?.data?.jwt })
+      )
+    : null;
+
+  response.status == 200 ? localStorage.setItem("loginTime", Date.now()) : null;
+  return response.data;
+};
+
+const verifyGuestRegister = async (userData) => {
+  try {
+    const response = await axios.post(
+      BASE_URL + "/api/guest/checkouts",
+      userData
+    );
+    // You can handle additional logic here if needed
+    return response.data;
+  } catch (error) {
+    if (
+      error.response.status === 400 &&
+      error.response.data.code === "guest_registration_failure_user_exists"
+    ) {
+      throw new Error("Guest registration failed: User already exists");
+    } else {
+      throw error;
+    }
+  }
+};
+
 const resendOtp = async (resndItems) => {
-  const res = await axios.post(BASE_URL + "resend-otp", resndItems)
-}
+  const res = await axios.post(BASE_URL + "/api/resend-otp", resndItems);
+};
 
 const forgotPassword = async (email) => {
   const response = await axios.post(
@@ -124,6 +165,8 @@ const authService = {
   loginWithGoogle,
   loginWithFacebook,
   verifyOtp,
+  verifyGuestRegister,
+  verifyGuestVerifyOtp,
 };
 
 export default authService;

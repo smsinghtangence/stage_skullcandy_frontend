@@ -24,10 +24,6 @@ import { toast } from "react-toastify";
 
 function Signin() {
   const API_URL = process.env.API_URL || "";
-  // const [username, setUsername] = useState('')
-  // const [password, setPassword] = useState('')
-
-  ///
 
   const dispatch = useDispatch();
   const [loginData, setLoginData] = useState({
@@ -40,7 +36,9 @@ function Signin() {
   const [test, setTest] = useState("");
   const [isMobileLogin, setIsMobileLogin] = useState(false);
   const [isOtpSend, setIsOtpSend] = useState(true);
+  const [mobileError, setMobileError] = useState("");
   const { username, password: lpswd } = loginData;
+
   const handleLogin = (e) => {
     setLoginData({ ...loginData, [e.target.name]: e.target.value });
   };
@@ -49,79 +47,45 @@ function Signin() {
     setIsMobileLogin(!isMobileLogin);
   };
 
-  // const handleSendOtp = async (e) => {
-  //   // debugger
-  //   // if (!mobile || mobile.length !== 10) {
-  //   //   alert("Please enter a valid 10-digit mobile number.");
-  //   //   return;
-  //   // }
-
-  //   try {
-  //     const response = await axios.post(
-  //       "https://api.textlocal.in/send/",
-  //       {
-  //         email: email,
-  //       },
-  //       {
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //       }
-  //     );
-  //     toast.success("Otp Send Successfully");
-  //     setTest(JSON.parse(response.config.data).mobile);
-  //   } catch (error) {
-  //     toast.error("Somthing Went Wrong");
-  //     console.error("Login error:", error);
-  //   } finally {
-  //   }
-  //   setIsOtpSend(false);
-  // };
+  const validateMobileNumber = (mobile) => {
+    const mobileRegex = /^[6-9]\d{9}$/;
+    return mobileRegex.test(mobile);
+  };
 
   const handleSendOtp = async (e) => {
-    // Prevent the form from submitting if required
     e.preventDefault();
 
-    const generateOtp = () => {
-      return Math.floor(1000 + Math.random() * 9000).toString();
-    };
+    if (!validateMobileNumber(mobile)) {
+      setMobileError("Please enter a valid 10-digit Indian mobile number.");
+      return;
+    }
 
-    const otp = generateOtp();
-
-    // Define the necessary parameters
-    const apiKey = "NTE0ZjZmNGE3MTU4MzY0NTRkMzMzMDQ3N2E0MzMxNTQ=";
-    const sender = "SKDYIN";
-    const numbers = "91" + mobile;
-    const message = encodeURIComponent(
-      `Your OTP verification code is ${otp}. Thanks for registering at Skullcandy.in`
-    );
+    setMobileError("");
 
     try {
       const response = await axios.post(
         "http://localhost:1337/api/send/otp",
-        {
-          mobile: mobile,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
+        { mobile },
+        { headers: { "Content-Type": "application/json" } }
       );
+
+      console.log(response, "OTP sent response");
+
       toast.success("OTP sent successfully");
-      // Set the mobile number from the response if needed
-      // setTest(JSON.parse(response.config.data).mobile);
-    } catch (error) {
-      toast.error("Something went wrong");
-      console.error("OTP sending error:", error);
-    } finally {
       setIsOtpSend(false);
+    } catch (error) {
+      toast.error(error.response.data.error.message);
+      console.error("OTP sending error:", error.response.data.error.message);
     }
   };
 
   const handleResendOtp = async () => {
     try {
-      const res = await axios.post("http://localhost:1337/api/resend-otp", {mobile}, {headers: {"Content-Type": "application/json"}})
+      const res = await axios.post(
+        "http://localhost:1337/api/resend-otp",
+        { mobile },
+        { headers: { "Content-Type": "application/json" } }
+      );
       toast.success("OTP Resend Successfully");
     } catch (error) {
       toast.error("Something went wrong");
@@ -160,50 +124,15 @@ function Signin() {
         Sales_price: item?.Sales_price,
       };
     });
-    // console.log("lineItems "+lineItems)
     if (Cart?.length != 0) {
       dispatch(addToCartforGuestafterLogin(lineItems));
     }
   }
 
   useEffect(() => {
-  //   if (isError) {
-  //     toast.error(message);
-  //   }
-
     if (isSuccess) {
       toast.success(`Welcome ${users?.username}`);
-      // setPop(false)
-      // setActive(false);
-      // setError(" ");
-      // setMsgError(" ");
-      // hidePop()
     }
-  //   //  alert(users?.id)
-  //   //   if (users?.id) {
-
-  //   //     alert("hi 12")
-  //   //       dispatch(getCartData())
-  //   //       dispatch(getWishlist())
-  //   //       const Cart = JSON.parse(localStorage?.getItem('cart'))
-  //   //       const lineItems = Cart?.map((item) => {
-  //   //           return {
-  //   //               "product_id": item?.id,
-  //   //               "quantity": item?.quantity,
-  //   //               "SKU": item?.SKU,
-  //   //               "name": item?.name,
-  //   //               "Variations_Color_Name": item?.Variations_Color_Name,
-  //   //               "Variations_Price": item?.Variations_Price,
-  //   //               "Variant_Image_url": item?.Variant_Image_url,
-  //   //               "Sales_price": item?.Sales_price
-  //   //           }
-  //   //       })
-  //   //       console.log("lineItems "+lineItems)
-  //   //       if (Cart?.length != 0) {
-  //   //           dispatch(addToCartforGuestafterLogin(lineItems))
-  //   //       }
-
-  //   //   }
   }, [users, isError, isSuccess]);
 
   return (
@@ -458,10 +387,14 @@ function Signin() {
               className="woocommerce-form__input woocommerce-form__input-checkbox mb-4"
               value={mobile}
               onChange={(e) => setMobile(e.target.value)}
-              name="email"
+              name="mobile"
               type="text"
               id="mobile"
+              maxLength={10}
             />{" "}
+            {mobileError && (
+              <p className="error" style={{ color: 'red' }}>{mobileError}</p>
+            )}
             {isOtpSend ? (
               ""
             ) : (

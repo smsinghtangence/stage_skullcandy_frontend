@@ -47,6 +47,44 @@ const authSlice = createSlice({
         state.isError = true;
         state.message = action.payload;
       })
+      .addCase(verifyGuestVerifyOtp.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(verifyGuestVerifyOtp.fulfilled, (state, action) => {
+        state.isLoading=false
+        state.isError = false;
+        state.isSuccess = true;
+        state.message = 'OTP Verified Successfully';
+        state.users= {...action.payload.user,"token":action.payload.jwt}
+        state.loginTimestamp = JSON.parse(localStorage.getItem('loginTime'))
+      })
+      .addCase(verifyGuestVerifyOtp.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      .addCase(guestRegister.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(guestRegister.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
+        state.message = 'Guest registration successful';
+        state.users = {
+          ...action.payload.user,
+          token: action.payload.jwt,
+        };
+        state.loginTimestamp = JSON.parse(localStorage.getItem('loginTime'));
+      })
+      .addCase(guestRegister.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = false;
+        state.isError = true;
+        state.message = action.payload;
+        state.users = null;
+      })
       .addCase(userRegister.pending,(state)=>{
         state.isLoading = true
       })
@@ -189,6 +227,27 @@ export const verifyOtp = createAsyncThunk('/auth/verifyOtp', async (loginItems, 
     return thunkAPI.rejectWithValue(message);
   }
 });
+
+export const verifyGuestVerifyOtp = createAsyncThunk('/auth/verifyGuestVerifyOtp', async (loginItems, thunkAPI) => {
+  try {
+    return await authService.verifyGuestVerifyOtp(loginItems);
+  } catch (error) {
+    const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+    return thunkAPI.rejectWithValue(message);
+  }
+});
+
+
+
+export const guestRegister = createAsyncThunk('/auth/guestRegister', async (userData, thunkAPI) => {
+    try {
+      return await authService.verifyGuestRegister(userData);
+    } catch (error) {
+      const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
 
 export const userLogout = createAsyncThunk('auth/logout',async(_,thunkAPI)=>{
 try {

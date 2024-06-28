@@ -1,101 +1,111 @@
-import React, { useEffect } from 'react'
-import ordersummary from '@/images/OrderSummary.svg'
-import { useDispatch, useSelector } from 'react-redux'
-import { addToCartforLogin, decrement, deleteFromCart, increment, removeFromBuyNow } from '@/features/Cart/cartnWishSlice'
-import Link from 'next/link'
+import React, { useEffect } from "react";
+import ordersummary from "@/images/OrderSummary.svg";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  addToCartforLogin,
+  decrement,
+  deleteFromCart,
+  increment,
+  removeFromBuyNow,
+} from "@/features/Cart/cartnWishSlice";
+import Link from "next/link";
 // import { fetchCurrency } from '@/features/Currency/currencySlice'
-import { htmlToText } from 'html-to-text'
-import { getDataWithQuery,geturl } from "@/utils/api"
+import { htmlToText } from "html-to-text";
+import { getDataWithQuery, geturl } from "@/utils/api";
 function OrderSummary() {
+  const { cart, buyNow } = useSelector((state) => state.cartWish);
 
+  const { users } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
 
-    const { cart, buyNow } = useSelector(state => state.cartWish)
+  const total = cart?.reduce((totalPrice, i) => {
+    let sku = i?.SKU;
 
-    const { users} = useSelector(state=>state.auth)
-    const dispatch = useDispatch()
-   
-    const total = cart?.reduce((totalPrice, i) => {
-    
-        let sku = i?.SKU
-                  
-        // let activeSlide = (i?.Variation_Sliders)?.find(product => product?.SKU === sku)
-         
-          let quantity = i?.quantity
-      
-        //   let price = activeSlide?.Sales_price ? activeSlide?.Sales_price :activeSlide?.Variations_Price;
-        let price = i?.Sales_price ? i?.Sales_price :i?.Variations_Price;
+    // let activeSlide = (i?.Variation_Sliders)?.find(product => product?.SKU === sku)
 
-        return parseFloat(totalPrice + price * quantity);
-      }, 0);
-   
+    let quantity = i?.quantity;
 
-    
-    return (
-        <>
-        
-        
-            <div className="col-lg-5 col-sm-6">
-                            <div className="checkout-right">
-                                
-                                  
-                                   
-                                   {/*  */}
-                                   {/* //////////// */}
-                                   <>
-                                   {cart?.map((item, index) => {
-                                    let sku = item?.SKU
-                                    // let activeSlide = (item?.Variation_Sliders)?.find(product => product?.SKU === sku)
-                                    // console.log(JSON.stringify(activeSlide))
-                                    let quantity = item?.quantity
-                                    // let price = activeSlide?.Sales_price ? activeSlide?.Sales_price :activeSlide?.Variations_Price;
-                                    let price = item?.Sales_price ? item?.Sales_price :item?.Variations_Price;
-                                    return (
-                                        <>
-                                    <div className="checkout-product mb-3"> 
-                                    <div className="checkout-product-list" key={index}>
-                                        <div className="cpl-blk">
-                                            <Link href={`/shop/${item?.slug}`}>
-                                            <div className="cpl-img">
-                                               
-                                                {/* <img src={geturl(activeSlide?.Variant_Image)}  alt={activeSlide?.Variations_Color_Name} /> */}
-                                                <img src={item?.Variant_Image_url}  alt={item?.Variations_Color_Name} />
-                                                <span className="badge">{quantity}</span>
-                                            </div>
-                                            </Link>
-                                            <div className="cpl-content">
-                                                <p>{item?.name}</p>
-                                                <span>{item?.Variations_Color_Name}|{item?.SKU}</span>
-                                            </div>
+    //   let price = activeSlide?.Sales_price ? activeSlide?.Sales_price :activeSlide?.Variations_Price;
+    let price = i?.Sales_price ? i?.Sales_price : i?.Variations_Price;
 
-                                        </div>
-                                    </div>
+    return parseFloat(totalPrice + price * quantity);
+  }, 0);
 
-                                    <div className="checkout-product-price"><i class="fa fa-rupee"></i>{price}</div>
-                                    </div>
-                                   </>
-                                          )}
-                                        )
-                                    }
-                                </>
-                                   
-                                   {/*  */}
-                                   
-                                
+  return (
+    <>
+      <div className="col-lg-5 col-sm-6">
+        <div className="checkout-right">
+          {/*  */}
+          {/* //////////// */}
+          <>
+            {cart?.map((item, index) => {
+              let sku = item?.SKU;
+              // let activeSlide = (item?.Variation_Sliders)?.find(product => product?.SKU === sku)
+              // console.log(JSON.stringify(activeSlide))
+              let quantity = item?.quantity;
+              // let price = activeSlide?.Sales_price ? activeSlide?.Sales_price :activeSlide?.Variations_Price;
+              let price = item?.Sales_price
+                ? item?.Sales_price
+                : item?.Variations_Price;
+              return (
+                <>
+                  <div className="checkout-product mb-3">
+                    <div className="checkout-product-list" key={index}>
+                      <div className="cpl-blk">
+                        <Link href={`/shop/${item?.slug}`}>
+                          <div className="cpl-img">
+                            {/* <img src={geturl(activeSlide?.Variant_Image)}  alt={activeSlide?.Variations_Color_Name} /> */}
+                            <img
+                              src={item?.Variant_Image_url}
+                              alt={item?.Variations_Color_Name}
+                            />
+                            <span className="badge">{quantity}</span>
+                          </div>
+                        </Link>
+                        <div className="cpl-content">
+                          <p>{item?.name}</p>
+                          <span>
+                            {item?.Variations_Color_Name}|{item?.SKU}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
 
-                                <div className="discount-code">
-                                    <form action="">
-                                        <input type="text" className='form-conrol' placeholder='Discount code' />
-                                        <Link href="#" className="apply-btn">Apply</Link>
-                                    </form>
-                                </div>
+                    <div className="checkout-product-price">
+                      <i class="fa fa-rupee"></i>
+                      {price}
+                    </div>
+                  </div>
+                </>
+              );
+            })}
+          </>
 
-                                <div className="checkout-subtotal-blk">
-                                    <div className="checkout-subtotal">
-                                        <div className="cs-text">Subtotal</div>
-                                        <div className="cs-price"><i class="fa fa-rupee"></i>{total}</div>
-                                    </div>
+          {/*  */}
 
-                                    {/* <div className="checkout-shipping">
+          <div className="discount-code">
+            <form action="">
+              <input
+                type="text"
+                className="form-conrol"
+                placeholder="Discount code"
+              />
+              <Link href="#" className="apply-btn">
+                Apply
+              </Link>
+            </form>
+          </div>
+
+          <div className="checkout-subtotal-blk">
+            <div className="checkout-subtotal">
+              <div className="cs-text">Subtotal</div>
+              <div className="cs-price">
+                <i class="fa fa-rupee"></i>
+                {total}
+              </div>
+            </div>
+
+            {/* <div className="checkout-shipping">
                                         <div className="shipping-text">
                                             Shipping
                                             <button className="shipping-btn">
@@ -105,16 +115,18 @@ function OrderSummary() {
                                         <div className="shipping-address">Enter shipping address</div>
                                     </div> */}
 
-                                    <div className="checkout-total">
-                                        <div className="chekout-total-text">Total</div>
-                                        <div className="checkout-total-price"><i class="fa fa-rupee"></i>{total}</div>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-        </>
-    )
+            <div className="checkout-total">
+              <div className="chekout-total-text">Total</div>
+              <div className="checkout-total-price">
+                <i class="fa fa-rupee"></i>
+                {total}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
 }
 
-export default OrderSummary
+export default OrderSummary;

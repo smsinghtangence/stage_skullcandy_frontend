@@ -11,7 +11,7 @@ const config = {
 };
 
 const createGuestCheckout = async (payload) => {
-  const res = await axios.post(`${BASE_URL}/checkouts`, payload);
+  const res = await axios.post(`${BASE_URL}/api/checkouts`, payload);
   return res.data;
 };
 
@@ -47,7 +47,7 @@ const createOrder = async (shippingObj, users) => {
 };
 
 const getAddress = async (users) => {
-  const response = await axios.get(`${API_URL}/api/users/me?populate=*`, {
+  const response = await axios.get(`${BASE_URL}/api/users/me?populate=*`, {
     headers: {
       Authorization: `Bearer ${users?.token}`,
     },

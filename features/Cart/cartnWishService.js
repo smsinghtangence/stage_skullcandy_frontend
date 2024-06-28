@@ -45,7 +45,7 @@ const addToCartforLogin = async (cartObj, cart, users) => {
 
   if (users?.id) {
     const res = await axios.put(
-      BASE_URL + `/users/${users.id}`,
+      BASE_URL + `/api/users/${users.id}`,
       { ...cartItem },
       {
         headers: {
@@ -62,7 +62,7 @@ const addToCartforLogin = async (cartObj, cart, users) => {
   }
 };
 const getuserData = async (users) => {
-  const response = await axios.get(BASE_URL + `/users/me?populate=*`, {
+  const response = await axios.get(BASE_URL + `/api/users/me?populate=*`, {
     headers: {
       Authorization: `Bearer ${users?.token}`,
     },
@@ -107,7 +107,7 @@ const addToCartforGuestafterLogin = async (lineItems, cart, users) => {
 
   if (users?.id && Cart1?.length > 0) {
     const res = await axios.put(
-      API_URL + `/api/users/${users.id}`,
+      BASE_URL + `/api/users/${users.id}`,
       { ...cartItem },
       {
         headers: {
@@ -127,7 +127,7 @@ const addToCartforGuestafterLogin = async (lineItems, cart, users) => {
   }
 };
 const getCartData = async (users) => {
-  const response = await axios.get(BASE_URL + `/users/me?populate=*`, {
+  const response = await axios.get(BASE_URL + `/api/users/me?populate=*`, {
     headers: {
       Authorization: `Bearer ${users?.token}`,
     },
@@ -171,7 +171,7 @@ const deleteFromCart = async (SKU, cart, users) => {
 
   if (users?.id) {
     const res = await axios.put(
-      API_URL + `/api/users/${users.id}`,
+      BASE_URL + `/api/users/${users.id}`,
       { ...cartItem },
       {
         headers: {
