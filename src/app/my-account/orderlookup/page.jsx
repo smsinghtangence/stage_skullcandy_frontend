@@ -3,8 +3,8 @@ import Accountnav from '@/components/Accountnav'
 function page() {
   return (
     <>
-    <Accountnav />
-    <section className="skull_space">
+ <Accountnav active={"Track"}/>
+ <section className="skull_space">
   <div className="container-fluid">
     <div className="container">
       <div className="row">

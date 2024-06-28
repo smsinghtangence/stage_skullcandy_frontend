@@ -1,7 +1,16 @@
 'use client'
 import Link from 'next/link'
 import React, { useState } from 'react';
+import axios from "axios"
+import { useRouter } from 'next/navigation'
+import { toast } from 'react-toastify'
+
 function page() {
+  const API_URL = process.env.API_URL || "";
+  const CLAIM_KEY = process.env.CLAIM_KEY || "";
+  const CLAIM_URL = process.env.CLAIM_URL || "";
+
+  const router = useRouter();
   const [formData, setFormData] = useState({
     Product_Name: '',
     Purchase_Date: '',
@@ -29,40 +38,147 @@ function page() {
   const validate = () => {
     let errors = {};
 
-    if (!formData.Product_Name) errors.Product_Name = "Product Name is required";
-    if (!formData.Purchase_Date) errors.Purchase_Date = "Purchase Date is required";
-    if (!formData.Seller_Name) errors.Seller_Name = "Seller Name is required";
-    if (!formData.Bill_Number) errors.Bill_Number = "Bill Number is required";
-    if (!formData.productIssues) errors.productIssues = "Describe Your Product Issues is required";
-    if (!formData.Your_Name) errors.Your_Name = "Your Name is required";
-    if (!formData.email) {
+    if (!formData?.Product_Name) errors.Product_Name = "Product Name is required";
+    if (!formData?.Purchase_Date) errors.Purchase_Date = "Purchase Date is required";
+    if (!formData?.Seller_Name) errors.Seller_Name = "Seller Name is required";
+    if (!formData?.Bill_Number) errors.Bill_Number = "Bill Number is required";
+    if (!formData?.productIssues) errors.productIssues   = "Describe Your Product Issues is required";
+    if (!formData?.Your_Name) errors.Your_Name = "Your Name is required";
+    if (!formData?.email) {
       errors.email = "Email Address is required";
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+    } else if (!/\S+@\S+\.\S+/.test(formData?.email)) {
       errors.email = "Email Address is invalid";
     }
-    if (!formData.Phone_Number) errors.Phone_Number = "Phone_Number Number is required";
-    if (!formData.State) errors.State = "State is required";
-    if (!formData.Address) errors.Address = "Address is required";
+    if (!formData?.Phone_Number) errors.Phone_Number = "Phone is required";
+    if (!formData?.State) errors.State = "State is required";
+    if (!formData?.Address) errors.Address = "Address is required";
 
     return errors;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const response = await fetch('http://13.126.252.23:8080/api/submit-a-claims/', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ data: formData })
-    });
+    // const response = await fetch(API_URL+'/api/submit-a-claims/', {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json'
+    //   },
+    //   body: JSON.stringify({ data: formData })
+    // });
+    
+    const response = await axios.post(API_URL+'/api/submit-a-claims/', { data: formData }, {headers: { 
+      'Authorization': `Basic ${CLAIM_KEY}`,
+      'Content-Type': 'application/json',
+  
+   
+    }})
+    if(response.status == 200){
+      const date = new Date(formData?.Purchase_Date);
+
+      // Options for formatting the date
+      const options = {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      };
+      
+      // Format the date
+      const formattedDate = date.toLocaleDateString('en-US', options);
+    //////////////
+ let claim_data = JSON.stringify([
+  {
+    "title":  "Warranty claim",
+    "ticket_details": formData?.productIssues,
+    "customer_name": formData?.Your_Name,
+    "phone":  formData?.Phone_Number,
+    "email_id": formData?.email,
+    "address":  formData?.Address,
+    "queue":  "P_Q",
+    "warranty_claims": [
+      {
+        "invoice": "https://kapture-email-attachments.s3.amazonaws.com/23837639668538110945/file1.pdf",
+        "product_list": formData?.Product_Name,
+        "purchase_date": formData?.Purchase_Date,
+        "customer_state": formData?.State
+      }
+    ]
+  }
+]);
+
+ 
+
+//   // ////////////
+//   const res = await axios.post(CLAIM_URL, claim_data, {headers: { 
+//     'Authorization': `Basic ${CLAIM_KEY}`,
+//     'Content-Type': 'application/json',
+    
+ 
+//   }})
+  
+//   console.log(res.data)
+
+
+////////////////
+ 
+// let data = JSON.stringify([
+//   {
+//     "title": "Warranty claim",
+//     "ticket_details": "Sound Issue",
+//     "customer_name": "SANMEET Singh",
+//     "phone": "07678553669",
+//     "email_id": "sanmeet66@gmail.com",
+//     "address": "Ashok vihar\nDelhi",
+//     "queue": "P_Q",
+//     "warranty_claims": [
+//       {
+//         "invoice": "",
+//         "product_list": "Dime",
+//         "purchase_date": "June 18, 2024",
+//         "customer_state": "Delhi"
+//       }
+//     ]
+//   }
+// ]);
+
+let config = {
+  method: 'post',
+  maxBodyLength: Infinity,
+  url: CLAIM_URL,
+  headers: { 
+    'Authorization': `Basic ${CLAIM_KEY}`, 
+    'Content-Type': 'application/json', 
+    'Cookie': 'JSESSIONID=942786B0EBB27DBDCCCE3D52E31ADC28; _KAPTURECRM_SESSION='
+  },
+  data : claim_data
+};
+
+axios.request(config)
+.then((response) => {
+  console.log(JSON.stringify(response.data));
+})
+.catch((error) => {
+  console.log(error);
+});
+
+
+
+}
+    ////////////////
+    
     const validationErrors = validate();
     setErrors(validationErrors);
+
+
+
+
+
 
     if (Object.keys(validationErrors).length === 0) {
       setSubmitted(true);
       // Form is valid, you can submit the form data here
       console.log('Form submitted successfully', formData);
+      toast.success('Claim Form submitted successfully')
+      // router.push('/thank-you');
     } else {
       setSubmitted(false);
     }
@@ -197,7 +313,7 @@ function page() {
                 <input
                   type="text"
                   name="Product_Name"
-                  value={formData.Product_Name}
+                  value={formData?.Product_Name}
                   onChange={handleChange}
                   size={40}
                   className="wpcf7-form-control wpcf7-text wpcf7-validates-as-required"
@@ -219,7 +335,7 @@ function page() {
                 <input
                   type="date"
                   name="Purchase_Date"
-                  value={formData.Purchase_Date}
+                  value={formData?.Purchase_Date}
                   onChange={handleChange}
                   className="wpcf7-form-control wpcf7-date wpcf7-validates-as-required wpcf7-validates-as-date"
                   aria-required="true"
@@ -240,7 +356,7 @@ function page() {
                 <input
                   type="text"
                   name="Seller_Name"
-                  value={formData.Seller_Name}
+                  value={formData?.Seller_Name}
                   onChange={handleChange}
                   size={40}
                   className="wpcf7-form-control wpcf7-text wpcf7-validates-as-required"
@@ -262,7 +378,7 @@ function page() {
                 <input
                   type="number"
                   name="Bill_Number"
-                  value={formData.Bill_Number}
+                  value={formData?.Bill_Number}
                   onChange={handleChange}
                   className="wpcf7-form-control wpcf7-number wpcf7-validates-as-required wpcf7-validates-as-number"
                   aria-required="true"
@@ -284,7 +400,7 @@ function page() {
                   name="productIssues"
                   cols={40}
                   rows={10}
-                  value={formData.productIssues}
+                  value={formData?.productIssues}
                   onChange={handleChange}
                   className="wpcf7-form-control wpcf7-textarea wpcf7-validates-as-required"
                   aria-required="true"
@@ -305,7 +421,7 @@ function page() {
                 <input
                   type="text"
                   name="Your_Name"
-                  value={formData.Your_Name}
+                  value={formData?.Your_Name}
                   onChange={handleChange}
                   size={40}
                   className="wpcf7-form-control wpcf7-text wpcf7-validates-as-required"
@@ -327,7 +443,7 @@ function page() {
                 <input
                   type="email"
                   name="email"
-                  value={formData.email}
+                  value={formData?.email}
                   onChange={handleChange}
                   size={40}
                   className="wpcf7-form-control wpcf7-text wpcf7-email wpcf7-validates-as-required wpcf7-validates-as-email"
@@ -342,20 +458,20 @@ function page() {
         </div>
         <div className="col-md-6">
           <div className="input_box_v2">
-            <label>Phone_Number Number</label>
+            <label>Phone</label>
             <p />
             <p>
               <span className="wpcf7-form-control-wrap" data-name="Phone_Number">
                 <input
                   type="tel"
                   name="Phone_Number"
-                  value={formData.Phone_Number}
+                  value={formData?.Phone_Number}
                   onChange={handleChange}
                   size={40}
                   className="wpcf7-form-control wpcf7-text wpcf7-tel wpcf7-validates-as-required wpcf7-validates-as-tel"
                   aria-required="true"
                   aria-invalid={!!errors.Phone_Number}
-                  placeholder="Phone_Number Number"
+                  placeholder="Phone"
                 />
               </span>
             </p>
@@ -370,7 +486,7 @@ function page() {
               <span className="wpcf7-form-control-wrap" data-name="State">
                 <select
                   name="State"
-                  value={formData.State}
+                  value={formData?.State}
                   onChange={handleChange}
                   className="wpcf7-form-control wpcf7-select wpcf7-validates-as-required"
                   aria-required="true"
@@ -423,7 +539,7 @@ function page() {
                   name="Address"
                   cols={40}
                   rows={10}
-                  value={formData.Address}
+                  value={formData?.Address}
                   onChange={handleChange}
                   className="wpcf7-form-control wpcf7-textarea wpcf7-validates-as-required"
                   aria-required="true"

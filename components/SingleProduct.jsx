@@ -11,7 +11,19 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { getDataWithQuery, geturl } from "@/utils/api"
 import { useDispatch, useSelector } from 'react-redux'
-import { adddToBuyNow, addToCart, compareCartState, addToCartforLogin, addToWishlist, deleteWishlist, setBuyNowStatus, resetBuyNowStatus, } from '@/features/Cart/cartnWishSlice'
+import { toast } from 'react-toastify'
+
+import {
+   adddToBuyNow,
+   addToCart,
+   compareCartState,
+   addToCartforLogin,
+   addToWishlist,
+   deleteWishlist,
+   setBuyNowStatus,
+   resetBuyNowStatus,
+   toggleDrawer,
+ } from "@/features/Cart/cartnWishSlice";
 import $ from 'jquery'
 
 const API_URL =  process.env.API_URL || '';
@@ -20,14 +32,14 @@ const API_URL =  process.env.API_URL || '';
 
 function SingleProduct({product}) {
 
-   useEffect(() => {
+   // useEffect(() => {
    
-      $(".notify-btn").click(function(){
-        $(".drawer").addClass("active")
-      })
+   //    $(".notify-btn").click(function(){
+   //      $(".drawer").addClass("active")
+   //    })
    
   
-    }, [])
+   //  }, [])
 
 
    //
@@ -35,6 +47,8 @@ function SingleProduct({product}) {
   const [cartItems, setCartItems] = useState([]);
   const { users, isSuccess: isuserSuccess } = useSelector(state => state.auth)
   const [wishlistItem, setWishListItem] = useState([])
+  const [isModalVisible, setIsModalVisible] = useState(true); 
+
   const { cart, wishlist, isSuccess, isBuyNow, isLoading: CartWishLoading } = useSelector(state => state.cartWish)
   const handleCart = (e, product) => {
     e.preventDefault()
@@ -54,7 +68,7 @@ function SingleProduct({product}) {
     }
 
 
- 
+    dispatch(toggleDrawer(true));
 
 }
 
@@ -149,6 +163,73 @@ productColorImgList.forEach((item) => {
  });
 
 ////////
+const [email, setEmail] = useState('');
+const [submitted, setSubmitted] = useState(false);
+const [errors, setErrors] = useState({});
+// const [formData, setFormData] = useState({
+//    product_id: product?.id,
+//    sku: activeSlide?.SKU,
+//    product_name: product?.title,
+//    color: activeSlide?.Variations_Color_Name,
+//    slug: product?.slug,
+//    email:''
+//  });
+
+const [formData, setFormData] = useState({
+   product_id: '',
+   sku: '',
+   product_name: '',
+   color: '',
+   slug: '',
+   email:''
+ });
+ 
+const validateEmail = (email) => {
+  const re = /\S+@\S+\.\S+/;
+  return re.test(email);
+};
+
+const handleChange = (e) => {
+   e.preventDefault()
+   // console.log(" formData " + JSON.stringify(formData))
+   // console.log("target "+ e.target.name +" valye "+ e.target.value)
+   
+   /////
+  
+   ///////
+   // setFormData({ ...formData, [e.target.name]: e.target.value })
+
+   setFormData( {
+      product_id: toString(product?.id),
+      sku: activeSlide?.SKU,
+      product_name: product?.title,
+      color: activeSlide?.Variations_Color_Name,
+      slug: product?.slug,
+      email:e.target.value
+    })
+   // console.log(" formData " + JSON.stringify(formData))
+}
+
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  const response = await fetch( API_URL+'/api/notify-me-when-availables/', {
+   method: 'POST',
+   headers: {
+     'Content-Type': 'application/json'
+   },
+   body: JSON.stringify({ "data": formData })
+ });
+ 
+
+ if(response.status == 200){
+   toast.success('Submit Successfully')
+   setFormData({ ...formData, email: "" })
+   setIsModalVisible(false);
+ }
+};
+
+
+
 
   return (
     <>
@@ -454,28 +535,38 @@ productColorImgList.forEach((item) => {
         <div className="modal-body">
         <small>We'll notify you when this product is back in stock.</small>
          <h4>Smokin' Buds</h4>
-         <form action="">
-            <div className="form-group">
-            <div className="select-container">
-               <select name="" id="" className="form-control">
-                  <option value="True Black">True Black</option>
-                  <option value="True Black">--</option>
-               </select>
-            </div>
-            </div>
+         <form onSubmit={handleSubmit}>
+            {/* <p>{JSON.stringify(activeSlide)}</p> */}
+           {/* <input name='product_id'   />
+            <input name='sku'   />
+            <input name='product_name'   />
+            <input name='color'   />
+            <input name='slug'   /> */}
+      <div className="form-group">
+        
+        <div className="select-container">
+        {product?.title}
+          {/* <input type="text" value={product?.title || ''} readOnly /> */}
+        </div>
+      </div>
 
-            <div className="form-group">
-               <input type="email" className='form-control' placeholder='Email address'/>
-            </div>
+      <div className="form-group">
+        <input
+         name="email"
+          type="email"
+          className={`form-control ${errors.email ? 'is-invalid' : ''}`}
+          placeholder="Email address"
+          value={formData.email}
+          onChange={handleChange}
+        />
+        {errors.email && <div className="invalid-feedback">{errors.email}</div>}
+      </div>
 
-            <div className="form-group">
-               <Link href="#" className='product-available-btn'>Notify me when available</Link>
-              
-            </div>
-            <small>we don't share your information with other</small>
-
-
-         </form>
+      <div className="form-group">
+        <button type="submit" className="product-available-btn">Notify me when available</button>
+      </div>
+      <small>we don't share your information with others</small>
+    </form>
         </div>
     
       </div>

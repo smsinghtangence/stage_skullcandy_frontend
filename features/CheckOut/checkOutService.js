@@ -1,5 +1,6 @@
 import axios from "axios"
 const API_URL = process.env.API_URL
+const BASE_URL = process.env.BASE_URL;
 const TOKEN = process.env.TOKEN || '';
  
 let config = {
@@ -11,6 +12,11 @@ let config = {
       "Authorization": `Bearer ${TOKEN}`
    }
 }
+
+const createGuestCheckout = async (payload) => {
+   const res = await axios.post(`${API_URL}/api/checkouts`, payload);
+   return res.data;
+ };
 const verifyCoupon = async (code) => {
    const response = await axios.get(API_URL + `/wc/v3/coupons?code=${code}`, config)
    return response.data
@@ -40,33 +46,7 @@ const getAddress = async (users) => {
 }
 
 const saveAddress = async (address, shipping,users) => {
-//    let data_shipping1 = [...address]
-//    console.log("address " +JSON.stringify(data_shipping1))
-//   let data_shipping = data_shipping1?.forEach(obj => {
-//       // Check if the object has an 'id' property
-//       if (obj.hasOwnProperty('id')) {
-//           // Delete the 'id' property
-//           delete obj.id;
-//       }
-//       // if ('id' in obj) {
-//       //    delete obj.id;
-//       // }
-//   });
-
-//   console.log("data_shipping " +JSON.stringify(data_shipping))
   
-//   if (Array.isArray(data_shipping)) {
-//    // If `myArray` is an array, append `newObject` to it
-//    data_shipping.push(shipping);
-// } else {
-//    // If `myArray` is not an array, initialize it as an array containing `newObject`
-//    data_shipping = [shipping];
-// }
-// //   const filteredData = data_shipping?.filter(obj => Object.keys(obj).length !== 0);
-
-// console.log("data_shipping " +JSON.stringify(data_shipping))
-  
-
   let address_array = {  
    "id": users?.id,
    "Company_Name":shipping?.Company_Name,
@@ -180,6 +160,7 @@ const updateOrderAfterPayment = async(id,data)=>{
    return {"ref_order_id":response.data.data.id,...response.data.data.attributes}
 }
 const checkoutService = {
+   createGuestCheckout,
    verifyCoupon,
    fetchCoupon,
    fetchState,

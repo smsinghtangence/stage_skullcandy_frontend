@@ -5,15 +5,24 @@ import { payWithCardReset } from '@/features/CheckOut/checkOutSlice'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import Link from 'next/link'
-import useCart  from '@/components/hooks/useCart'
-
+import {
+  adddToBuyNow,
+  addToCart,
+  compareCartState,
+  addToCartforLogin,
+  addToWishlist,
+  deleteWishlist,
+  setBuyNowStatus,
+  resetBuyNowStatus,
+  toggleDrawer,
+} from "@/features/Cart/cartnWishSlice";
 function Drawer() {
   
-  const { openCart, isCartOpen, closeCart } = useCart();
+  
 
    
 
-    const { cart, wishlist, isLoading } = useSelector(state => state.cartWish)
+  const { cart, wishlist, isLoading, drawerOpen } = useSelector((state) => state.cartWish);
 
     const [login, setLogin] = useState(false)
 
@@ -36,7 +45,7 @@ function Drawer() {
         // dispatch(payWithCardReset())
     }, [])
 
-    console.log(isCartOpen)
+    
   //   const total = cart?.reduce((p, c) => {
   //     return parseFloat(p + c.price * c.quantity)
   // }, [0])
@@ -64,12 +73,12 @@ function Drawer() {
 
    {/* <section className={isCartOpen=="true" ? "drawer active ":"drawer"   }> */}
 
-   <section className={isCartOpen =="true" ? 'drawer active' : 'drawer'}> 
-        <div className="drawer-content">
+   <section className={`drawer ${drawerOpen ? "active" : ""}`}>
+   <div className="drawer-content">
          
           <div className="drawer-header">
           <h2>{cart?.length > 0?"Your Bag":""}</h2>
-          <span className="drawer-close" onClick={()=>closeCart()} >
+          <span className="drawer-close" onClick={()=>dispatch(toggleDrawer(false))} >
             <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" role="presentation" className="icon icon-close" fill="none" viewBox="0 0 30 30">
               <g data-name="Ellipse 40" fill="#000" stroke="#000" strokeWidth="2">
                 <circle cx="15" cy="15" r="15" stroke="none"></circle>
@@ -130,8 +139,10 @@ function Drawer() {
               <span className="subtotal-value"><i className="fa fa-rupee"></i>{total}</span>
             </div>
             <p>Taxes and shipping calculated at checkout </p>
-            <Link href="/checkout" className='CartDrawer-Checkout'  >Checkout</Link>
-            <Link href="/cart" className='CartDrawer-Checkout cart-btn'  >Cart</Link>
+            <div className='drawer-btn-blk'>
+            <Link href="/checkout" className='CartDrawer-Checkout' onClick={()=>dispatch(toggleDrawer(false))}  >Checkout</Link>
+            <Link href="/cart" className='CartDrawer-Checkout cart-btn'  onClick={()=>dispatch(toggleDrawer(false))}>Cart</Link>
+            </div>
           </div>
 </>:""}
 

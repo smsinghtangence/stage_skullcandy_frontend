@@ -45,7 +45,7 @@ function page() {
       // router.push(redirectUrl);
       router.push(`/${query}`);
     } else {
-      router.push('/my-account');
+      router.push('/my-account/orders');
     }
   }
   
@@ -73,7 +73,9 @@ function page() {
         <div className="row">
           <div className="col-md-12">
           {users?.success || users?.id ? 
-          <> <h2>WELCOME</h2></>
+          <>  
+          <p className='text-center'><strong>WELCOME <br/> {users?.username}</strong></p>
+          </>
           : 
           
           <h2>SIGN IN </h2>}
@@ -95,43 +97,8 @@ function page() {
 
 
             <section>
-  <div className="container-fluid">
-  <h2 className='text-center'> {users?.username}</h2>
-    <div className="container max_container pb-3">
-      <p />
-      <div className="woocommerce">
-      <nav className="woocommerce-MyAccount-navigation">
-          <ul>
-            <li className="woocommerce-MyAccount-navigation-link woocommerce-MyAccount-navigation-link--orders is-active">
-              <a href="/my-account/orders/">Orders</a>
-            </li>
-            <li className="woocommerce-MyAccount-navigation-link woocommerce-MyAccount-navigation-link--orders ">
-              <Link href="/my-account/address">Addresses</Link>
-            </li>
-            <li className="woocommerce-MyAccount-navigation-link woocommerce-MyAccount-navigation-link--orders ">
-              <Link href="/my-account/account-setting"> Account Settings </Link>
-            </li>
-            {/* <li className="woocommerce-MyAccount-navigation-link woocommerce-MyAccount-navigation-link--orders ">
-              <a href="#">Wishlist</a>
-            </li> */}
-            <li className="woocommerce-MyAccount-navigation-link woocommerce-MyAccount-navigation-link--orders ">
-              <Link href="/my-account/orderlookup"> Track your order </Link>
-            </li>
-            <li className="woocommerce-MyAccount-navigation-link woocommerce-MyAccount-navigation-link--customer-logout">
-              <a href="#"     onClick={handleLogout}>
-                Logout
-              </a>
-            </li>
-          </ul>
-        </nav>
-     
-      </div>
-     
-    
-    </div>
-  </div>
-
-  
+   
+            
 </section>
 
 

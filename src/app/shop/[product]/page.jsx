@@ -136,7 +136,7 @@ return (
 <LoveProduct  slug={product?.product_categories?.data[0]?.attributes?.slug}/>
 }
 
-<Review />
+<Review product={product}/>
 
 
 <section className='right-for-you-blk'>

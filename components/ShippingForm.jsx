@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { addBilling, addShippingDetails, fetchState, saveAddress } from '../features/CheckOut/checkOutSlice'
+import { addBilling, addShippingDetails, fetchState, saveAddress,createGuestCheckout } from '../features/CheckOut/checkOutSlice'
 import {
     MDBBtn,
     MDBModalContent,
@@ -78,6 +78,11 @@ function ShippingForm() {
         setShipping({ ...shipping, [e.target.name]: e.target.value })
     
         console.log(" s " + JSON.stringify(shipping)) 
+
+        //////////
+        setShipping({ ...shipping, [e.target.name]: e.target.value })
+
+        ////////
     }
 
     const handleBillingChange = (e) => {
@@ -317,80 +322,7 @@ function ShippingForm() {
         /////billing validation end///////
     }
         setErrors(newErrors);
-        // if (!first_name || first_name.length > 10) {
-        //     setFirstNameError('First name is required and should be 10 characters or less');
-        //     isValid = false;
-
-        // } else if (!/^[a-zA-Z]*$/.test(first_name)) {
-        //     setFirstNameError('Name should  onlycontain letters');
-        //     isValid = false;
-        // } else {
-        //     setFirstNameError('');
-        // }
-       
-        // if (!last_name || last_name.length > 10) {
-        //     setLastNameError('Last name is required and should be 10 characters or less');
-        //     isValid = false;
-        // } else if (!/^[a-zA-Z]*$/.test(last_name)) {
-        //     setLastNameError('Name should only contain letters');
-        //     isValid = false;
-        // } else {
-        //     setLastNameError('');
-        // }
-        // // if (!email || !/\S+@\S+\.\S+/.test(email)) {
-        // //     setEmailError('Enter a valid email address');
-        // //     isValid = false;
-        // // } else {
-        // //     setEmailError('');
-        // // }
-
-        // if (!address_1 || address_1.length > 30) {
-        //     setAddress1Error('Address Line 1 is required and should be 30 characters or less');
-        //     isValid = false;
-        // } else {
-        //     setAddress1Error('');
-        // }
-      
-        // if (address_2.length > 30) {
-        //     setAddress2Error('Address Line 2 is required  and should be 30 characters or less');
-        //     isValid = false;
-        // } else {
-        //     setAddress2Error('');
-        // }
-        // if (!phone || phone.length !== 10 || isNaN(phone)) {
-        //     setPhoneError('Enter a valid 10-digit phone number');
-        //     isValid = false;
-        // } else {
-        //     setPhoneError('');
-        // }
-        // // console.log("isValid " + isValid)
-        // if (!city) {
-        //     setCityError('City is required');
-        //     isValid = false;
-        // } else {
-        //     setCityError('');
-        // }
         
-        // if (!state) {
-        //     setStateError('State is required');
-        //     isValid = false;
-        // } else {
-        //     setStateError('');
-        // }
-        
-        // if (!country) {
-        //     setCountryError('Country is required');
-        //     isValid = false;
-        // } else {
-        //     setCountryError('');
-        // }
-       
-        // if (!postcode) {
-        //     setPostcodeError('Postal code is required');
-        //     isValid = false;
-        // } else {
-        //     setPostcodeError('');
-        // }
 
         if (!isValid) {
             return;
@@ -424,6 +356,22 @@ function ShippingForm() {
             }
 
         }
+
+        if(!billingSame)
+            {
+                
+                dispatch(createGuestCheckout(shipping))
+                .then(() => dispatch(addBilling(billing)))
+                .then(() => dispatch(addShippingDetails(shipping)));
+          
+            }
+        else{
+            dispatch(createGuestCheckout(shipping))
+                .then(() => dispatch(addBilling(shipping)))
+                .then(() => dispatch(addShippingDetails(shipping)));
+        }
+      
+
         setShipping({
             first_name: '',
             last_name: '',

@@ -25,7 +25,16 @@ function AddressSection() {
 
         // document.getElementById('userAddress').checked = true
 
-        const { first_name, last_name, phone, address_1, address_2, country, postcode, state, city } = item
+        const { 
+            first_name, 
+            last_name, 
+            phone, 
+            address_1, 
+            address_2, 
+            country, 
+            postcode, 
+            state, 
+            city } = item
 
         const shipping = {
             first_name,

@@ -14,7 +14,7 @@ import FeatureSelect from '@/components/FeatureSelect'
 // import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
 import { getDataWithQuery, geturl } from "@/utils/api"
 
-function page({ params }) {
+function Page({ params }) {
   // console.log(JSON.stringify(params))
   const [isActive, setActive] = useState("false");
   const handleToggle = () => {
@@ -183,4 +183,4 @@ useEffect(() => {
   )
 }
 
-export default page
+export default Page

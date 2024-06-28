@@ -32,7 +32,13 @@ const initialState = {
   isError: false,
   message: ''
 }
-
+export const createGuestCheckout = createAsyncThunk('checkout/createCheckout', async (payload) => {
+  try {
+    return await checkoutService.createGuestCheckout(payload);
+  } catch (error) {
+    throw Error(error.response.data.message || error.message);
+  }
+});
 const checkOutSlice = createSlice({
   name: 'checkout',
   initialState,
@@ -287,6 +293,22 @@ const checkOutSlice = createSlice({
         state.isSuccess = false
         state.isLoading = false
       })
+      .addCase(createGuestCheckout.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(createGuestCheckout.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
+        state.message = 'createGuestCheckoutfullfilled';
+        state.order = action.payload;
+      })
+      .addCase(createGuestCheckout.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = false;
+        state.isError = true;
+        state.message = action.payload;
+      });
   }
 })
 

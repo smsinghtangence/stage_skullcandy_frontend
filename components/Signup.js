@@ -48,12 +48,12 @@ function Signup() {
               >
                 <p className="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
                   <label htmlFor="reg_email">
-                  Username&nbsp;<span className="required">*</span>
+                  Mobile&nbsp;<span className="required">*</span>
                   </label>
                   <input 
                   type="text" 
                   className="woocommerce-Input woocommerce-Input--text input-text"
-                  onChange={e => setUsername(e.target.value) } value={username} placeholder="Username"/>
+                  onChange={e => setUsername(e.target.value) } value={username} placeholder="Mobile"/>
                   {" "}
                 </p>
 

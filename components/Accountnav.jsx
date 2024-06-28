@@ -16,7 +16,9 @@ getWishlist,
 import { resetAllState, setCheckOutUserType } from "@/features/CheckOut/checkOutSlice";
 import { useRouter } from 'next/navigation'
 import { useDispatch, useSelector } from "react-redux";
-function page() {
+
+
+function page({active}) {
 const dispatch = useDispatch();
 const router = useRouter();
 const { users, isError, isSuccess, message, isLaoding, loginTimestamp } =
@@ -32,9 +34,13 @@ router.push("/");
 };
 useEffect(()=>{
 if(!users?.id  ){
-router.push("/my-account/orders");
+router.push("/my-account");
 }
 },[])
+if(!users?.id  ){
+   router.push("/my-account");
+   }
+// console.log("active "+ active)
 return (
 <>
 {users?.success || users?.id ? (
@@ -69,30 +75,40 @@ return (
                      <div className="woocommerce">
                         <nav className="woocommerce-MyAccount-navigation">
                            <ul>
-                              <li className="woocommerce-MyAccount-navigation-link woocommerce-MyAccount-navigation-link--orders is-active">
-                                 <a href="/my-account/orders/">Orders</a>
+                              <li className={"woocommerce-MyAccount-navigation-link woocommerce-MyAccount-navigation-link--orders "
+                              + (active == "Orders" ? " is-active " : "")}
+                              >
+                                 <Link href="/my-account/orders/">Orders</Link>
                               </li>
-                              <li className="woocommerce-MyAccount-navigation-link woocommerce-MyAccount-navigation-link--orders ">
+                              {/* <li className={"woocommerce-MyAccount-navigation-link woocommerce-MyAccount-navigation-link--orders "
+                              + (active == "Addresses" ? " is-active " : "")}>
                                  <Link href="/my-account/address">
                                  Addresses</Link>
-                              </li>
-                              <li className="woocommerce-MyAccount-navigation-link woocommerce-MyAccount-navigation-link--orders ">
+                              </li> */}
+                              <li className={"woocommerce-MyAccount-navigation-link woocommerce-MyAccount-navigation-link--orders "
+                              + (active == "Settings" ? " is-active " : "")}>
                                  <Link href="/my-account/account-setting">
                                  Account Settings </Link>
                               </li>
+                              <li className={"woocommerce-MyAccount-navigation-link woocommerce-MyAccount-navigation-link--orders "
+                              + (active == "Password" ? " is-active " : "")}>
+                                 <Link href="/my-account/reset-password">
+                                 Reset Password </Link>
+                              </li>
                               {/* 
                               <li className="woocommerce-MyAccount-navigation-link woocommerce-MyAccount-navigation-link--orders ">
-                                 <a href="#">Wishlist</a>
+                                 <Link href="#">Wishlist</Link>
                               </li>
                               */}
-                              <li className="woocommerce-MyAccount-navigation-link woocommerce-MyAccount-navigation-link--orders ">
+                              <li className={"woocommerce-MyAccount-navigation-link woocommerce-MyAccount-navigation-link--orders "
+                              + (active == "Track" ? " is-active " : "")}>
                                  <Link href="/my-account/orderlookup">
                                  Track your order </Link>
                               </li>
                               <li className="woocommerce-MyAccount-navigation-link woocommerce-MyAccount-navigation-link--customer-logout">
-                                 <a href="#" onClick={handleLogout}>
+                                 <Link href="#" onClick={handleLogout}>
                                  Logout
-                                 </a>
+                                 </Link>
                               </li>
                            </ul>
                         </nav>

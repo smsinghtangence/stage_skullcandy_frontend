@@ -10,10 +10,15 @@ import '../../public/css/new.css'
 import { useEffect } from 'react'
 
 
-
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import { Providers } from '../../store/providers'
+
+// import { useDispatch, useSelector } from 'react-redux'
+// import {
+
+//   toggleHtml,
+// } from "@/features/Cart/cartnWishSlice";
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -27,13 +32,23 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {  
+  
+
+
   useEffect(() => {
     if(typeof window !== "undefined"){
+      // const {htmlActive} = useSelector((state) => state.cartWish);
      require('../../public/js/bootstrap.bundle.min.js')
     }
  }, []);
+
+
+
+
   return (
-    <html lang="en">
+    <html lang="en" 
+    // className={htmlActive?"Active":"inActive"}
+    >
      <head>
      <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet"></link>
      </head>
@@ -43,6 +58,9 @@ export default function RootLayout({
         {children}
       <Footer/>
       </Providers>
+      <script type="text/javascript" id="kap-snippet" data-supportkey="03c8bc29ce63903a6a0842dd8a27594ec1163cf60542815185" chat-for="TICKET" src="
+https://selfserveapp.kapturecrm.com/js/init_chat.js"
+chat-type="NR"></script>
       </body>
       
     </html>

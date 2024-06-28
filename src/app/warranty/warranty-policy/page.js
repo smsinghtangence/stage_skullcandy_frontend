@@ -2,7 +2,7 @@
 import React from 'react'
 import InnerPageSearch from '@/components/InnerPageSearch'
 import { useEffect, useState  } from 'react';
-import { getDataWithQuery } from "../../../../utils/api"
+import { getDataWithQuery } from "@utils/api"
 function page() {
   
   const [data, setData] = useState();  
