@@ -15,6 +15,7 @@ function Review({ product }) {
    const product_id = product?.id
 
     
+   const [StarCounts, setStarCounts] = useState({ 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 });
    const [AvgRating, setAvgRating] = useState(0);
    const [AllowedReivew, setAllowedReivew] = useState(true);
    const [Userpurchased, setUserpurchased] = useState(false);
@@ -91,14 +92,29 @@ function Review({ product }) {
 
    const calculateAverageRating = (ratings) => {
       const totalRatings = ratings?.length;
+      console.log("totalRatings "+totalRatings)
       if (totalRatings === 0) return 0;
     
-      const sumOfRatings = ratings?.reduce((sum, rating) => sum + rating.rating, 0);
+      const sumOfRatings = ratings?.reduce((sum, rating) => sum + parseInt(rating?.attributes.rating), 0);
+      console.log("sumOfRatings "+sumOfRatings)
       const averageRating = sumOfRatings / totalRatings;
-       setAvgRating(averageRating)
+       setAvgRating(averageRating.toFixed(1))
+
+       const count_star = ratings?.reduce((counts, rating) => {
+         const star = rating?.attributes?.rating;
+         if (star >= 1 && star <= 5) {
+           counts[star] = (counts[star] || 0) + 1;
+         }
+         return counts;
+       }, {1: 0, 2: 0, 3: 0, 4: 0, 5: 0});
+
+       setStarCounts(count_star)
+
       return averageRating;
     };
+    
 
+    const totalRatings = Object.values(StarCounts).reduce((sum, count) => sum + count, 0);
 
 useEffect(() => {
    if(data?.length>0){
@@ -193,18 +209,28 @@ useEffect(() => {
                                     <span>Based on {data?.length} reviews</span>
                                  </div>
                               </div>
-                              <Link href="#" className="srs-btn">
+                              {/* <Link href="#" className="srs-btn"> */}
+                              <div className="srs-btn">
                                  <svg data-v-ac74125e="" width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" className="yotpo-button-icon">
                                     <path d="M10.3896 0L11.2118 1.5415L12.7532 2.36364L11.2118 3.18578L10.3896 4.72727L9.56748 3.18578L8.02599 2.36364L9.56748 1.5415L10.3896 0ZM4.77922 1.94805L6.44155 5.06494L9.55844 6.72729L6.44155 8.38959L4.77922 11.5065L3.11688 8.38959L0 6.72729L3.11688 5.06494L4.77922 1.94805ZM12.0519 9.42857L11.013 7.48052L9.97404 9.42857L8.02599 10.4676L9.97404 11.5065L11.013 13.4545L12.0519 11.5065L14 10.4676L12.0519 9.42857Z" fill="#FFFFFF"></path>
                                  </svg>
-                                 Reviews summary</Link>
+                                 Reviews summary
+                                 {/* </Link> */}
+                                 </div>
                            </div>
                            <div className="rs-right">
                               <div className="start-rating-blk">
+                              {/* {StarCounts?.map((star)=>{  */}
+                              
+                                  {Object?.entries(StarCounts)?.map(([star, count]) => {
+                                    const percentage = totalRatings > 0 ? (count / totalRatings) * 100 : 0;
+                                    return (
+                                    
+                                 <>                                
                                  {/* start list */}
                                  <div className="start-rating-list">
                                     <div className="srl-index">
-                                       <span>5</span>
+                                       <span>{star}</span>
                                        <svg className="yotpo-star-rating-icon yotpo-sr-star-full" width="18" height="18" viewBox="0 0 33 33" fill="none" xmlns="http://www.w3.org/2000/svg" transform="scale(1.2, 1.2)">
                                           <defs>
                                              <linearGradient id="yotpo_stars_gradient_0.13923812364636412">
@@ -216,97 +242,17 @@ useEffect(() => {
                                        </svg>
                                     </div>
                                     <div className="progress" >
-                                       <div className="progress-bar" style={{ width: "40%", height: 6 }} />
+                                       <div className="progress-bar" style={{ width: `${percentage}%`, height: 6 }} />
                                     </div>
                                     <div className="rs-value">
-                                       282
+                                       {count}
                                     </div>
                                  </div>
 
-                                 <div className="start-rating-list">
-                                    <div className="srl-index">
-                                       <span>4</span>
-                                       <svg className="yotpo-star-rating-icon yotpo-sr-star-full" width="18" height="18" viewBox="0 0 33 33" fill="none" xmlns="http://www.w3.org/2000/svg" transform="scale(1.2, 1.2)">
-                                          <defs>
-                                             <linearGradient id="yotpo_stars_gradient_0.13923812364636412">
-                                                <stop offset="100%" stop-color="rgba(0,0,0,1)"></stop>
-                                                <stop offset="100%" stop-color="#FFFFFF" stop-opacity="1"></stop>
-                                             </linearGradient>
-                                          </defs>
-                                          <path d="M17.0919 25.4549L16.8335 25.299L16.5751 25.4549L7.39263 30.9971L9.82942 20.5516L9.89798 20.2577L9.66988 20.0601L1.55658 13.0315L12.2393 12.1252L12.5397 12.0997L12.6574 11.8221L16.8335 1.9688L21.0096 11.8221L21.1273 12.0997L21.4277 12.1252L32.1104 13.0315L23.9971 20.0601L23.769 20.2577L23.8376 20.5516L26.2744 30.9971L17.0919 25.4549Z" stroke="rgba(0,0,0,1)" fill="url(#yotpo_stars_gradient_0.13923812364636412)"></path>
-                                       </svg>
-                                    </div>
-                                    <div className="progress" >
-                                       <div className="progress-bar" style={{ width: "40%", height: 6 }} />
-                                    </div>
-                                    <div className="rs-value">
-                                       30
-                                    </div>
-                                 </div>
+                                 {/*  */}
+                                 </>
+                              )})}
 
-                                 <div className="start-rating-list">
-                                    <div className="srl-index">
-                                       <span>3</span>
-                                       <svg className="yotpo-star-rating-icon yotpo-sr-star-full" width="18" height="18" viewBox="0 0 33 33" fill="none" xmlns="http://www.w3.org/2000/svg" transform="scale(1.2, 1.2)">
-                                          <defs>
-                                             <linearGradient id="yotpo_stars_gradient_0.13923812364636412">
-                                                <stop offset="100%" stop-color="rgba(0,0,0,1)"></stop>
-                                                <stop offset="100%" stop-color="#FFFFFF" stop-opacity="1"></stop>
-                                             </linearGradient>
-                                          </defs>
-                                          <path d="M17.0919 25.4549L16.8335 25.299L16.5751 25.4549L7.39263 30.9971L9.82942 20.5516L9.89798 20.2577L9.66988 20.0601L1.55658 13.0315L12.2393 12.1252L12.5397 12.0997L12.6574 11.8221L16.8335 1.9688L21.0096 11.8221L21.1273 12.0997L21.4277 12.1252L32.1104 13.0315L23.9971 20.0601L23.769 20.2577L23.8376 20.5516L26.2744 30.9971L17.0919 25.4549Z" stroke="rgba(0,0,0,1)" fill="url(#yotpo_stars_gradient_0.13923812364636412)"></path>
-                                       </svg>
-                                    </div>
-                                    <div className="progress" >
-                                       <div className="progress-bar" style={{ width: "40%", height: 6 }} />
-                                    </div>
-                                    <div className="rs-value">
-                                       1
-                                    </div>
-                                 </div>
-
-
-                                 <div className="start-rating-list">
-                                    <div className="srl-index">
-                                       <span>2</span>
-                                       <svg className="yotpo-star-rating-icon yotpo-sr-star-full" width="18" height="18" viewBox="0 0 33 33" fill="none" xmlns="http://www.w3.org/2000/svg" transform="scale(1.2, 1.2)">
-                                          <defs>
-                                             <linearGradient id="yotpo_stars_gradient_0.13923812364636412">
-                                                <stop offset="100%" stop-color="rgba(0,0,0,1)"></stop>
-                                                <stop offset="100%" stop-color="#FFFFFF" stop-opacity="1"></stop>
-                                             </linearGradient>
-                                          </defs>
-                                          <path d="M17.0919 25.4549L16.8335 25.299L16.5751 25.4549L7.39263 30.9971L9.82942 20.5516L9.89798 20.2577L9.66988 20.0601L1.55658 13.0315L12.2393 12.1252L12.5397 12.0997L12.6574 11.8221L16.8335 1.9688L21.0096 11.8221L21.1273 12.0997L21.4277 12.1252L32.1104 13.0315L23.9971 20.0601L23.769 20.2577L23.8376 20.5516L26.2744 30.9971L17.0919 25.4549Z" stroke="rgba(0,0,0,1)" fill="url(#yotpo_stars_gradient_0.13923812364636412)"></path>
-                                       </svg>
-                                    </div>
-                                    <div className="progress" >
-                                       <div className="progress-bar" style={{ width: "40%", height: 6 }} />
-                                    </div>
-                                    <div className="rs-value">
-                                       1
-                                    </div>
-                                 </div>
-
-                                 <div className="start-rating-list">
-                                    <div className="srl-index">
-                                       <span>1</span>
-                                       <svg className="yotpo-star-rating-icon yotpo-sr-star-full" width="18" height="18" viewBox="0 0 33 33" fill="none" xmlns="http://www.w3.org/2000/svg" transform="scale(1.2, 1.2)">
-                                          <defs>
-                                             <linearGradient id="yotpo_stars_gradient_0.13923812364636412">
-                                                <stop offset="100%" stop-color="rgba(0,0,0,1)"></stop>
-                                                <stop offset="100%" stop-color="#FFFFFF" stop-opacity="1"></stop>
-                                             </linearGradient>
-                                          </defs>
-                                          <path d="M17.0919 25.4549L16.8335 25.299L16.5751 25.4549L7.39263 30.9971L9.82942 20.5516L9.89798 20.2577L9.66988 20.0601L1.55658 13.0315L12.2393 12.1252L12.5397 12.0997L12.6574 11.8221L16.8335 1.9688L21.0096 11.8221L21.1273 12.0997L21.4277 12.1252L32.1104 13.0315L23.9971 20.0601L23.769 20.2577L23.8376 20.5516L26.2744 30.9971L17.0919 25.4549Z" stroke="rgba(0,0,0,1)" fill="url(#yotpo_stars_gradient_0.13923812364636412)"></path>
-                                       </svg>
-                                    </div>
-                                    <div className="progress" >
-                                       <div className="progress-bar" style={{ width: "40%", height: 6 }} />
-                                    </div>
-                                    <div className="rs-value">
-                                       1
-                                    </div>
-                                 </div>
 
                               </div>
                            </div>
