@@ -39,18 +39,18 @@ useEffect(() => {
     <>
     <Accountnav active={"Orders"}/> 
 
-    <div className="container orders-blk">
-      {/* <h1>User Orders</h1> */}
-      <div className='table-responsive user-order'>
+    <div className="container">
+      <h1>User Orders</h1>
+      <div className='table-responsive'>
       <table className='table table-stripped'>
           <tr>
-            <th >Order</th>
-            <th colspan="6">Date</th>
+            <th>Order</th>
+            <th>Date</th>
             {/* <th>Payment Id </th>
             <th>Order Id </th> */}
-            <th >Status </th>
-            <th > Total </th>
-            <th >Action </th>
+            <th>Status </th>
+            <th>Total </th>
+            <th>Action </th>
             
           </tr>
         {(data?.length > 0) 
@@ -74,14 +74,14 @@ const formattedDate = date.toLocaleDateString('en-US', options);
           
           return (
           <tr>
-            <td ><Link href={"/my-account/orders/"+item?.id}>#{item?.id}</Link></td>
-            <td colspan="6">{formattedDate}</td>
+            <td><Link href={"/my-account/orders/"+item?.id}>#{item?.id}</Link></td>
+            <td>{formattedDate}</td>
             {/* <td>{item?.attributes?.payment_id}</td>
             <td>{item?.attributes?.order_id}</td> */}
-            <td >{item?.attributes?.status}</td>
-            <td ><i class="fa fa-rupee"></i> {item?.attributes?.amount?.toLocaleString()}</td>
+            <td>{item?.attributes?.status}</td>
+            <td><i class="fa fa-rupee"></i> {item?.attributes?.amount?.toLocaleString()}</td>
            <td><Link href={"/my-account/orders/"+ item?.id}
-           className='myacc_order_btn woocommerce-Button'
+           className='myacc_order_btn'
            >View</Link></td>
           </tr>
         )}

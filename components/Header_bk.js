@@ -1,7 +1,7 @@
 'use client'
 import React from 'react'
 import $ from 'jquery'
-import {useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useDispatch, useSelector } from 'react-redux'
 import Drawer from "@/components/Drawer";
@@ -10,185 +10,213 @@ import MobileMenu from '@/components/MobileMenu'
 import Button from 'react-bootstrap/Button';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import Accordion from 'react-bootstrap/Accordion';
-import { addToCartforGuestafterLogin, getCartData, getWishlist } from '@/features/Cart/cartnWishSlice'
+import { addToCartforGuestafterLogin, getCartData, getWishlist, toggleDrawer } from '@/features/Cart/cartnWishSlice'
+import { useRouter } from 'next/navigation'
+import useCart from '@/components/hooks/useCart'
+
+
 function header() {
-
+  const { openCart, isCartOpen, closeCart } = useCart();
   const { users, isError, isSuccess, message, isLaoding, loginTimestamp } =
-useSelector((state) => state.auth);
-const { cart, wishlist } = useSelector((state) => state.cartWish);
-  useEffect(() => {
-   
-    $(".cart_btn").click(function(){
-      $(".drawer").addClass("active")
-    })
- $(".drawer-close").click(function(){
-  $(".drawer").removeClass("active")
- });
- $(".CartDrawer-Checkout").click(function(){
-  
-  $(".drawer").removeClass("active")
- });
+    useSelector((state) => state.auth);
+  const { cart, wishlist } = useSelector((state) => state.cartWish);
+  //   useEffect(() => {
 
-  }, [])
+  //     $(".cart_btn").click(function(){
+  //       $(".drawer").addClass("active")
+  //     })
+  //  $(".drawer-close").click(function(){
+  //   $(".drawer").removeClass("active")
+  //  });
 
-/////////////////////////
+  //  $(".CartDrawer-Checkout").click(function(){
 
-   
-const [isVisible, setIsVisible] = useState(false);
+  //   $(".drawer").removeClass("active")
+  //  });
+  //  $("#cart-btn").click(function(){
+  //   $(".drawer").addClass("active")
+  // })
 
-// Function to show the div
-const showDiv = () => {
-  setIsVisible(true);
-};
+  //   }, [])
 
-// Function to hide the div
-const hideDiv = () => {
-  setIsVisible(false);
-};
+  /////////////////////////
 
 
-const [menu, setMenu] = useState();
+  const [isVisible, setIsVisible] = useState(false);
+
+  // Function to show the div
+  const showDiv = () => {
+    setIsVisible(true);
+  };
+
+  // Function to hide the div
+  const hideDiv = () => {
+    setIsVisible(false);
+  };
+
+
+  const [menu, setMenu] = useState();
   const getdata = async () => {
-    const response = await getDataWithQuery(`/api/product-categories?populate[1]=parent_category&populate=Product_Category_Img`,
+    const response = await getDataWithQuery(`/api/menus?populate[0]=Sub_Menu,Right_Menu_Section&populate[1]=Right_Menu_Section.Image`,
       {
       });
-      setMenu( response?.data)
+    setMenu(response?.data)
     return response;
   }
   useEffect(() => {
     getdata();
   }, []);
 
-  var parent_category,sub_category;
- 
-
-//   useEffect(() => {
-//     console.log("menu  "+JSON.stringify(menu));
-//     // const parent_category = menu?.filter(item => item?.attributes?.parent_category.some(it => it?.data === "null"));
-
-
-//       parent_category = menu?.filter(function (item) { return  item?.attributes?.parent_category?.data == null ; });
-// console.log("parent_category "+JSON.stringify(parent_category));
-
-    
-//   }, [menu]);
-
-  // console.log("menu  "+JSON.stringify(menu));
-  // const parent_category = menu?.filter(item => item?.attributes?.parent_category.some(it => it?.data === "null"));
-
-
-    parent_category = menu?.filter(function (item) { return  item?.attributes?.parent_category?.data == null ; });
-// console.log("parent_category "+JSON.stringify(parent_category));
-
-
-
-const submenu = (cat) =>{
-
-   sub_category = menu?.filter(function (item) { return  item?.attributes?.parent_category?.data?.attributes?.Name == cat ; });
-
-
-
-  return sub_category.map((c,i)=>(
-
-     
-    <li>
-      <Link href={"/collection/" + c?.attributes?.slug}>{c?.attributes?.Name} </Link>
-    </li>
-     
-  )
-
-)
-
-}
-
-const [isMenuVisible, setMenuIsVisible] = useState(false);
-
-const handleShow = () => {
-  setMenuIsVisible(!isMenuVisible);
-};
-const handleHide = () => {
-  setMenuIsVisible(false);
-};
-//////////////////////////////////
 
 
 
 
 
-///////////////
-const dispatch = useDispatch()
-useEffect(() => {
-  
-  if (users?.id) {
-  
-  
-     
+  const [isMenuVisible, setMenuIsVisible] = useState(false);
+
+  const handleShow = () => {
+    setMenuIsVisible(!isMenuVisible);
+  };
+  const handleHide = () => {
+    setMenuIsVisible(false);
+  };
+  //////////////////////////////////
+
+
+
+
+
+  ///////////////
+  const dispatch = useDispatch()
+  useEffect(() => {
+
+    if (users?.id) {
+
+
+
       dispatch(getCartData())
       // dispatch(getWishlist())
       const Cart = JSON.parse(localStorage?.getItem('cart'))
       const lineItems = Cart?.map((item) => {
-          return {  
-              "product_id": item?.id,
-              "quantity": item?.quantity,
-              "SKU": item?.SKU,
-              "name": item?.name,
-              "Variations_Color_Name": item?.Variations_Color_Name,
-              "Variations_Price": item?.Variations_Price,
-              "Variant_Image_url": item?.Variant_Image_url,
-              "Sales_price": item?.Sales_price 
-          }
+        return {
+          "product_id": item?.id ? item?.id : item?.product_id,
+          "quantity": item?.quantity,
+          "SKU": item?.SKU,
+          "name": item?.name,
+          "Variations_Color_Name": item?.Variations_Color_Name,
+          "Variations_Price": item?.Variations_Price,
+          "Variant_Image_url": item?.Variant_Image_url,
+          "Sales_price": item?.Sales_price
+        }
       })
+      // console.log("lineItems "+JSON.stringify(lineItems))
+
       if (Cart?.length != 0) {
-          dispatch(addToCartforGuestafterLogin(lineItems))
+        dispatch(addToCartforGuestafterLogin(lineItems))
       }
 
-  }
- 
-   
-}, [ isSuccess])
-// }, [users, isError,isSuccess])
-///////////////
-const [data, setData] = useState();  
-const getdata1 = async () =>{
-  const response = await getDataWithQuery("/api/home",
-   {
-      // pagesize: 1000, typeId: blogId
-  });
-  setData(response?.data)
+
+    }
+
+
+
+  }, [users, isError, isSuccess])
+  ///////////////
+  const [data, setData] = useState();
+  const getdata1 = async () => {
+    const response = await getDataWithQuery("/api/home",
+      {
+        // pagesize: 1000, typeId: blogId
+      });
+    setData(response?.data)
     //console.log( JSON.stringify(response));
     return response;
-}
-useEffect(() => {  
-  getdata1();
-}, []);
- 
-const _url = data?.attributes?.Annoucement_Url ? data?.attributes?.Annoucement_Url : "";
+  }
+  useEffect(() => {
+    getdata1();
+  }, []);
+
+  const _url = data?.attributes?.Annoucement_Url ? data?.attributes?.Annoucement_Url : "";
+  ///////
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [activePanel, setActivePanel] = useState(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const toggleMenu = () => {
+    setMenuOpen(!menuOpen);
+    setIsOpen(!isOpen);
+  };
+
+  const handlePanelClick = (panel) => {
+    setActivePanel(panel);
+    
+  };
+
+  const handleBodyClick = (e) => {
+    if (!e.target.closest('#menu-toggle') && menuOpen) {
+      setMenuOpen(false);
+      setActivePanel(null);
+
+    }
+  };
+  ///////
+
+
+
+
+  let k = 0;
+
+  //////
+  const router = useRouter();
+  const [query, setQuery] = useState('search');
+  const [searchResults, setSearchResults] = useState([]);
+  const handleSearch = async (e) => {
+    e.preventDefault();
+    router.push(`/search/${query}`);
+    // Perform search operation
+    // try {
+    //   const response = await fetch(`/api/search?q=${query}`);
+    //   const data = await response.json();
+    //   setSearchResults(data.results);
+    // } catch (error) {
+    //   console.error('Error fetching search results:', error);
+    // }
+  };
+  ///////
 
 
   return (
 
     <>
+
       <div className="skull_popup_bg" />
       <div className='annoucement'>
         <Link href={_url} > {data?.attributes?.Annoucement_Heading}
-         <i className='fa fa-angle-down pl-2'></i>
+          <i className='fa fa-angle-down pl-2'></i>
         </Link>
       </div>
       <header>
-      {isMenuVisible && (
-        <div className="mobile-search-blk"  >
-          <form>
-            <input type="text" className='mobile-input' placeholder='Search' />
-            <img src="images/close.png" alt="" className='mobile-close' onClick={handleHide} />
-          </form>
-        </div>
-      )}
+        {isMenuVisible && (
+          <div className="mobile-search-blk"  >
+            <form onSubmit={handleSearch}>
+              {/* <input type="text" className='mobile-input' placeholder='Search' /> */}
+
+              <input
+                type="text"
+                value={query == "search" ? "" : query}
+                onChange={(e) => setQuery(e.target.value)}
+                className='mobile-input' placeholder='Search'
+              />
+
+
+              <img src="/images/close.png" alt="" className='mobile-close' onClick={handleSearch} />
+              {/* <button type="submit" >Submit</button> */}
+            </form>
+          </div>
+        )}
         <div className="container-fluid top_header">
           <div className="container">
             <div className="row">
-              <div className='mobile-menu'>
-                {/* <MobileMenu  /> */}
-              </div>
+
               <div className="col-lg-12">
                 <div className="header-blk">
 
@@ -205,42 +233,62 @@ const _url = data?.attributes?.Annoucement_Url ? data?.attributes?.Annoucement_U
                   <div className="header-nav">
                     <div className="navigation main_menu">
                       <div className="skull_menu">
-                        <ul id="menu-main-menu" className="menu">
-          
-                          {parent_category?.map((m,mi)=>(<>
-                          
+                        <ul id="menu-main-menu" className="menu" key={"topmain" + k}>
+
+                          {menu?.map((m, mi) => {
+                            k = mi + 1;
+
+                            return (
+                              <>
 
 
-                          {/*  */}
-                          <li className="megamenu menu-item-has-children">
-                            <Link href={"/collection/"+m?.attributes?.slug} >{m?.attributes?.Name}</Link>
 
-                            <ul className="sub-menu">
-                              <li className="menu-item-has-children menu-left-blk">
-                                <Link href={"/collection/"+m?.attributes?.slug}>
-                                  <h5>{m?.attributes?.Name}</h5>
-                                </Link>
-                                <ul key={mi}>
-                                  
-                                  {submenu(m?.attributes?.Name)}
-                                   
-                                </ul>
-                              </li>
+                                {/*  */}
+                                <li className="megamenu menu-item-has-children" key={"menu" + mi}>
+                                  <Link href={m?.attributes?.Url ? m?.attributes?.Url : "#"} >{m?.attributes?.Title}</Link>
 
-                              <li className='menu-right-blk'>
-                                <ul className="menu-img-list">
-                                  <li><Link href="#"><img src="/images/menu-img1.png" alt="" /><h5>Product Guide</h5></Link></li>
-                                  <li><Link href="#"><img src="/images/menu-img1.png" alt="" /><h5>Product Guide</h5></Link></li>
-                                </ul>
-                              </li>
-                            </ul>
-                          </li>
-                          {/*  */}
-                          </>))}
-                         
+                                  <ul className="sub-menu" key={"submenuui" + mi}>
+                                    <li className="menu-item-has-children menu-left-blk" key={"submenuuichild" + mi}>
+                                      <Link href={m?.attributes?.Url}>
+                                        <h5>{m?.attributes?.Title}</h5>
+                                      </Link>
+                                      <ul key={"mainmenusubsub" + mi}>
+
+                                        {m?.attributes?.Sub_Menu.map((c, i) => (
+
+
+                                          <li key={"sub" + mi + i}>
+                                            <Link href={c?.Submenu_Url ? c?.Submenu_Url : "#"}>{c?.Submenu_Title} </Link>
+                                          </li>
+
+                                        ))}
+                                      </ul>
+                                    </li>
+
+                                    <li className='menu-right-blk'>
+                                      <ul className="menu-img-list">
+                                        {m?.attributes?.Right_Menu_Section.map((r, ri) => (
+
+
+                                          <li key={"r" + mi + ri}>
+                                            <Link href={r?.Url ? r?.Url : "#"}>
+                                              <img src={geturl(r?.Image)} alt="" />
+                                              <h5>{r?.Title}</h5>
+                                            </Link>
+                                          </li>
+                                        ))}
+                                      </ul>
+                                    </li>
+                                  </ul>
+                                </li>
+                                {/*  */}
+                              </>)
+                          }
+                          )}
+
                           {/* menu li */}
 
-                     
+
 
                         </ul>
                       </div>
@@ -253,14 +301,30 @@ const _url = data?.attributes?.Annoucement_Url ? data?.attributes?.Annoucement_U
                       <div className="header-right-menu">
                         <div className="skull_menu">
                           <ul id="menu-right-menu" className="menu">
-                            <li className='nav-search'>
+                            {/* <li className='nav-search'>
                               <input type="search" className='search' />
-                              <img src="images/search.png" alt="" className='search-icon' />
+                              <img src="/images/search.png" alt="" className='search-icon' />
+                            </li> */}
+
+                            {/*  */}
+                            <li className='nav-search'>
+                              <form onSubmit={handleSearch}>
+                                <input
+                                  type="text"
+                                  value={query == "search" ? "" : query}
+                                  onChange={(e) => setQuery(e.target.value)}
+                                  placeholder=""
+                                  className='search'
+                                />
+                                <img src="/images/search.png" alt="search" className='search-icon' onClick={handleSearch} />
+                                {/* <button type="submit" >Search</button> */}
+                              </form>
                             </li>
-                         
-                            <li className="megamenu menu-item-has-children locations_menu mobile_text_menu ">
+                            {/*  */}
+
+                            <li className="megamenu menu-item-has-children locations_menu mobile_text_menu " key={"mobilemenu"} >
                               <Link href="#">
-                             
+
                                 <img src="/images/IN_EN_FLAG.png" /> <span>LOCATION</span>
                               </Link>
                               <ul className="sub-menu">
@@ -348,50 +412,51 @@ const _url = data?.attributes?.Annoucement_Url ? data?.attributes?.Annoucement_U
                             </li>
                             <li className="no_hover mobile_text_menu ">
                               <Link href="/my-account/">
-                                <img src="/images/user.png" alt="" />
+                                {/* <img src="/images/user.png" alt="" /> */}
+                                <svg
+                                  version="1.1"
+                                  id="Layer_1"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  xmlnsXlink="http://www.w3.org/1999/xlink"
+                                  x="0px"
+                                  y="0px"
+                                  viewBox="0 0 24 24"
+                                  style={{ enableBackground: "new 0 0 24 24" }}
+                                  xmlSpace="preserve"
+                                >
+                                  <style
+                                    type="text/css"
+                                    dangerouslySetInnerHTML={{ __html: "\n\t.st0{fill:#FFFFFF;}\n" }}
+                                  />
+                                  <path
+                                    className="st0"
+                                    d="M12,12c3.3,0,6-2.7,6-6s-2.7-6-6-6S6,2.7,6,6S8.7,12,12,12z M12,15c-4,0-12,2-12,6v3h24v-3C24,17,16,15,12,15z"
+                                  />
+                                </svg>
+
                                 <span>Account</span>
                               </Link>
                             </li>
-                            {/* <li className="no_hover search_btn mobile_text_menu ">
-                   <Link href="#">
-                      <svg
-                        viewBox="0 0 22.922 22.158"
-                        id="search"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        {" "}
-                        <g
-                          id="Group_762"
-                          data-name="Group 762"
-                          transform="translate(-1079.439 -1360.5)"
-                        >
-                          {" "}
-                          <circle
-                            id="Ellipse_174"
-                            data-name="Ellipse 174"
-                            className="cls-1"
-                            cx="8.084"
-                            cy="8.084"
-                            r="8.084"
-                            transform="translate(1079.939 1361)"
-                          />{" "}
-                          <line
-                            id="Line_224"
-                            data-name="Line 224"
-                            className="cls-1"
-                            x2="7.571"
-                            y2="7.443"
-                            transform="translate(1094.44 1374.859)"
-                          />{" "}
-                        </g>{" "}
-                      </svg>
-                      <span>Search</span>
-                    </Link>
-                  </li> */}
-                            <li className="no_hover cart_btn header-cart">
+
+                            <li className="no_hover cart_btn header-cart" onClick={() => dispatch(toggleDrawer(true))}>
                               <Link href="#">
-                                <img src="/images/store.png" alt="" />
-                                <span className='badges'>{cart?.length}</span>
+                                {/* <img src="/images/store.png" alt="" /> */}
+                                <svg
+                                  className="icon icon-cart"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width={16}
+                                  height={16}
+                                  viewBox="0 0 16 16"
+                                >
+                                  <path
+                                    data-name="Icon material-shopping-cart"
+                                    d="M6.3,15.8a1.6,1.6,0,1,0,1.6,1.6A1.6,1.6,0,0,0,6.3,15.8ZM1.5,3V4.6H3.1l2.88,6.072L4.9,12.632a1.547,1.547,0,0,0-.2.768A1.6,1.6,0,0,0,6.3,15h9.6V13.4H6.636a.2.2,0,0,1-.2-.2l.024-.1.72-1.3h5.96a1.592,1.592,0,0,0,1.4-.824L17.4,5.784a.782.782,0,0,0,.1-.384.8.8,0,0,0-.8-.8H4.868L4.116,3ZM14.3,15.8a1.6,1.6,0,1,0,1.6,1.6A1.6,1.6,0,0,0,14.3,15.8Z"
+                                    transform="translate(-1.5 -3)"
+                                    fill="currentColor"
+                                  />
+                                </svg>
+
+                                <span className='badges'>{cart?.length ? cart?.length : "0"}</span>
                               </Link>
                             </li>
                           </ul>
@@ -406,15 +471,15 @@ const _url = data?.attributes?.Annoucement_Url ? data?.attributes?.Annoucement_U
 
 
 
-           
+
               <div className="col-md-12 tab_header">
-              {/* <div className="mobile-search-blk">
+                {/* <div className="mobile-search-blk">
                 <input type="search" />
                 <i className='fa fa-close'></i>
                </div> */}
                 <div className="row">
                   <div className="col-md-3 col-3">
-                    <div className="skull_nav_button"  onClick={showDiv}>
+                    <div className={`skull_nav_button ${isOpen ? 'open' : ''}`} id="menu-toggle" onClick={toggleMenu}>
                       <span />
                       <span />
                       <span />
@@ -435,6 +500,9 @@ const _url = data?.attributes?.Annoucement_Url ? data?.attributes?.Annoucement_U
                     <div className="mobile-right-blk">
                       <div className="mobile-search">
                         <img src="/images/search.png" alt="" onClick={handleShow} />
+                      </div>
+                      <div className='mobile-user'>
+
                       </div>
                       <div className="tab_cart_btn cart_btn ">
                         <img src="/images/store.png" alt="" className='mobile-store' />
@@ -513,142 +581,148 @@ const _url = data?.attributes?.Annoucement_Url ? data?.attributes?.Annoucement_U
             <span className="close_btn" />
           </div>
         </div>
+
+
+        {/*  */}
+        <div onClick={handleBodyClick} className='mobile-menu'>
+          <div className={menuOpen ? 'active' : ''}>
+            <nav className="navbar">
+
+              <nav className={`slide-out-menu ${menuOpen ? 'active' : ''}`} onClick={(e) => e.stopPropagation()}>
+                <div className="menu-panels">
+                  <div className="primary-menu-panel">
+                    <ul>
+                      {/*  ////main menu start///// */}
+                      {menu?.map((m, mi) => {
+                        k = mi + 1;
+                        let menu_id = m?.attributes?.Title.replace(/ /g, '_');
+                        return (
+                          <li>
+                            <button type="button" id={menu_id} className="menu-link" onClick={() => handlePanelClick(menu_id)}>
+                              {m?.attributes?.Title}
+                              <svg className="arrow-right d-sm-ib" fill="#111" height="30px" width="30px" viewBox="0 0 185.4 300">
+                                <path d="M7.3 292.7c-9.8-9.8-9.8-25.6 0-35.4L114.6 150 7.3 42.7c-9.8-9.8-9.8-25.6 0-35.4s25.6-9.8 35.4 0L185.4 150 42.7 292.7c-4.9 4.8-11.3 7.3-17.7 7.3-6.4 0-12.7-2.5-17.7-7.3z"></path>
+                              </svg>
+                            </button>
+                          </li>
+
+                        )
+                      }
+                      )}
+
+                    </ul>
+                    {/*  ////main menu end///// */}
+                  </div>
+
+
+                  {/* ///////Submenu///////////// */}
+                  {menu?.map((m, mi) => {
+                    k = mi + 1;
+
+                    let menu_id = m?.attributes?.Title.replace(/ /g, '_');
+                    return (
+                      <>
+                        {/* //main menu loop */}
+
+                        <div className={`menu-panel ${activePanel == menu_id ? 'is-active' : ''}`} data-menu={menu_id}>
+                          <button type="button" className="menu-link menu-header" onClick={() => setActivePanel(null)}>
+                            <svg className="arrow-left" fill="#111" height="30px" width="30px" viewBox="0 0 185.4 300">
+                              <path d="M160.4 300c-6.4 0-12.7-2.5-17.7-7.3L0 150 142.7 7.3c9.8-9.8 25.6-9.8 35.4 0 9.8 9.8 9.8 25.6 0 35.4L70.7 150 178 257.3c9.8 9.8 9.8 25.6 0 35.4-4.9 4.8-11.3 7.3-17.6 7.3z"></path>
+                            </svg>
+                            {m?.attributes?.Title}
+                          </button>
+                          <ul key={"mainmenusubsub" + mi}>
+                            {m?.attributes?.Sub_Menu.map((c, i) => {
+                              // let menu_id =  title.replace(/ /g, '_');
+                              return (
+                                //submenu loop 
+                                <li key={"sub" + mi + i}><Link href={c?.Submenu_Url ? c?.Submenu_Url : "#"}>{c?.Submenu_Title}</Link></li>
+
+                              )
+                            })}
+                          </ul>
+
+                          {/* right sub menu start*/}
+                          <ul className="menu-img-list">
+                            {m?.attributes?.Right_Menu_Section.map((r, ri) => (
+
+
+                              <li key={"r" + mi + ri}>
+                                <Link href={r?.Url ? r?.Url : "#"}>
+                                <div className="dpl-img">
+                                  <img src={geturl(r?.Image)} alt="" />
+                                  </div>
+                                  <h5>{r?.Title}</h5>
+                                </Link>
+                              </li>
+                            ))}
+                          </ul>
+                          {/* right sub menu end*/}
+                        </div>
+                      </>
+                    )
+                  }
+                  )}
+                </div>
+
+
+                {/* // //////////////////////////////////// */}
+
+              </nav>
+            </nav>
+          </div>
+        </div>
+        {/*  */}
       </header>
-      {/* <div
-    id="latest-offer"
-    style={{
-      width: "100%",
-      textAlign: "center",
-      color: "#fff",
-      padding: "1em",
-      backgroundColor: "#fff",
-      marginBottom: "-5px",
-      borderTop: "1px solid #2c2c2d"
-    }}
-  >
-   <Link href="#">
-      Use Coupon Code <b>MRP65</b> Get Flat{" "}
-      <b style={{ fontSize: 22, color: "#f47c35" }}>65% OFF</b> on MRP{" "}
-      <b>SHOP NOW &gt;</b>
-    </Link>
-  </div> */}
-      {/* <div style={{ width: "100%", height: "auto", mergin: "auto" }} className='ads-banner-top'>
-   <Link href="#">
-      <img
-        style={{ width: "100%" }}
-        src="/images/Deal-of-the-day-Smokin-Buds_Skullcandy_new_year.gif"
-      />
-    </Link>
-  </div> */}
-      {/* <marquee
-
-    style={{ color: "#fff", marginBottom: 0, padding: "-2px" }}
-  >
-    <span
-      style={{
-        backgroundColor: "#000",
-        fontSize: 17,
-        padding: "11px 41px 0px 41px",
-        fontWeight: 500,
-        color: "#fff",
-        lineHeight: 1
-      }}
-    >
-      Get Additional 5% off upto ₹500 on all prepaid orders
-    </span>
-  </marquee> */}
-
-    
 
       <Drawer />
 
-
-
-
-
-    
-    
-
-    {isVisible && (
+      {/* {isVisible && (
         <div className='mmenu' >
          
           <div className='menu-close' onClick={hideDiv}><i className='fa fa-close' ></i></div>
          <div className="accordion" id="menu-blk">
-  <div className="card">
+
+         {menu?.map((m,mi)=>(<>
+  <div className="card" key={mi}>
     <div
       className="card-header collapsed"
       data-toggle="collapse"
-      data-target="#collapseOne"
+      data-target={`#collapse${mi}`}
       aria-expanded="true"
     >
-      <span className="title">Earbuds </span>
+      <span className="title">{m?.attributes?.Title} </span>
  
     </div>
     <div
-      id="collapseOne"
+      id={`collapse${mi}`}
       className="collapse "
       data-parent="#menu-blk"
     >
       <div className="card-body">
-         <ul className='menu-blk-list'>
-         <li><Link href="#">Wireless Earbuds</Link></li>
+         <ul className='menu-blk-list'  >
+          
+         {  m?.attributes?.Sub_Menu.map((c,i)=>(
+
+
+<li key={"sub"+mi+i}>
+<Link href={c?.Submenu_Url?c?.Submenu_Url:"#"}>{c?.Submenu_Title} </Link>
+</li>
+
+))}
          </ul>
       </div>
     </div>
   </div>
-  <div className="card">
-    <div
-      className="card-header collapsed"
-      data-toggle="collapse"
-      data-target="#collapseTwo"
-      aria-expanded="false"
-      aria-controls="collapseTwo"
-    >
-      <span className="title">Headphones</span>
- 
-    </div>
-    <div id="collapseTwo" className="collapse" data-parent="#menu-blk">
-      <div className="card-body">
-      <ul className='menu-blk-list'>
-            <li><Link href="#">Wireless Earbuds</Link></li>
-            <li><Link href="#">Wireless Headphones</Link></li>
-            <li><Link href="#">CRUSHER BASS</Link></li>
-            <li><Link href="#">NEW ARRIVALS</Link></li>
-         </ul>
-      </div>
-    </div>
-  </div>
-  <div className="card">
-    <div
-      className="card-header collapsed"
-      data-toggle="collapse"
-      data-target="#collapseThree"
-      aria-expanded="false"
-    >
-      <span className="title">Others</span>
- 
-    </div>
-    <div
-      id="collapseThree"
-      className="collapse"
-      data-parent="#menu-blk"
-    >
-      <div className="card-body">
-      <ul className='menu-blk-list'>
-            <li><Link href="#">Wireless Earbuds</Link></li>
-            <li><Link href="#">Wireless Headphones</Link></li>
-            <li><Link href="#">CRUSHER BASS</Link></li>
-            <li><Link href="#">NEW ARRIVALS</Link></li>
-         </ul>
-      </div>
-    </div>
-  </div>
+  </>))}
+
+
 </div>
 
 
 
         </div>
-      )}
+      )} */}
 
 
 

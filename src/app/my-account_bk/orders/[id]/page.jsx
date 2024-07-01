@@ -58,7 +58,7 @@ useEffect(() => {
       <div className="col-12">
         <p>Order #{data?.[0]?.id} was placed on {formattedDate} and is currently {item?.status}.
       </p>
-      <h2 className=' pb-3'>Order Detail</h2>
+      <h2 className='pt-5 pb-5'>Order Detail</h2>
       </div>
       </div>
     
@@ -130,32 +130,23 @@ useEffect(() => {
   
      <div className="row">
         <div className="col-6">
-        <div className='bg-grey order-block'>
+        <div className='bg-grey'>
           <h2>Billing Address</h2>
-          <div className="order-address">
-          <p>{item?.billing?.first_name} {item?.billing?.last_name} </p>
+          <p>{item?.billing?.first_name} {item?.billing?.last_name}</p>
           <p>{item?.billing?.address_1} ,{item?.billing?.address_2}</p>
           <p>{item?.billing?.city}, {item?.billing?.state}, {item?.billing?.postcode} </p>
           <p>{item?.billing?.country}</p>
-          <p>{item?.billing?.phone}</p>
-          <p>{item?.billing?.Email}</p>
-          </div>
-          
           </div>
         </div>
         {/*  */}
 
         <div className="col-6">
-        <div className='bg-grey order-block'>
+        <div className='bg-grey'>
           <h2>Shipping Address</h2>
-          <div className="order-address">
           <p>{item?.shipping?.first_name} {item?.shipping?.last_name}</p>
           <p>{item?.shipping?.address_1} ,{item?.shipping?.address_2}</p>
           <p>{item?.shipping?.city}, {item?.shipping?.state}, {item?.shipping?.postcode} </p>
           <p>{item?.shipping?.country}</p>
-          <p>{item?.shipping?.phone}</p>
-          <p>{item?.shipping?.Email}</p>
-          </div>
           </div>
         </div>
         {/*  */}

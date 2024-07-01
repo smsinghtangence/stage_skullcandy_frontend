@@ -182,7 +182,11 @@ function header() {
     // }
   };
   ///////
+  const [visibleSection, setVisibleSection] = useState(null);
 
+  const toggleVisibility = (section) => {
+    setVisibleSection(visibleSection === section ? null : section);
+  };
 
   return (
 
@@ -327,87 +331,60 @@ function header() {
 
                                 <img src="/images/IN_EN_FLAG.png" /> <span>LOCATION</span>
                               </Link>
-                              <ul className="sub-menu">
-                                <li className="menu-item-has-children ">
-                                  <Link href="#">North America</Link>
-                                  <ul className="sub-menu">
-                                    <li>
-                                      <Link href="#">Canada</Link>
-                                    </li>
-                                    <li>
-                                      <Link href="#">Mexico</Link>
-                                    </li>
-                                    <li>
-                                      <Link href="#">United States</Link>
-                                    </li>
+                              <ul className="sub-menu location-sub-menu">
+                               <li>
+                                <div className='lsm-list '>
+                                  <Link href="#" className='location-link'>North America</Link>
+                                  <ul className='list-link'>
+                                    <li> <Link href="#">Canada</Link></li>
+                                    <li> <Link href="#">Mexico</Link></li>
+                                    <li> <Link href="#">United States</Link></li>
                                   </ul>
-                                </li>
-                                <li className="menu-item-has-children">
-                                  <Link href="#">Europe / Middle East</Link>
-                                  <ul className="sub-menu">
-                                    <li>
-                                      <Link href="#">United Kingdom</Link>
-                                    </li>
-                                    <li>
-                                      <Link href="#">Europe (EN)</Link>
-                                    </li>
+                                </div>
+
+                                <div className='lsm-list '>
+                                  <Link href="#" className='location-link'>South America</Link>
+                                  <ul className='list-link'>
+                                    <li> <Link href="#">Chile</Link></li>
+                                    <li> <Link href="#">Peru</Link></li>
                                   </ul>
-                                </li>
-                                <li className=" menu-item-has-children ">
-                                  <Link href="#">Asia</Link>
-                                  <ul className="sub-menu">
-                                    <li>
-                                      <Link href="#">Japan | 日本</Link>
-                                    </li>
-                                    <li>
-                                      <Link href="#">China | 中国</Link>
-                                    </li>
-                                    <li>
-                                      <Link href="#">South Korea | 대한민국</Link>
-                                    </li>
-                                    <li>
-                                      <Link href="#">Taiwan | 臺灣</Link>
-                                    </li>
-                                    <li>
-                                      <Link href="#" aria-current="page">
-                                        India
-                                      </Link>
-                                    </li>
+                                </div>
+                               </li>
+                               <li>
+                               <div className='lsm-list '>
+                                  <Link href="#" className='location-link'>Europe / Middle East</Link>
+                                  <ul className='list-link'>
+                                    <li> <Link href="#"> United Kingdom</Link></li>
+                                    <li> <Link href="#"> Ireland</Link></li>
+                                    <li> <Link href="#">Netherlands</Link></li>
+                                    <li> <Link href="#">France</Link></li>
+                                    <li> <Link href="#">Germany</Link></li>
+                                    <li> <Link href="#">Spain</Link></li>
+                                    <li> <Link href="#">Belgium</Link></li>
+                                    <li> <Link href="#">Portugal</Link></li>
+                                    <li> <Link href="#">Austria</Link></li>
+                                    <li> <Link href="#">Hungary</Link></li> 
+                                    <li> <Link href="#">Sweden</Link></li>
+                                    <li> <Link href="#">Italy</Link></li>
+                                    <li> <Link href="#">Other European Countries</Link></li>
+                                    <li> <Link href="#">Other Middle Eastern Countries</Link></li>
+                             
                                   </ul>
-                                </li>
-                                <li className=" menu-item-has-children">
-                                  <Link href="#">South America</Link>
-                                  <ul className="sub-menu">
-                                    <li>
-                                      <Link href="#">Chile</Link>
-                                    </li>
-                                    <li>
-                                      <Link href="#">Peru</Link>
-                                    </li>
-                                    <li>
-                                      <Link href="#">Other Middle Eastern Countries</Link>
-                                    </li>
+                                </div>
+                               </li>
+                               <li>
+                               <Link href="#" className='location-link'>Africa</Link>
+                                  <ul className='list-link'>
+                                    <li> <Link href="#">  South Africa</Link></li>
                                   </ul>
-                                </li>
-                                <li className=" menu-item-has-children ">
-                                  <Link href="#">Africa</Link>
-                                  <ul className="sub-menu">
-                                    <li>
-                                      <Link href="#">South Africa</Link>
-                                    </li>
+
+                                  <Link href="#" className='location-link'>Asia</Link>
+                                  <ul className='list-link'>
+                                    <li> <Link href="#">  Japan | 日本</Link></li>
+                                    <li> <Link href="#">  South Korea | 대한민국</Link></li>
+                                    <li> <Link href="#">  India</Link></li>
                                   </ul>
-                                </li>
-                                <li className="menu-item-has-children">
-                                  <Link href="#">Pacific</Link>
-                                  <ul className="sub-menu">
-                                    <li>
-                                      <Link href="#">Australia</Link>
-                                    </li>
-                                    <li>
-                                      <Link href="#">New Zealand</Link>
-                                    </li>
-                                  </ul>
-                                </li>
+                               </li>
                               </ul>
                             </li>
                             <li className="no_hover mobile_text_menu ">
@@ -504,8 +481,9 @@ function header() {
                       <div className='mobile-user'>
 
                       </div>
-                      <div className="tab_cart_btn cart_btn ">
+                      <div className="tab_cart_btn cart_btn " onClick={() => dispatch(toggleDrawer(true))}>
                         <img src="/images/store.png" alt="" className='mobile-store' />
+                        <span className='badges'>{cart?.length ? cart?.length : "0"}</span>
                       </div>
 
                     </div>
@@ -659,6 +637,71 @@ function header() {
                           </ul>
                           {/* right sub menu end*/}
                         </div>
+                        <div className={`menu-panel ${activePanel === 'my-account' ? 'is-active' : ''}`} data-menu="my-account">
+                <button type="button" className="menu-link menu-header" onClick={() => setActivePanel(null)}>
+                  <svg className="arrow-left" fill="#111" height="30px" width="30px" viewBox="0 0 185.4 300">
+                    <path d="M160.4 300c-6.4 0-12.7-2.5-17.7-7.3L0 150 142.7 7.3c9.8-9.8 25.6-9.8 35.4 0 9.8 9.8 9.8 25.6 0 35.4L70.7 150 178 257.3c9.8 9.8 9.8 25.6 0 35.4-4.9 4.8-11.3 7.3-17.6 7.3z"></path>
+                  </svg>
+                  My Account
+                </button>
+                <ul>
+                <li>
+          <div className='location-menu-mobile'>
+            <h5 onClick={() => toggleVisibility('northAmerica')}>North America</h5>
+            <div className={`location-menu-content ${visibleSection === 'northAmerica' ? 'visible' : 'hidden'}`}>
+              <Link href="#">Canada</Link>
+              <Link href="#">Mexico</Link>
+              <Link href="#">United States</Link>
+            </div>
+          </div>
+
+          <div className='location-menu-mobile'>
+            <h5 onClick={() => toggleVisibility('southAmerica')}>South America</h5>
+            <div className={`location-menu-content ${visibleSection === 'southAmerica' ? 'visible' : 'hidden'}`}>
+              <Link href="#">Chile</Link>
+              <Link href="#">Peru</Link>
+            </div>
+          </div>
+
+          <div className='location-menu-mobile'>
+            <h5 onClick={() => toggleVisibility('europeMiddleEast')}>Europe / Middle East</h5>
+            <div className={`location-menu-content ${visibleSection === 'europeMiddleEast' ? 'visible' : 'hidden'}`}>
+              <Link href="#">United Kingdom</Link>
+              <Link href="#">Ireland</Link>
+              <Link href="#">Netherlands</Link>
+              <Link href="#">France</Link>
+              <Link href="#">Germany</Link>
+              <Link href="#">Spain</Link>
+              <Link href="#">Belgium</Link>
+              <Link href="#">Portugal</Link>
+              <Link href="#">Austria</Link>
+              <Link href="#">Hungary</Link>
+              <Link href="#">Sweden</Link>
+              <Link href="#">Italy</Link>
+              <Link href="#">Other European Countries</Link>
+              <Link href="#">Other Middle Eastern Countries</Link>
+            </div>
+          </div>
+
+          <div className='location-menu-mobile'>
+            <h5 onClick={() => toggleVisibility('africa')}>Africa</h5>
+            <div className={`location-menu-content ${visibleSection === 'africa' ? 'visible' : 'hidden'}`}>
+              <Link href="#">South Africa</Link>
+            </div>
+          </div>
+
+          <div className='location-menu-mobile'>
+            <h5 onClick={() => toggleVisibility('asia')}>Asia</h5>
+            <div className={`location-menu-content ${visibleSection === 'asia' ? 'visible' : 'hidden'}`}>
+              <Link href="#">Japan | 日本</Link>
+              <Link href="#">South Korea | 대한민국</Link>
+              <Link href="#">India</Link>
+            </div>
+          </div>
+        </li>
+                 
+                </ul>
+              </div>
                       </>
                     )
                   }
@@ -667,6 +710,43 @@ function header() {
 
 
                 {/* // //////////////////////////////////// */}
+
+                <div className="header-menu-bottom">
+                  <ul>
+                    <li><Link href="#">Product Guide</Link></li>
+                    <li><Link href="#">Support</Link></li>
+                    <li><Link href="#">
+                      <svg
+                        version="1.1"
+                        id="Layer_1"
+                        xmlns="http://www.w3.org/2000/svg"
+                        xmlnsXlink="http://www.w3.org/1999/xlink"
+                        x="0px"
+                        y="0px"
+                        viewBox="0 0 24 24"
+                        style={{ enableBackground: "new 0 0 24 24" }}
+                        xmlSpace="preserve"
+                      >
+                        <style
+                          type="text/css"
+                          dangerouslySetInnerHTML={{ __html: "\n\t.st0{fill:#FFFFFF;}\n" }}
+                        />
+                        <path
+                          className="st0"
+                          d="M12,12c3.3,0,6-2.7,6-6s-2.7-6-6-6S6,2.7,6,6S8.7,12,12,12z M12,15c-4,0-12,2-12,6v3h24v-3C24,17,16,15,12,15z"
+                        />
+                      </svg>
+                      Log in</Link></li>
+                      <li>
+                      <button type="button" className="menu-link" onClick={() => handlePanelClick('my-account')}>
+                      My Account
+                      <svg className="arrow-right d-sm-ib" fill="#111" height="30px" width="30px" viewBox="0 0 185.4 300">
+                        <path d="M7.3 292.7c-9.8-9.8-9.8-25.6 0-35.4L114.6 150 7.3 42.7c-9.8-9.8-9.8-25.6 0-35.4s25.6-9.8 35.4 0L185.4 150 42.7 292.7c-4.9 4.8-11.3 7.3-17.7 7.3-6.4 0-12.7-2.5-17.7-7.3z"></path>
+                      </svg>
+                    </button>
+                      </li>
+                  </ul>
+                </div>
 
               </nav>
             </nav>

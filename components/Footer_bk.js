@@ -3,7 +3,6 @@ import Link from 'next/link'
 import React from 'react'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import SearchModal from '@/components/SearchModal'
 function Footer() {
 
   const scrollToTop = () => {
@@ -164,10 +163,7 @@ function Footer() {
 
 
       <Link href="#" className='call-top-top'><i className='fa fa-arrow-up' onClick={scrollToTop}></i></Link>
-    
-  <SearchModal />
     </>
-    
   )
 }
 

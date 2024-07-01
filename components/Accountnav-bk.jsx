@@ -64,13 +64,13 @@ return (
 </section>
 <section>
    <div className="container-fluid">
-   <div className="pb-3">
+   <div className="container max_container pb-3">
       <div className="woocommerce">
          <div className="woocommerce-notices-wrapper" />
             <section>
-               <div className="container">
-                  <h2 className='text-center order-user-email'> {users?.username}</h2>
-                  <div className="pb-3">
+               <div className="container-fluid">
+                  <h2 className='text-center'> {users?.username}</h2>
+                  <div className="container max_container pb-3">
                      <p />
                      <div className="woocommerce">
                         <nav className="woocommerce-MyAccount-navigation">

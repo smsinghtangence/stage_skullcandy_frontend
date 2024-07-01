@@ -49,10 +49,9 @@ function page() {
       <Accountnav active={"Password"} />
       <div className="my-account-address pb-5">
         <div className="container">
-          
+          <div className="row">
             <form onSubmit={handleSubmit}>
-            <div className="row">
-              <div className='col-lg-4'>
+              <div>
                 <label>Current Password:</label>
                 <input
                   type="password"
@@ -62,7 +61,7 @@ function page() {
                   required
                 />
               </div>
-              <div className='col-lg-4'>
+              <div>
                 <label>New Password:</label>
                 <input
                   type="password"
@@ -72,7 +71,7 @@ function page() {
                   required
                 />
               </div>
-              <div className='col-lg-4'>
+              <div>
                 <label>Confirm New Password:</label>
                 <input
                   type="password"
@@ -82,14 +81,10 @@ function page() {
                   required
                 />
               </div>
-              <div className="col-lg-12 mt-3">
-              <button type="submit " className='woocommerce-Button'>Change Password</button>
-              </div>
+              <button type="submit">Change Password</button>
               {message && <p>{message}</p>}
-              </div>
             </form>
-         
-          </div></div>
+          </div></div></div>
     </>
   );
 }

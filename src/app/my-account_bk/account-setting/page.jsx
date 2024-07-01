@@ -4,6 +4,7 @@ import Accountnav from '@/components/Accountnav'
 import { useRouter } from 'next/navigation'
 import { useDispatch, useSelector } from "react-redux";
 import { updateUser } from '@/features/authSlice'
+import { toast } from 'react-toastify'
 
 import axios from 'axios';
 function page() {
@@ -100,6 +101,7 @@ function page() {
       // })
 
       dispatch(updateUser(shipping))
+      toast.success('Update Successfully')
 
     }
 
@@ -228,7 +230,7 @@ function page() {
                 </div>
 
                 <div className="col-lg-12 form-group">
-                  <button type='submit' value={"submit"} className='woocommerce-Button'> Submit</button>
+                  <input type='submit' value={"submit"} />
                 </div>
             </div>
 
