@@ -25,7 +25,7 @@ function AddressSection() {
 
         // document.getElementById('userAddress').checked = true
 
-        const { first_name, last_name, phone, address_1, address_2, country, postcode, state, city } = item
+        const { first_name, last_name, mobile, address_1, address_2, country, postcode, state, city } = item
 
         const shipping = {
             first_name,
@@ -36,7 +36,7 @@ function AddressSection() {
             state,
             postcode,
             country,
-            phone,
+            mobile,
         }
         dispatch(addShippingDetails(shipping))
          dispatch(addBilling(shipping))
@@ -108,7 +108,7 @@ function AddressSection() {
                                         <tr>
                                             <th></th>
                                             <th>Name</th>
-                                            <th>Phone</th>
+                                            <th>Mobile</th>
                                             <th>Address</th>
 
                                         </tr>
@@ -142,7 +142,7 @@ function AddressSection() {
                                                                             </div>
                                                                         </td>
                                                                         <td> {item.first_name}&nbsp;{item.last_name}</td>
-                                                                        <td>{item?.phone}</td>
+                                                                        <td>{item?.mobile}</td>
                                                                         <td> {item.address_1}, {item.address_2} {item.city}, {item?.state}, {item?.country}</td>
                                                                     </tr>
 

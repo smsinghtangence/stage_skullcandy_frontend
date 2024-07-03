@@ -108,16 +108,16 @@ function page() {
          ):         
           <div className="u-columns col2-set" id="customer_login">
             <div className='row'>
-            <div className='col-lg-6'>
-            <div className="u-column1 ">
+            <div className='col-lg-12'>
+            {/* <div className="u-column1 "> */}
               <Signin />
+            {/* </div> */}
             </div>
-            </div>
-            <div className='col-lg-6'>
+            {/* <div className='col-lg-6'>
             <div className="u-column2">
               <Signup />
             </div>
-            </div>
+            </div> */}
             </div>
           </div>
 }

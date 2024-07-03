@@ -17,8 +17,8 @@ function AddressSection() {
 
     // const toggleShow = () => setBasicModal(!basicModal);
 
-    const { address, isSuccess, updatedAddress, isSaveAddress, isLoading } = useSelector(state => state.checkOut)
-
+    const { address, isSuccess, shipping: shippingDetails, updatedAddress, isSaveAddress, isLoading } = useSelector(state => state.checkOut)
+ 
     const { users } = useSelector(state => state.auth)
 
     const handleClick = (item) => {
@@ -28,7 +28,7 @@ function AddressSection() {
         const { 
             first_name, 
             last_name, 
-            phone, 
+            mobile, 
             address_1, 
             address_2, 
             country, 
@@ -45,7 +45,7 @@ function AddressSection() {
             state,
             postcode,
             country,
-            phone,
+            mobile,
         }
         dispatch(addShippingDetails(shipping))
          dispatch(addBilling(shipping))
@@ -73,6 +73,10 @@ function AddressSection() {
         }
     }, [updatedAddress]) // for when someone change default address
 
+
+    // useEffect(() => {
+    //     setShipping(shippingDetails)
+    // }, [shippingDetails])
     // useEffect(() => {
     //     if (address?.length !== 0 && isSuccess) {
     //         // console.log('from default address')
@@ -111,13 +115,69 @@ function AddressSection() {
                 <div className='table-responsive' >
                     <div className="row ">
                         <div className="col-lg-12">
-                            <div className="address_card">
-                                <table class="table table-bordered">
+                           
+
+{
+isLoading == 'addressPending' ? <>
+
+<Spinner />
+</> : <>
+
+{
+address && <>
+{
+address?.map((item, index) => (
+<>
+
+<div className='bg-grey order-block mb-2' key={index}>
+<div className="form-check">
+<label class="form-check-label">
+<input type="radio"
+className="form-check-input"
+name="address"
+id="userAddress"
+value={"add" + index}
+onChange={() => { handleClick(item) }} 
+// checked={(index === address?.length - 1)  ? true : false}
+
+/>
+</label>
+</div>
+           <div className="order-address">
+            
+          <p>{item?.first_name} {item?.last_name} </p>
+          <p>{item?.address_1} ,{item?.address_2}</p>
+          <p>{item?.city}, {item?.state}, {item?.postcode} </p>
+          <p>{item?.country}</p>
+          <p>{item?.mobile}</p>
+          <p>{item?.Email}</p>
+          </div>
+          
+</div>
+ 
+
+
+</>
+
+))
+}
+</>
+}
+
+
+
+
+                                        </>
+                                    }
+
+{/* <div className="address_card"> */}
+                                {/* checked={item?.is_default_address === "1" ? true : false} */}
+                                {/* <table class="table table-bordered">
                                     <thead>
                                         <tr>
                                             <th></th>
                                             <th>Name</th>
-                                            <th>Phone</th>
+                                            <th>Mobile</th>
                                             <th>Address</th>
 
                                         </tr>
@@ -138,7 +198,7 @@ function AddressSection() {
                                                                 <tbody>
                                                                     <tr key={index}>
                                                                         <td>
-                                                                            {/* checked={item?.is_default_address === "1" ? true : false} */}
+                                                                            
                                                                             <div className="form-check">
                                                                                 <label class="form-check-label">
                                                                                     <input type="radio" 
@@ -151,7 +211,7 @@ function AddressSection() {
                                                                             </div>
                                                                         </td>
                                                                         <td> {item.first_name}&nbsp;{item.last_name}</td>
-                                                                        <td>{item?.phone}</td>
+                                                                        <td>{item?.mobile}</td>
                                                                         <td> {item.address_1}, {item.address_2} {item.city}, {item?.state}, {item?.country}</td>
                                                                     </tr>
 
@@ -172,10 +232,10 @@ function AddressSection() {
                                     }
 
 
-                                </table>
+                                </table> */}
 
 
-                            </div>
+                            {/* </div> */}
                         </div>
 
 

@@ -161,6 +161,23 @@ const authSlice = createSlice({
         state.message = action.payload
         state.isLoading=false
       })
+      .addCase(createGuestCheckout.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(createGuestCheckout.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
+        state.message = 'createGuestCheckoutfullfilled';
+        state.users=  action.payload
+        state.loginTimestamp = JSON.parse(localStorage.getItem('loginTime'))
+      })
+      .addCase(createGuestCheckout.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = false;
+        state.isError = true;
+        state.message = action.payload;
+      });
     }
 })
 
@@ -237,6 +254,15 @@ export const loginWithFacebook = createAsyncThunk('/auth/loginWithFacebook',asyn
     return thunkAPI.rejectWithValue(message)
   }
 })
+
+export const createGuestCheckout = createAsyncThunk('checkout/createCheckout', async (payload) => {
+  try {
+    return await authService.createGuestCheckout(payload);
+  } catch (error) {
+    throw Error(error.response.data.message || error.message);
+  }
+});
+
 
  export default authSlice.reducer
 export const {reset} = authSlice.actions

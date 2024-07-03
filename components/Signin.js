@@ -40,7 +40,10 @@ function Signin() {
   const [test, setTest] = useState("");
   const [isMobileLogin, setIsMobileLogin] = useState(false);
   const [isOtpSend, setIsOtpSend] = useState(true);
+  const [mobileError, setMobileError] = useState("");
   const { username, password: lpswd } = loginData;
+  
+  
   const handleLogin = (e) => {
     setLoginData({ ...loginData, [e.target.name]: e.target.value });
   };
@@ -48,7 +51,11 @@ function Signin() {
   const handleLoginMethod = (e) => {
     setIsMobileLogin(!isMobileLogin);
   };
-
+  const validateMobileNumber = (mobile) => {
+    const mobileRegex = /^[6-9]\d{9}$/;
+    return mobileRegex.test(mobile);
+  };
+  
   // const handleSendOtp = async (e) => {
   //   // debugger
   //   // if (!mobile || mobile.length !== 10) {
@@ -79,49 +86,39 @@ function Signin() {
   // };
 
   const handleSendOtp = async (e) => {
-    // Prevent the form from submitting if required
     e.preventDefault();
 
-    const generateOtp = () => {
-      return Math.floor(1000 + Math.random() * 9000).toString();
-    };
+    if (!validateMobileNumber(mobile)) {
+      setMobileError("Please enter a valid 10-digit Indian mobile number.");
+      return;
+    }
 
-    const otp = generateOtp();
-
-    // Define the necessary parameters
-    const apiKey = "NTE0ZjZmNGE3MTU4MzY0NTRkMzMzMDQ3N2E0MzMxNTQ=";
-    const sender = "SKDYIN";
-    const numbers = "91" + mobile;
-    const message = encodeURIComponent(
-      `Your OTP verification code is ${otp}. Thanks for registering at Skullcandy.in`
-    );
+    setMobileError("");
 
     try {
       const response = await axios.post(
         API_URL +"/api/send/otp",
-        {
-          mobile: mobile,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
+        { mobile },
+        { headers: { "Content-Type": "application/json" } }
       );
+
+      console.log(response, "OTP sent response");
+
       toast.success("OTP sent successfully");
-      // Set the mobile number from the response if needed
-      // setTest(JSON.parse(response.config.data).mobile);
-    } catch (error) {
-      toast.error("Something went wrong");
-      console.error("OTP sending error:", error);
-    } finally {
       setIsOtpSend(false);
+    } catch (error) {
+      toast.error(error.response.data.error.message);
+      console.error("OTP sending error:", error.response.data.error.message);
     }
   };
 
   const handleResendOtp = async () => {
     try {
-      const res = await axios.post(API_URL +"/api/resend-otp", {mobile}, {headers: {"Content-Type": "application/json"}})
+      const res = await axios.post(
+        API_URL +"/api/resend-otp",
+        { mobile },
+        { headers: { "Content-Type": "application/json" } }
+      );
       toast.success("OTP Resend Successfully");
     } catch (error) {
       toast.error("Something went wrong");
@@ -134,6 +131,7 @@ function Signin() {
     const loginItems = { mobile, otp };
     dispatch(verifyOtp(loginItems));
   };
+
 
   const Login = (e) => {
     e.preventDefault();
@@ -167,9 +165,9 @@ function Signin() {
   }
 
   useEffect(() => {
-  //   if (isError) {
-  //     toast.error(message);
-  //   }
+    if (isError) {
+      toast.error(message);
+    }
 
     if (isSuccess) {
       toast.success(`Welcome ${users?.username}`);
@@ -208,197 +206,81 @@ function Signin() {
 
   return (
     <>
-      {/* <div className="u-column1 col-1"> */}
-      <h2>Login</h2>
-      {/* <form
-        className="woocommerce-form woocommerce-form-login login"
-        // onSubmit={(e) => e.preventDefault()}
-        onSubmit={Login}
-      >
-        <p className="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
-          <label htmlFor="username">
-            Username or email address&nbsp;
-            <span className="required">*</span>
-          </label>
-          <input
-            type="email"
-            className="woocommerce-Input woocommerce-Input--text input-text"
-            // onChange={e => setUsername(e.target.value) }
-            value={username}
-            onChange={handleLogin}
-            name="username"
-          />{" "}
-        </p>
-        <p className="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
-          <label htmlFor="password">
-            Password&nbsp;<span className="required">*</span>
-          </label>
-          <span className="password-input">
-            <input
-              type="password"
-              name="password"
-              className="woocommerce-Input woocommerce-Input--text input-text"
-              value={lpswd}
-              onChange={handleLogin}
-              // onChange={e => setPassword(e.target.value) }
-              // value={password}
-            />
-
-            <span className="show-password-input" />
-          </span>
-        </p>
-        <p className="form-row">
-          <label className="woocommerce-form__label woocommerce-form__label-for-checkbox woocommerce-form-login__rememberme">
-            <input
-              className="woocommerce-form__input woocommerce-form__input-checkbox"
-              name="rememberme"
-              type="checkbox"
-              id="rememberme"
-              defaultValue="forever"
-            />{" "}
-            <span>Remember me</span>
-          </label>{" "}
-          <button
-            type="submit"
-            className="woocommerce-Button button woocommerce-form-login__submit"
-
-            // onClick={() => Login() }
-          >
-            Log in
-          </button>
-        </p>
-        <p className="woocommerce-LostPassword lost_password">
-          <Link href="/sign-in/lost-password/">Lost your password?</Link>
-        </p>
-      </form>
-      <form
-        className="woocommerce-form woocommerce-form-login login"
-        onSubmit={(e) => e.preventDefault()}
-      >
-        <p className="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
-          <label htmlFor="email">
-            Email&nbsp;
-            <span className="required">*</span>
-          </label>
-          <input
-            type="email"
-            className="woocommerce-Input woocommerce-Input--text input-text"
-            // onChange={e => setUsername(e.target.value) }
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            name="email"
-          />{" "}
-        </p>
-        <div className="or">
-          <span>Or</span>
-        </div>
-        <label htmlFor="mobile">
-          Mobile<span className="required">*</span>
-        </label>
-        <input
-          className="woocommerce-form__input woocommerce-form__input-checkbox mb-4"
-          type="text"
-          id="mobile"
-        />{" "}
-        {isOtpSend ? (
-          ""
-        ) : (
-          <p className="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
-            <label htmlFor="otp">
-              OTP&nbsp;<span className="required">*</span>
-            </label>
-            <span className="password-input">
-              <input
-                type="number"
-                name="otp"
-                className="woocommerce-Input woocommerce-Input--text input-text"
-                value={otp}
-                onChange={(e) => setOtp(e.target.value)}
-              />
-              <span className="show-password-input" />
-            </span>
-          </p>
-        )}
-        <p className="form-row">
-          <label className="woocommerce-form__label woocommerce-form__label-for-checkbox woocommerce-form-login__rememberme">
-            <input
-              className="woocommerce-form__input woocommerce-form__input-checkbox"
-              name="rememberme"
-              type="checkbox"
-              id="rememberme"
-              defaultValue="forever"
-            />{" "}
-            <span>Remember me</span>
-          </label>{" "}
-          {isOtpSend ? (
-            <button
-              type="submit"
-              className="woocommerce-Button button woocommerce-form-login__submit"
-              onClick={handleSendOtp}
-            >
-              Send OTP
-            </button>
-          ) : (
-            <button
-              type="submit"
-              className="woocommerce-Button button woocommerce-form-login__submit"
-              onClick={handleVerifyOtp}
-            >
-              Verify OTP
-            </button>
-          )}
-        </p>
-      </form> */}
-
-      {isMobileLogin ? (
-        <form
+     <div className='row'>
+     <div className="col-6">
+           
+           <h2>Login with Mobile OTP</h2>
+            <form
           className="woocommerce-form woocommerce-form-login login"
-          onSubmit={(e) => e.preventDefault()}
+          // onSubmit={(e) => e.preventDefault()}
+          onSubmit={Login}
         >
-          <p className="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
-            <label htmlFor="email">
-              Email&nbsp;
-              <span className="required">*</span>
+            <label htmlFor="mobile">
+              Mobile<span className="required">*</span>
             </label>
             <input
-              type="email"
-              className="woocommerce-Input woocommerce-Input--text input-text"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              name="email"
+              className="woocommerce-form__input woocommerce-form__input-checkbox mb-4"
+              value={mobile}
+              onChange={(e) => setMobile(e.target.value)}
+              name="mobile"
+              type="tel"
+              id="mobile"
+              maxLength={10}
             />{" "}
-          </p>
-          <p className="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
-            <label htmlFor="otp">
-              OTP&nbsp;<span className="required">*</span>
-            </label>
-            <span className="password-input">
-              <input
-                type="number"
-                name="otp"
-                className="woocommerce-Input woocommerce-Input--text input-text"
-                value={otp}
-                onChange={(e) => setOtp(e.target.value)}
-              />
+            {mobileError && (
+              <p className="error" style={{ color: 'red' }}>{mobileError}</p>
+            )}
+            {isOtpSend ? (
+              ""
+            ) : (
+              <p className="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
+                <label htmlFor="otp">
+                  OTP&nbsp;<span className="required">*</span>
+                </label>
+                <span className="password-input">
+                  <input
+                    type="number"
+                    name="otp"
+                    className="woocommerce-Input woocommerce-Input--text input-text"
+                    value={otp}
+                    onChange={(e) => setOtp(e.target.value)}
+                  />
 
-              <span className="show-password-input" />
-            </span>
-          </p>
-          <p className="form-row">
-            <label className="woocommerce-form__label woocommerce-form__label-for-checkbox woocommerce-form-login__rememberme">
-              <input
-                className="woocommerce-form__input woocommerce-form__input-checkbox"
-                name="rememberme"
-                type="checkbox"
-                id="rememberme"
-                defaultValue="forever"
-              />{" "}
-              <span>Remember me</span>
-            </label>{" "}
-            c
-          </p>
+                  <span className="show-password-input" />
+                </span>
+              </p>
+            )}
+           
+                {isOtpSend ? (
+                  <button
+                    type="submit"
+                    className="woocommerce-Button button woocommerce-form-login__submit"
+                    onClick={handleSendOtp}
+                  >
+                    Send OTP
+                  </button>
+                ) : (
+                  <>
+                    <button
+                      type="submit"
+                      className="woocommerce-Button button woocommerce-form-login__submit"
+                      onClick={handleVerifyOtp}
+                    >
+                      Verify OTP
+                    </button>
+                    <span onClick={handleResendOtp}>Resend OTP?</span>
+                  </>
+                )}
+             
+          
         </form>
-      ) : (
+       </div>
+
+      <div className="col-6">
+      <h2>Login</h2>
+ 
+
+      
         <form
           className="woocommerce-form woocommerce-form-login login"
           // onSubmit={(e) => e.preventDefault()}
@@ -447,44 +329,8 @@ function Signin() {
               />{" "}
               <span>Remember me</span>
             </label>{" "}
-            {/* /// */}
-            <div className="or">
-              <span>Or</span>
-            </div>
-            <label htmlFor="mobile">
-              Mobile<span className="required">*</span>
-            </label>
-            <input
-              className="woocommerce-form__input woocommerce-form__input-checkbox mb-4"
-              value={mobile}
-              onChange={(e) => setMobile(e.target.value)}
-              name="email"
-              type="text"
-              id="mobile"
-            />{" "}
-            {isOtpSend ? (
-              ""
-            ) : (
-              <p className="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
-                <label htmlFor="otp">
-                  OTP&nbsp;<span className="required">*</span>
-                </label>
-                <span className="password-input">
-                  <input
-                    type="number"
-                    name="otp"
-                    className="woocommerce-Input woocommerce-Input--text input-text"
-                    value={otp}
-                    onChange={(e) => setOtp(e.target.value)}
-                  />
-
-                  <span className="show-password-input" />
-                </span>
-              </p>
-            )}
-            {mobile === "" ? (
-              <>
-                <button
+           </p>
+            <button
                   type="submit"
                   className="woocommerce-Button button woocommerce-form-login__submit"
                 >
@@ -495,34 +341,24 @@ function Signin() {
                     Lost your password?
                   </Link>
                 </p>
-              </>
-            ) : (
-              <>
-                {isOtpSend ? (
-                  <button
-                    type="submit"
-                    className="woocommerce-Button button woocommerce-form-login__submit"
-                    onClick={handleSendOtp}
-                  >
-                    Send OTP
-                  </button>
-                ) : (
-                  <>
-                    <button
-                      type="submit"
-                      className="woocommerce-Button button woocommerce-form-login__submit"
-                      onClick={handleVerifyOtp}
-                    >
-                      Verify OTP
-                    </button>
-                    <span onClick={handleResendOtp}>Resend OTP?</span>
-                  </>
-                )}
-              </>
-            )}
-          </p>
-        </form>
-      )}
+            
+           
+           </form>
+           
+           </div>
+           
+
+
+
+
+
+
+
+{/* //////////////////////////////////////////////////////// */}
+
+
+        
+       </div>
     </>
   );
 }

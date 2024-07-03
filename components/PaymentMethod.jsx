@@ -82,7 +82,7 @@ function PaymentMethod() {
                 //toast.success('Your Order is Successfully Placed')
                 var ciphertext = CryptoJS.AES.encrypt(JSON.stringify(order?.ref_order_id), '').toString();
                 var encrypt_orderid = ciphertext.replace(/\+/g,'p1L2u3S').replace(/\//g,'s1L2a3S4h').replace(/=/g,'e1Q2u3A4l');
-                if (buyNow.length !== 0) {
+            if (buyNow.length !== 0) {
                     const product = cart?.filter((i) => {
                         return i?.id == buyNow[0]?.id
                     })
@@ -115,23 +115,10 @@ function PaymentMethod() {
 
         }
 
+        if (isSuccess && order?.id && razorpay == false && payment.payment_method == 'cod') {
 
-
-        // if (order?.id && razorpay === true && isRazorPayPopUp) {
-        //     dispatch(compareCartState(cart))
-            
-        //     dispatch(updateOrderAfterPayment(
-        //         {
-        //             "amount": parseInt(total),
-        //             "order_id": (order?.ref_order_id).toString
-        //         }))
-                
-        //     // dispatch(deleteAllItemsFromCart())
-        //     // dispatch(reset())
-        // }
-
-
-
+        }
+ 
         // 
         if(isOrder)
             {
@@ -298,7 +285,7 @@ function PaymentMethod() {
 //       prefill: {
 //         name: users?.Address?.first_name,
 //         email: users?.email,
-//         contact: users?.phone,
+//         contact: users?.mobile,
 //       },
 //     };
   
@@ -328,9 +315,11 @@ const initializeRazorpay = () => {
   ////////////////////////
 
 const callAfterOrderCreate = async ()=>{
-    if (hasProcessed) return;
+    // if (hasProcessed) return;
 
-      if(order?.ref_order_id){
+      if(order?.ref_order_id &&  payment?.payment_method == 'razor pay'){
+        if (hasProcessed) return;
+        else{
         setHasProcessed(true);
             const res = await initializeRazorpay();
           
@@ -393,17 +382,49 @@ const callAfterOrderCreate = async ()=>{
               prefill: {
                 name: users?.Address?.first_name,
                 email: users?.email,
-                contact: users?.phone,
+                contact: users?.mobile,
               },
             };
           
             const paymentObject = new window.Razorpay(options);
             paymentObject.open();
-                 };
-
+                 }
+        }
+      else if (order?.ref_order_id &&  payment?.payment_method == 'cod'){
+            console.log(JSON.stringify(order))
+            setHasProcessed(true);
+             
+           const updateobj = {
+                 
+           
+                "amount": parseInt(total),
+                "order_id":"COD_"+order?.ref_order_id,
+                "customer_id": users?.id
+            }
+            dispatch(updateOrderAfterPayment(updateobj))
+            .then(()=>redirectToSuccess())
+            
+      }
+      
 }
 
+const redirectToSuccess = async ()=>{
+    var ciphertext = CryptoJS.AES.encrypt(JSON.stringify(order?.ref_order_id), '').toString();
+    var encrypt_orderid = ciphertext.replace(/\+/g,'p1L2u3S').replace(/\//g,'s1L2a3S4h').replace(/=/g,'e1Q2u3A4l');
+    if (users?.id) {
+        dispatch(deleteAllItemsFromCart())//delete all products from cart
+    } else {
+        localStorage.removeItem('cart')
+        dispatch(resetCartAfterPaymentForGustUser())
+    }
+
+
   
+    router.push('/success/'+encrypt_orderid)
+    dispatch(reset())
+    dispatch(resetAllState())
+    
+} 
     return (
         <>
             <div className="ms-2 row" >
@@ -429,7 +450,14 @@ const callAfterOrderCreate = async ()=>{
 
                                 <ul className='d-flex gap-2 p-0' style={{ listStyle: "none" }}>
 
-                                    <li><input type="radio" checked={payment.payment_method == 'razor pay' ? true : false} name="payment_method" id="paywithcard" onChange={() => {
+                                    <li>
+                                        <input 
+                                        type="radio" 
+                                        checked={payment.payment_method == 'razor pay' ? true : false} 
+                                        className='paymentRadio'
+                                        name="payment_method" 
+                                        id="paywithcard" 
+                                        onChange={() => {
                                         handleChange({
                                             payment_method: 'razor pay',
                                             payment_method_title: "razor pay",
@@ -442,11 +470,16 @@ const callAfterOrderCreate = async ()=>{
                                 {/* <hr /> */}
                             </div>
 
-                            {/* <div className="col-lg-12 col-md-12 col-sm-12 col-12 px-3">
+                            <div className="col-lg-12 col-md-12 col-sm-12 col-12 px-3">
 
-                                <ul className='d-flex gap-2' style={{ listStyle: "none" }}>
+                                <ul className='d-flex gap-2  p-0' style={{ listStyle: "none" }}>
 
-                                    <li><input type="radio" name="payment_method" id="" onChange={() => {
+                                    <li>
+                                        <input 
+                                        type="radio" 
+                                        name="payment_method" 
+                                        className='paymentRadio'
+                                        id="" onChange={() => {
                                         handleChange({
                                             payment_method: 'cod',
                                             payment_method_title: "Cash on Delivery",
@@ -459,7 +492,7 @@ const callAfterOrderCreate = async ()=>{
                           </span>20 Shipping Cost)</li>
                                 </ul>
                                 <hr />
-                            </div> */}
+                            </div>
 
                         </div>
 

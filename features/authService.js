@@ -109,6 +109,17 @@ export const loginWithFacebook = async(token)=>{
    response.status == 200 ? localStorage.setItem('loginTime', Date.now()) : null
    return response.data
 }
+
+const createGuestCheckout = async (payload) => {
+   const response = await axios.post(API_URL +`/api/checkout/register`, payload);
+   localStorage.setItem(
+     "user",
+     JSON.stringify({ ...response?.data?.user, token: response?.data?.jwt })
+   );
+   localStorage.setItem("loginTime", Date.now());
+   return { ...response?.data?.user, token: response?.data?.jwt };
+ };
+ 
 const authService = {
    userRegister,
    userLogin,
@@ -118,7 +129,8 @@ const authService = {
    loginWithGoogle,
    loginWithFacebook,
    resendOtp,
-   verifyOtp
+   verifyOtp,
+   createGuestCheckout
 }
 
 export default authService

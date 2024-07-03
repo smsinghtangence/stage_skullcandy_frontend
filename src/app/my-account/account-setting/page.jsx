@@ -153,7 +153,7 @@ function page() {
                 </div>
 
                 <div className="col-lg-12 form-group">
-                <label>Phone</label>
+                <label>Mobile</label>
                   <input
                     required
                     className='form-control' placeholder='mobile'

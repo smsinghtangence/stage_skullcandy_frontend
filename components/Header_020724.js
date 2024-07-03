@@ -212,7 +212,7 @@ function header() {
               />
 
 
-              <img src="/images/close.png" alt="" className='mobile-close' onClick={handleHide} />
+              <img src="/images/close.png" alt="" className='mobile-close' onClick={handleSearch} />
               {/* <button type="submit" >Submit</button> */}
             </form>
           </div>
@@ -642,12 +642,12 @@ function header() {
                   <svg className="arrow-left" fill="#111" height="30px" width="30px" viewBox="0 0 185.4 300">
                     <path d="M160.4 300c-6.4 0-12.7-2.5-17.7-7.3L0 150 142.7 7.3c9.8-9.8 25.6-9.8 35.4 0 9.8 9.8 9.8 25.6 0 35.4L70.7 150 178 257.3c9.8 9.8 9.8 25.6 0 35.4-4.9 4.8-11.3 7.3-17.6 7.3z"></path>
                   </svg>
-                 Locations
+                  My Account
                 </button>
                 <ul>
                 <li>
           <div className='location-menu-mobile'>
-            <h5 onClick={() => toggleVisibility('northAmerica')} className={visibleSection === 'northAmerica' ? 'active' : ''}>North America</h5>
+            <h5 onClick={() => toggleVisibility('northAmerica')}>North America</h5>
             <div className={`location-menu-content ${visibleSection === 'northAmerica' ? 'visible' : 'hidden'}`}>
               <Link href="#">Canada</Link>
               <Link href="#">Mexico</Link>
@@ -656,7 +656,7 @@ function header() {
           </div>
 
           <div className='location-menu-mobile'>
-            <h5 onClick={() => toggleVisibility('southAmerica')} className={visibleSection === 'southAmerica' ? 'active' : ''}>South America</h5>
+            <h5 onClick={() => toggleVisibility('southAmerica')}>South America</h5>
             <div className={`location-menu-content ${visibleSection === 'southAmerica' ? 'visible' : 'hidden'}`}>
               <Link href="#">Chile</Link>
               <Link href="#">Peru</Link>
@@ -664,7 +664,7 @@ function header() {
           </div>
 
           <div className='location-menu-mobile'>
-            <h5 onClick={() => toggleVisibility('europeMiddleEast')} className={visibleSection === 'europeMiddleEast' ? 'active' : ''}>Europe / Middle East</h5>
+            <h5 onClick={() => toggleVisibility('europeMiddleEast')}>Europe / Middle East</h5>
             <div className={`location-menu-content ${visibleSection === 'europeMiddleEast' ? 'visible' : 'hidden'}`}>
               <Link href="#">United Kingdom</Link>
               <Link href="#">Ireland</Link>
@@ -684,14 +684,14 @@ function header() {
           </div>
 
           <div className='location-menu-mobile'>
-            <h5 onClick={() => toggleVisibility('africa')} className={visibleSection === 'africa' ? 'active' : ''}>Africa</h5>
+            <h5 onClick={() => toggleVisibility('africa')}>Africa</h5>
             <div className={`location-menu-content ${visibleSection === 'africa' ? 'visible' : 'hidden'}`}>
               <Link href="#">South Africa</Link>
             </div>
           </div>
 
           <div className='location-menu-mobile'>
-            <h5 onClick={() => toggleVisibility('asia')}  className={visibleSection === 'asia' ? 'active' : ''}>Asia</h5>
+            <h5 onClick={() => toggleVisibility('asia')}>Asia</h5>
             <div className={`location-menu-content ${visibleSection === 'asia' ? 'visible' : 'hidden'}`}>
               <Link href="#">Japan | 日本</Link>
               <Link href="#">South Korea | 대한민국</Link>
@@ -739,7 +739,7 @@ function header() {
                       Log in</Link></li>
                       <li>
                       <button type="button" className="menu-link" onClick={() => handlePanelClick('my-account')}>
-                      <img src='/images/IN_FLAG.png' class="india-flag"/>  IN
+                      My Account
                       <svg className="arrow-right d-sm-ib" fill="#111" height="30px" width="30px" viewBox="0 0 185.4 300">
                         <path d="M7.3 292.7c-9.8-9.8-9.8-25.6 0-35.4L114.6 150 7.3 42.7c-9.8-9.8-9.8-25.6 0-35.4s25.6-9.8 35.4 0L185.4 150 42.7 292.7c-4.9 4.8-11.3 7.3-17.7 7.3-6.4 0-12.7-2.5-17.7-7.3z"></path>
                       </svg>

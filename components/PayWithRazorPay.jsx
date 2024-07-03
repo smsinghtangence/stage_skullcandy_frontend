@@ -76,7 +76,7 @@ async function PayWithRazorPay() {
       prefill: {
         name: users?.Address?.first_name,
         email: users?.email,
-        contact: users?.phone,
+        contact: users?.mobile,
       },
     };
   

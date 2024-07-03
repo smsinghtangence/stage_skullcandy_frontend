@@ -49,7 +49,7 @@ useEffect(() => {
           <thead>
           <tr>
                     <th>Name</th>
-                    <th>Phone</th>
+                    <th>Mobile</th>
                     <th>Address</th>
           </tr>
           </thead>
@@ -57,7 +57,7 @@ useEffect(() => {
                       <tr >
 
                         <td> {data?.Address[0]?.first_name}&nbsp;{data?.Address[0]?.last_name}</td>
-                        <td>{data?.Address[0]?.phone}</td>
+                        <td>{data?.Address[0]?.mobile}</td>
                         <td> {data?.Address[0]?.address_1}, {data?.Address[0]?.address_2} {data?.Address[0]?.city}, {data?.Address[0]?.state}, {data?.Address[0]?.country}</td>
                       </tr>
 

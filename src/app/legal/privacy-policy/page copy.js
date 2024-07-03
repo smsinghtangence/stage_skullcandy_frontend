@@ -1,28 +1,27 @@
+'use client'
+import React from 'react'
+import { useEffect, useState  } from 'react';
+import { getDataWithQuery } from "@/utils/api"
 import Link from 'next/link';
-import { Metadata } from 'next';
-import { type } from 'os';
-const API_URL = process.env.API_URL || '';
-const getData = async ()=>{  
+function page() {
 
-  const response = await fetch(API_URL + "/api/privacy-policy?populate=*");
-  if(!response.ok){
-    throw new Error("failed to fetch Api Data");
-  }
-  return response.json();
+  const [data, setData] = useState();  
+  const getdata = async () =>{
+    const response = await getDataWithQuery("/api/privacy-policy",
+     { 
+        // pagesize: 1000, typeId: blogId 
+    });
+    setData(response.data)
+      // console.log( JSON.stringify(response));
+      return response;
 }
+useEffect(() => {  
+    getdata();
+  }, []);
 
-
-
-
-const page = async ({params})=> {
-  const apiData = await getData();
- 
- console.log(params.Heading)
-
-  return(
+  return (
     <>
-
-      <div className="container-fluid">
+    <div className="container-fluid">
       <div className="container max_container">
         <div className="row">
           <div className="col-md-12">
@@ -113,52 +112,30 @@ const page = async ({params})=> {
       </div>
     </section>
     <section className="full_center_section skull_space_xtra pt-5">
-      <div className='container-fluid'>
+      <div className="container-fluid">
         <div className="container max_container">
-          <div className="row ">
+          <div className="row m-0">
             <div className="col-md-12">
               <div className="skull_title big big_text mb-5 pb-3">
-                 <h2>{apiData?.data?.attributes?.Heading} </h2> 
-            
-              
+                <h2>{data?.attributes?.Heading} </h2>
               </div>
             </div>
             <div className="col-md-12">
               <div className="support_content">
               <div
-                dangerouslySetInnerHTML={{__html: apiData?.data?.attributes?.Content}}
-              />  
+                dangerouslySetInnerHTML={{__html: data?.attributes?.Content}}
+              />
+            
 
-              {JSON.stringify(apiData)}
-            <h3>{apiData?.data?.attributes?.Seo?.Meta_Title}</h3>
-        
               </div>
             </div>
           </div>
         </div>
       </div>
     </section>
+  </>
   
-    </>
   )
 }
-
-
-export async function generateMetadata({ params }) {
-  // Fetch data from the API
-  const response = await fetch(API_URL + "/api/privacy-policy?populate=*");
-  const apiData = await response.json();
-
-  // Extract title and description from the API data
-  const title = apiData?.data?.attributes?.Seo?.Meta_Title;
-  const description = apiData?.data?.attributes?.Seo?.Meta_Description;
-
-  return {
-    title: title,
-    description: description,
-  };
-}
-
-
 
 export default page

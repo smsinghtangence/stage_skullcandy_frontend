@@ -498,11 +498,11 @@ const hidePop =()=>{
                                    <span className=''>
                                         <button className='border-0 p-0 forgot-btn btn btn-default' onClick={(e) => handleForgot(e)}>Forgot Password?</button>
                                     </span>
-                                    <div className="line-container">
+                                    {/* <div className="line-container">
                                         <div className="line"></div>
                                         <div className="or">OR</div>
                                         <div className="line"></div>
-                                    </div>
+                                    </div> */}
 
                                     <div className='p-1'>
 

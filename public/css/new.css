@@ -1047,7 +1047,7 @@ header {
 .pr-list-hover-info {
   position: absolute;
   top: 0;
-  z-index: 9999;
+  z-index: 9;
   height: 100%;
   width: 100%;
   opacity: 0;
@@ -4278,6 +4278,10 @@ header .skull_menu ul li.megamenu.locations_menu > ul.sub-menu > li:nth-child(2)
 }
 .header-menu-bottom ul{padding: 0px;margin: 0px;}
 #search-modal{max-width: 950px;}
+.paymentRadio{
+  height: auto !important;
+  margin-right: 10px !important;
+}
 @media(min-width:1366px){
     .single-product-content{padding-right: 80px;}
     .single-product-slider{padding-right: 20px;}
@@ -5058,6 +5062,24 @@ header .skull_menu ul li.megamenu.locations_menu > ul.sub-menu > li:nth-child(2)
   .location-menu-content.visible {
     display: block;
   }
-  .location-menu-mobile h5{font-size: 14px;font-weight: 100;color: #fff;padding: 5px 20px;margin: 0px;}
+  .location-menu-mobile h5{font-size: 14px;font-weight: 100;color: #fff;padding: 8px 20px;margin: 0px;}
  .menu-panel ul .location-menu-mobile .location-menu-content a{padding: 5px 20px!important;}
+ .india-flag{width: 30px;}
+ .location-menu-mobile h5{position: relative;}
+ .location-menu-mobile h5:after{
+  content: "\f107";
+    font-family: FontAwesome;
+    font-style: normal;
+    font-weight: normal;
+    text-decoration: inherit;
+    color: #fff;
+    font-size: 18px;
+    padding-right: 0.5em;
+    position: absolute;
+    top: 0;
+    right: 0;
+ }
+ .location-menu-mobile h5.active:after{
+  content: "\f106";
+ }
 }

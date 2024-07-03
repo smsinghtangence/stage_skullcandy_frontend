@@ -56,8 +56,9 @@ useEffect(() => {
         {(data?.length > 0) 
         
         
-        ?<>{data?.map(item => 
-          
+        ?<>
+        {/* {data?.map(item =>  */}
+          {[...data]?.reverse()?.map(item => 
           {
             const date = new Date(item?.attributes?.createdAt);
 

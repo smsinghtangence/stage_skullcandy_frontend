@@ -137,7 +137,7 @@ useEffect(() => {
           <p>{item?.billing?.address_1} ,{item?.billing?.address_2}</p>
           <p>{item?.billing?.city}, {item?.billing?.state}, {item?.billing?.postcode} </p>
           <p>{item?.billing?.country}</p>
-          <p>{item?.billing?.phone}</p>
+          <p>{item?.billing?.mobile}</p>
           <p>{item?.billing?.Email}</p>
           </div>
           
@@ -153,7 +153,7 @@ useEffect(() => {
           <p>{item?.shipping?.address_1} ,{item?.shipping?.address_2}</p>
           <p>{item?.shipping?.city}, {item?.shipping?.state}, {item?.shipping?.postcode} </p>
           <p>{item?.shipping?.country}</p>
-          <p>{item?.shipping?.phone}</p>
+          <p>{item?.shipping?.mobile}</p>
           <p>{item?.shipping?.Email}</p>
           </div>
           </div>

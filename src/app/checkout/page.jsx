@@ -1,12 +1,24 @@
 "use client";
 import Link from "next/link";
-import React, { use, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import OrderSummary from "@/components/OrderSummary";
 import PaymentMethod from "@/components/PaymentMethod";
 import { useRouter } from "next/navigation";
 import AddressSection from "@/components/AddressSection";
+import {
+  loginWithGoogle,
+  reset,
+  userLogin,
+  userRegister,
+  loginWithFacebook as facebookLogin,
+  verifyGuestVerifyOtp,
+  verifyOtp,
+} from "@/features/authSlice";
+import axios from "axios";
+import { toast } from "react-toastify";
+
 function Page() {
   const router = useRouter();
   const { users } = useSelector((state) => state.auth);
@@ -26,6 +38,12 @@ function Page() {
   };
   const [isActive, setIsActive] = useState(false);
   const [isActiveOtp, setIsActiveOtp] = useState(false);
+  const [mobileError, setMobileError] = useState("");
+  const [otp, setOtp] = useState(["", "", "", ""]);
+  const [isOtpSend, setIsOtpSend] = useState(true);
+  const [ip, setIp] = useState("");
+
+  const dispatch = useDispatch();
 
   const handleToggle = () => {
     setIsActive(!isActive);
@@ -37,6 +55,107 @@ function Page() {
   };
   const [mobile, setMobile] = useState("");
   const [validationMessage, setValidationMessage] = useState("");
+
+  // const handleSendOtp = async (e) => {
+  //   // Prevent the form from submitting if required
+  //   e.preventDefault();
+
+  //   try {
+  //     const response = await axios.post(
+  //       "http://localhost:1337/api/guest/send/otp",
+  //       {
+  //         mobile: mobile,
+  //       },
+  //       {
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //       }
+  //     );
+  //     toast.success("OTP sent successfully");
+  //     // Set the mobile number from the response if needed
+  //     // setTest(JSON.parse(response.config.data).mobile);
+  //   } catch (error) {
+  //     toast.error("Something went wrong");
+  //     console.error("OTP sending error:", error);
+  //   } finally {
+  //     setIsOtpSend(false);
+  //   }
+  // };
+
+  // const handleResendOtp = async () => {
+  //   try {
+  //     const res = await axios.post(
+  //       "http://localhost:1337/api/guest/resend-otp",
+  //       { mobile },
+  //       { headers: { "Content-Type": "application/json" } }
+  //     );
+  //     toast.success("OTP Resend Successfully");
+  //   } catch (error) {
+  //     toast.error("Something went wrong");
+  //     console.error("OTP sending error:", error);
+  //   }
+  // };
+
+  // const handleVerifyOtp = async (e) => {
+  //   e.preventDefault();
+  //   const newOtp = otp.join("");
+  //   const loginItems = { mobile, otp: newOtp };
+  //   dispatch(verifyGuestVerifyOtp(loginItems));
+  // };
+
+  const validateMobileNumber = (mobile) => {
+    const mobileRegex = /^[6-9]\d{9}$/;
+    return mobileRegex.test(mobile);
+  };
+
+  const handleSendOtp = async (e) => {
+    e.preventDefault();
+
+    if (!validateMobileNumber(mobile)) {
+      setMobileError("Please enter a valid 10-digit Indian mobile number.");
+      return;
+    }
+
+    setMobileError("");
+
+    try {
+      const response = await axios.post(
+        "http://13.126.252.23:8080/api/send/otp",
+        { mobile },
+        { headers: { "Content-Type": "application/json" } }
+      );
+
+      console.log(response, "OTP sent response");
+
+      toast.success("OTP sent successfully");
+      setIsOtpSend(false);
+    } catch (error) {
+      toast.error(error.response.data.error.message);
+      console.error("OTP sending error:", error.response.data.error.message);
+    }
+  };
+
+  const handleResendOtp = async () => {
+    try {
+      const res = await axios.post(
+        "http://13.126.252.23:8080/api/resend-otp",
+        { mobile },
+        { headers: { "Content-Type": "application/json" } }
+      );
+      toast.success("OTP Resend Successfully");
+    } catch (error) {
+      toast.error(error.response.data.error.message);
+      console.error("OTP sending error:", error.response.data.error.message);
+    }
+  };
+
+  const handleVerifyOtp = async (e) => {
+    e.preventDefault();
+    const newOtp = otp.join("");
+    const loginItems = { mobile, otp: newOtp };
+    dispatch(verifyOtp(loginItems));
+  };
 
   const handleMobileChange = (e) => {
     const value = e.target.value;
@@ -50,6 +169,41 @@ function Page() {
       setValidationMessage("");
     }
   };
+
+  const otpRefs = useRef([]);
+
+  const handleOtpChange = (e, index) => {
+    const { value } = e.target;
+    const newOtp = [...otp];
+    if (value.length <= 1) {
+      newOtp[index] = value;
+      setOtp(newOtp);
+      if (value && index < otpRefs.current.length - 1) {
+        otpRefs.current[index + 1].focus();
+      }
+    }
+  };
+
+  const handleKeyDown = (e, index) => {
+    if (e.key === "Backspace") {
+      if (!otp[index] && index > 0) {
+        otpRefs.current[index - 1].focus();
+      }
+    }
+  };
+
+  // useEffect(() => {
+  //   const fetchIp = async () => {
+  //     try {
+  //       const response = await axios.get('https://api.ipify.org?format=json');
+  //       setIp(response.data.ip);
+  //     } catch (error) {
+  //       console.error('Error fetching IP address:', error);
+  //     }
+  //   };
+
+  //   fetchIp();
+  // }, []);
   return (
     <>
       <section className="checkout">
@@ -57,7 +211,7 @@ function Page() {
           <div className="row">
             <div className="col-lg-7">
               <div className="checkout-left">
-                {!users?.id && (
+              {!users?.id && (
                   <div className="row">
                     <div className="col-lg-12 ">
                       {/* <button onClick={handleLoginRedirect} className='btn btn-dark mt-5' >Login / Signup</button>
@@ -85,26 +239,72 @@ function Page() {
                         <label htmlFor="mobile">Mobile No</label>
 
                         <input
-                          type="text"
                           className="form-control"
-                          id="login-mobile"
                           value={mobile}
-                          onChange={handleMobileChange}
+                          onChange={(e) => setMobile(e.target.value)}
+                          name="email"
+                          type="tel"
+                          maxLength={10}
+                          id="mobile"
                         />
                         {validationMessage && (
                           <p className="validation-message">
                             {validationMessage}
                           </p>
                         )}
-                        <Link
-                          href="#"
-                          onClick={handleToggleOtp}
-                          className="request-otp"
-                        >
-                          Request OTP
-                        </Link>
+                        {isOtpSend ? (
+                          ""
+                        ) : (
+                          <>
+                            <label htmlFor="mobile">OTP</label>
+                            <div
+                              className={`otp-blk ${
+                                isActiveOtp ? "" : "active1"
+                              }`}
+                            >
+                              <div id="otp">
+                                {[0, 1, 2, 3].map((index) => (
+                                  <input
+                                    key={index}
+                                    type="text"
+                                    className="otp-box"
+                                    maxLength={1}
+                                    value={otp[index] || ""}
+                                    onChange={(e) => handleOtpChange(e, index)}
+                                    onKeyDown={(e) => handleKeyDown(e, index)}
+                                    ref={(el) => (otpRefs.current[index] = el)}
+                                  />
+                                ))}
+                              </div>
+                            </div>
+                            {/* <input
+                              className="form-control"
+                              type="number"
+                              name="otp"
+                              value={otp}
+                              onChange={(e) => setOtp(e.target.value)}
+                            /> */}
+                          </>
+                        )}
+                        {isOtpSend ? (
+                          <Link
+                            href="#"
+                            onClick={handleSendOtp}
+                            className="request-otp"
+                          >
+                            Request OTP
+                          </Link>
+                        ) : (
+                          <Link
+                            href="#"
+                            onClick={handleVerifyOtp}
+                            className="request-otp"
+                          >
+                            Verify OTP
+                          </Link>
+                        )}
                       </div>
-                      <div
+                      {/* <div
                         className={`otp-blk ${isActiveOtp ? "active1" : ""}`}
                       >
                         <div id="otp">
@@ -116,7 +316,7 @@ function Page() {
                         <Link href="#" className="request-otp">
                           Verify
                         </Link>
-                      </div>
+                      </div> */}
                     </div>
                     <div className="col-lg-12 text-center">
                       <hr />
@@ -165,9 +365,9 @@ function Page() {
                     <img src="/images/dark_gpay.svg" alt="" />
                   </a>
                 </div> */}
-                <div className="or">
+                {/* <div className="or">
                   <span>or</span>
-                </div>
+                </div> */}
                 {/* contact form start */}
                 <div className="checkout-contact-form">
                   {/* <div className="ccf-heading">
