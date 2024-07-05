@@ -14,7 +14,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { adddToBuyNow, addToCart, compareCartState, addToCartforLogin, addToWishlist, deleteWishlist, setBuyNowStatus, resetBuyNowStatus, } from '@/features/Cart/cartnWishSlice'
 import LoveProduct from '@/components/LoveProduct'
 import Review from '@/components/Review'
-function page({ params }) {
+function Page({ params }) {
 const slug = params.product;
 const dispatch = useDispatch()
 const [cartItems, setCartItems] = useState([]);
@@ -158,4 +158,4 @@ return (
 </>
 )
 }
-export default page
+export default Page

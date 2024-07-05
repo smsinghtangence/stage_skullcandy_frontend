@@ -10,7 +10,7 @@ import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
 import { getDataWithQuery, geturl } from "@/utils/api"
-function page() {
+function Page() {
     const [thumbsSwiper, setThumbsSwiper] = useState(null);
 const [products, setProducts] = useState();
   const getdata = async () => {
@@ -122,4 +122,4 @@ const [products, setProducts] = useState();
   )
 }
 
-export default page
+export default Page

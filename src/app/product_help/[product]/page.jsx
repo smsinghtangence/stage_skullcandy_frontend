@@ -7,7 +7,7 @@ import { useEffect, useState, useRef  } from 'react'
 import $ from 'jquery';
 import { getDataWithQuery, geturl } from "@/utils/api"
 import { useDispatch, useSelector } from 'react-redux'
- function page({ params }) {
+ function Page({ params }) {
 const slug = params.product;
 const dispatch = useDispatch()
 const [cartItems, setCartItems] = useState([]);
@@ -105,4 +105,4 @@ return (
 </>
 )
 }
-export default page
+export default Page

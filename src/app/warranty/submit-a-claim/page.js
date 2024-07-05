@@ -5,7 +5,7 @@ import axios from "axios"
 import { useRouter } from 'next/navigation'
 import { toast } from 'react-toastify'
 
-function page() {
+function Page() {
   const API_URL = process.env.API_URL || "";
   const CLAIM_KEY = process.env.CLAIM_KEY || "";
   const CLAIM_URL = process.env.CLAIM_URL || "";
@@ -580,4 +580,4 @@ axios.request(config)
   )
 }
 
-export default page
+export default Page

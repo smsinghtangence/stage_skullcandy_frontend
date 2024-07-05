@@ -3,7 +3,7 @@ import React from 'react'
 import InnerPageSearch from '@/components/InnerPageSearch'
 import { useEffect, useState  } from 'react';
 import { getDataWithQuery } from "@/utils/api"
-function page() {
+function Page() {
   
   const [data, setData] = useState();  
   const getdata = async () =>{
@@ -77,4 +77,4 @@ useEffect(() => {
   )
 }
 
-export default page
+export default Page

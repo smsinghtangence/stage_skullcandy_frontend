@@ -4,7 +4,7 @@ import axios from 'axios';
 import Accountnav from '@/components/Accountnav'
 import { getDataWithQuery, geturl } from "@/utils/api"
 import { useDispatch, useSelector } from "react-redux";
-const page = () => {
+const Page = () => {
   const API_URL =  process.env.API_URL || '';
   const [data, setData] = useState();  
   const { users, isError, isSuccess, message, isLaoding, loginTimestamp } =
@@ -87,4 +87,4 @@ useEffect(() => {
   )
 }
 
-export default page
+export default Page

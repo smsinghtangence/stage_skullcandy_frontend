@@ -11,7 +11,7 @@ import 'swiper/css/scrollbar';
 import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
 import { getDataWithQuery, geturl } from "@/utils/api"
 import { useRouter } from 'next/router';
-function page() {
+function Page() {
 
   // const router = useRouter();
   // const { query } = router;
@@ -282,4 +282,4 @@ function page() {
   )
 }
 
-export default page
+export default Page

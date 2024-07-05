@@ -18,7 +18,7 @@ import { useRouter } from 'next/navigation'
 import { useDispatch, useSelector } from "react-redux";
 
 
-function page({active}) {
+function Page({active}) {
 const dispatch = useDispatch();
 const router = useRouter();
 const { users, isError, isSuccess, message, isLaoding, loginTimestamp } =
@@ -127,4 +127,4 @@ return (
 </>
 )
 }
-export default page
+export default Page

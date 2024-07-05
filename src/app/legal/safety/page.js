@@ -5,7 +5,7 @@ import { getDataWithQuery } from "@/utils/api"
 import Link from 'next/link';
 import { NavLink } from 'react-bootstrap';
 
-function page() {
+function Page() {
   const [data, setData] = useState();
   const getdata = async () =>{
     const response = await getDataWithQuery("/api/safty",
@@ -139,4 +139,4 @@ useEffect(() => {
   )
 }
 
-export default page
+export default Page

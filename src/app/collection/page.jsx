@@ -3,7 +3,7 @@ import React from 'react'
 import Link from 'next/link'
 import { useState, useEffect } from 'react';
 import { getDataWithQuery,geturl } from "@/utils/api"
-function page() {
+function Page() {
 
 const [category, setCategory] = useState();
 const getdata = async () =>{   
@@ -69,4 +69,4 @@ return (
 </>
 )
 }
-export default page
+export default Page

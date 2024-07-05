@@ -14,7 +14,7 @@ const getData = async ()=>{
 
 
 
-const page = async ({params})=> {
+const Page = async ({params})=> {
   const apiData = await getData();
  
  console.log(params.Heading)
@@ -161,4 +161,4 @@ export async function generateMetadata({ params }) {
 
 
 
-export default page
+export default Page

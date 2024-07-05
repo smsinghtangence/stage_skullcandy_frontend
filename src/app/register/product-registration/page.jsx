@@ -1,6 +1,6 @@
 import React from 'react'
 import InnerPageSearch from '@/components/InnerPageSearch'
-function page() {
+function Page() {
     return (
         <div>
           
@@ -90,4 +90,4 @@ function page() {
     )
 }
 
-export default page
+export default Page

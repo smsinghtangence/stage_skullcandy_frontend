@@ -10,7 +10,7 @@ import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
 import { getDataWithQuery, geturl } from "@/utils/api"
-function page({ params }) {
+function Page({ params }) {
 
 
     // const slug = params.search;
@@ -272,4 +272,4 @@ function page({ params }) {
     )
 }
 
-export default page 
+export default Page 

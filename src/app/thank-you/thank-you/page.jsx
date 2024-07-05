@@ -2,7 +2,7 @@ import Link from 'next/link'
 import React from 'react'
 
 
-function page() {
+function Page() {
   return (
     <div>
               <div className="breacrumb-blk">
@@ -47,4 +47,4 @@ function page() {
   )
 }
 
-export default page
+export default Page

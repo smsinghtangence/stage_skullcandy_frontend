@@ -3,7 +3,7 @@ import React from 'react'
 import { useEffect, useState  } from 'react';
 import { getDataWithQuery } from "@/utils/api"
 import Link from 'next/link';
-function page() {
+function Page() {
 
   const [data, setData] = useState();  
   const getdata = async () =>{
@@ -138,4 +138,4 @@ useEffect(() => {
   )
 }
 
-export default page
+export default Page

@@ -2,7 +2,7 @@
 import React from 'react'
 import { useEffect, useState  } from 'react';
 import { getDataWithQuery } from "@/utils/api"
-function page({ params }) {
+function Page({ params }) {
     const slug = params.slug;
     console.log("hello" + slug)
     const [data, setData] = useState();  
@@ -37,4 +37,4 @@ function page({ params }) {
   )
 }
 
-export default page
+export default Page

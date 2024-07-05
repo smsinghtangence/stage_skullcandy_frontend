@@ -18,6 +18,8 @@ function ShippingForm() {
     const dispatch = useDispatch()
 
     const { states, shipping: shippingDetails, isError, message } = useSelector(state => state.checkOut)
+
+    const [isFormvalid, setIsFormvalid] = useState(true);
     // const [email, setEmail] = useState()
     // const [addType, setAddType] = useState()
 
@@ -138,26 +140,30 @@ console.log("ss"+shippingDetails?.first_name)
                   mobile: value,
                 }
               );
-      
-              if (response.data.exists) {
-                //   alert(response.data.message);
-                setErrors((prevErrors) => ({
-                  ...prevErrors,
-                  billingphone: "This mobile number is already registered.",
-                }));
-              } else {
-                alert(response.data.message);
-                setErrors((prevErrors) => ({
-                  ...prevErrors,
-                  billingphone: "",
-                }));
-              }
+          
+               
+                if (response.data.status == 401) {
+                    toast.warn(response.data.message);
+                    setIsFormvalid(false);
+                   
+                    setErrors((prevErrors) => ({
+                        ...prevErrors,
+                        shippingmobile: "Mobile already registered. Please try Login.",
+                      }));
+                  }
+                 else{
+                    setErrors((prevErrors) => ({
+                        ...prevErrors,
+                        shippingmobile: "",
+                      }));
+                 }
+               
             } catch (error) {
               // alert(error.response.data.message);
               console.error("Error checking mobile number", error);
               setErrors((prevErrors) => ({
                 ...prevErrors,
-                billingphone: "Error checking mobile number. Please try again later.",
+                shippingmobile: "Error checking mobile number. Please try again later.",
               }));
             }
           }
@@ -171,22 +177,27 @@ console.log("ss"+shippingDetails?.first_name)
                 }
               );
       
-              if (response.data.exists) {
-                setErrors((prevErrors) => ({
-                  ...prevErrors,
-                  billingphone: "This email is already registered.",
-                }));
-              } else {
-                setErrors((prevErrors) => ({
-                  ...prevErrors,
-                  billingphone: "",
-                }));
-              }
+             
+                if (response.data.status == 401) {
+                    toast.warn(response.data.message);
+                    setIsFormvalid(false);
+                    
+                    setErrors((prevErrors) => ({
+                        ...prevErrors,
+                        shippingemail: "Email already registered. Please try Login.",
+                      }));
+                }
+                else{
+                  setErrors((prevErrors) => ({
+                    ...prevErrors,
+                    shippingemail: "",
+                  }));
+                }
             } catch (error) {
               console.error("Error checking email", error);
               setErrors((prevErrors) => ({
                 ...prevErrors,
-                billingphone: "Error checking email. Please try again later.",
+                "shippingemail": "Error checking email. Please try again later.",
               }));
             }
           }
@@ -431,7 +442,7 @@ console.log("ss"+shippingDetails?.first_name)
         }
         setErrors(newErrors);
 
-
+console.log("newErrors " + JSON.stringify(newErrors))
         if (!isValid) {
             return;
         }
@@ -878,7 +889,7 @@ console.log("ss"+shippingDetails?.first_name)
                   value={billing["email"]}
                   onChange={handleChange}
                 />
-                <span className="text-danger">{errors[billingemail]}</span>
+                <span className="text-danger">{errors["billingemail"]}</span>
               </div>
             </div>
 
@@ -890,7 +901,9 @@ console.log("ss"+shippingDetails?.first_name)
                         {/*  */}
                         <div className="row">
                             <div className="col-lg-12">
-                                <button className=' btn btn-dark mt-2' type='submit' >Add Address</button>
+                                <button className=' btn btn-dark mt-2' type='submit' 
+                                // disabled={!isFormvalid}
+                                >Add Address</button>
                             </div>
                         </div>
                         {/*  */}

@@ -9,7 +9,7 @@ import { deleteAllItemsFromCart, deleteFromCart, removeFromCart, resetCartAfterP
 // import Thankyou from '@/pages/Thankyou';
 import { useRouter } from 'next/navigation'
 import CryptoJS from "crypto-js"
-function page() {
+function Page() {
     const router = useRouter();
     const { isLoading, isSuccess, message, razorpay, isPaymentWithCard, order } = useSelector(state => state.checkOut);
     const { cart, buyNow } = useSelector(state => state.cartWish);
@@ -78,4 +78,4 @@ function page() {
     );
 }
 
-export default page;
+export default Page;

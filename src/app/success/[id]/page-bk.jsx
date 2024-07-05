@@ -13,7 +13,7 @@ import { useRouter } from 'next/navigation'
 import { getDataWithQuery,geturl } from "@/utils/api"
 
 
-function page({params}) {
+function Page({params}) {
   const API_URL = process.env.API_URL
 const TOKEN = process.env.TOKEN || '';
     // const navigate = useNavigate()
@@ -230,4 +230,4 @@ const getorder = async () => {
   )
 }
 
-export default page
+export default Page

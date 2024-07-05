@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Link from 'next/link'
 
 
-const page = ({params}) => {
+const Page = ({params}) => {
   const API_URL =  process.env.API_URL || '';
   const id = params?.id
   const [data, setData] = useState();  
@@ -171,4 +171,4 @@ useEffect(() => {
   );
 };
 
-export default page;
+export default Page;

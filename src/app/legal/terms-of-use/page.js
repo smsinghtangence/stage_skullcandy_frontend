@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { getDataWithQuery } from "@/utils/api"
 import Link from 'next/link';
 
-function page() {
+function Page() {
   const [data, setData] = useState();
   const getdata = async () =>{
     const response = await getDataWithQuery("/api/terms-of-use",
@@ -136,4 +136,4 @@ useEffect(() => {
   )
 }
 
-export default page
+export default Page

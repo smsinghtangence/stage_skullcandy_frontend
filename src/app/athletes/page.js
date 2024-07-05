@@ -1,6 +1,6 @@
 import React from 'react'
 
-function page() {
+function Page() {
   return (
     <>
     <section className="full_center_section dark_bg title_top_section">
@@ -221,4 +221,4 @@ function page() {
   )
 }
 
-export default page
+export default Page

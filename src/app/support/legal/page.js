@@ -1,6 +1,6 @@
 import React from 'react'
 import Link from 'next/link'
-function page() {
+function Page() {
   return (
     <>
     <div className="container-fluid">
@@ -136,4 +136,4 @@ function page() {
   )
 }
 
-export default page
+export default Page

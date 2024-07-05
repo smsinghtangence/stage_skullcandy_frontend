@@ -10,7 +10,7 @@ import CryptoJS from "crypto-js"
 
 import restrict from '@/components/hooks/restrict'
 
-const page = ({params}) => {
+const Page = ({params}) => {
   restrict();
   const dispatch = useDispatch()
   const API_URL =  process.env.API_URL || '';
@@ -198,4 +198,4 @@ useEffect(() => {
   );
 };
 
-export default page;
+export default Page;

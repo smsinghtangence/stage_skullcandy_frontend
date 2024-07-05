@@ -4,7 +4,7 @@ import React from 'react'
 import { useEffect, useState } from 'react';
 import { getDataWithQuery, geturl } from "@/utils/api"
 
-function page() {
+function Page() {
   const [data, setData] = useState();  
   const getdata = async () =>{
     const response = await getDataWithQuery("/api/music-with-a-mission/?populate=*",
@@ -95,4 +95,4 @@ useEffect(() => {
   )
 }
 
-export default page
+export default Page

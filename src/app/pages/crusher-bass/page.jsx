@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import React from 'react'
 import CrusherProduct from '@/components/CrusherProduct'
-function page() {
+function Page() {
     return (
         <>
             <div className="breacrumb-blk">
@@ -405,4 +405,4 @@ function page() {
     )
 }
 
-export default page
+export default Page

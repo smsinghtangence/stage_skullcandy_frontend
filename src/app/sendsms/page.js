@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import Accountnav from '@/components/Accountnav'
 import { useRouter } from 'next/navigation'
 import { useDispatch, useSelector } from "react-redux";
-function page() {
+function Page() {
 
   
 // const router = useRouter();
@@ -42,4 +42,4 @@ http.request(options, callback).end();
   )
 }
 
-export default page
+export default Page

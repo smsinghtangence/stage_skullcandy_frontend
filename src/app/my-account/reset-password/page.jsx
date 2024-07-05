@@ -7,7 +7,7 @@ import { updateUser } from '@/features/authSlice'
  
 
 import axios from 'axios';
-function page() {
+function Page() {
   const API_URL = process.env.API_URL || "";
   const { users, isError, isSuccess, isLaoding, loginTimestamp } =
     useSelector((state) => state.auth);
@@ -94,4 +94,4 @@ function page() {
   );
 }
 
-export default page
+export default Page

@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { updateUser } from '@/features/authSlice'
 
 import axios from 'axios';
-function page() {
+function Page() {
 
   const API_URL = process.env.API_URL || "";
   // const router = useRouter();
@@ -242,4 +242,4 @@ function page() {
   )
 }
 
-export default page
+export default Page

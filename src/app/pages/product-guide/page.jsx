@@ -10,7 +10,7 @@ import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 import { getDataWithQuery, geturl } from "@/utils/api"
 const API_URL = process.env.API_URL || '';
-function page() {
+function Page() {
     useEffect(() => {
         $(".get-started").click(function () {
 
@@ -314,4 +314,4 @@ function page() {
     )
 }
 
-export default page
+export default Page

@@ -1,6 +1,6 @@
 import React from 'react'
 import Accountnav from '@/components/Accountnav'
-function page() {
+function Page() {
   return (
     <>
  <Accountnav active={"Track"}/>
@@ -56,4 +56,4 @@ function page() {
   )
 }
 
-export default page
+export default Page

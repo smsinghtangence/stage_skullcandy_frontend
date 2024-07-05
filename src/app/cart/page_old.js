@@ -5,7 +5,7 @@ import { payWithCardReset } from '@/features/CheckOut/checkOutSlice'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import Link from 'next/link'
-function page() {
+function Page() {
 
   const { cart, wishlist, isLoading } = useSelector(state => state.cartWish)
 
@@ -184,4 +184,4 @@ function page() {
   )
 }
 
-export default page
+export default Page

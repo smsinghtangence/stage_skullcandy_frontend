@@ -56,53 +56,7 @@ function Page() {
   const [mobile, setMobile] = useState("");
   const [validationMessage, setValidationMessage] = useState("");
 
-  // const handleSendOtp = async (e) => {
-  //   // Prevent the form from submitting if required
-  //   e.preventDefault();
-
-  //   try {
-  //     const response = await axios.post(
-  //       "http://localhost:1337/api/guest/send/otp",
-  //       {
-  //         mobile: mobile,
-  //       },
-  //       {
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //       }
-  //     );
-  //     toast.success("OTP sent successfully");
-  //     // Set the mobile number from the response if needed
-  //     // setTest(JSON.parse(response.config.data).mobile);
-  //   } catch (error) {
-  //     toast.error("Something went wrong");
-  //     console.error("OTP sending error:", error);
-  //   } finally {
-  //     setIsOtpSend(false);
-  //   }
-  // };
-
-  // const handleResendOtp = async () => {
-  //   try {
-  //     const res = await axios.post(
-  //       "http://localhost:1337/api/guest/resend-otp",
-  //       { mobile },
-  //       { headers: { "Content-Type": "application/json" } }
-  //     );
-  //     toast.success("OTP Resend Successfully");
-  //   } catch (error) {
-  //     toast.error("Something went wrong");
-  //     console.error("OTP sending error:", error);
-  //   }
-  // };
-
-  // const handleVerifyOtp = async (e) => {
-  //   e.preventDefault();
-  //   const newOtp = otp.join("");
-  //   const loginItems = { mobile, otp: newOtp };
-  //   dispatch(verifyGuestVerifyOtp(loginItems));
-  // };
+   
 
   const validateMobileNumber = (mobile) => {
     const mobileRegex = /^[6-9]\d{9}$/;
@@ -192,24 +146,14 @@ function Page() {
     }
   };
 
-  // useEffect(() => {
-  //   const fetchIp = async () => {
-  //     try {
-  //       const response = await axios.get('https://api.ipify.org?format=json');
-  //       setIp(response.data.ip);
-  //     } catch (error) {
-  //       console.error('Error fetching IP address:', error);
-  //     }
-  //   };
-
-  //   fetchIp();
-  // }, []);
+ 
   return (
     <>
       <section className="checkout">
         <div className="container">
           <div className="row">
             <div className="col-lg-7">
+              {cart?.length > 0 ?
               <div className="checkout-left">
               {!users?.id && (
                   <div className="row">
@@ -580,6 +524,11 @@ function Page() {
                   </ul>
                 </div>
               </div>
+            :
+            <div className="center">
+              <h3>Your cart is empty</h3>
+              <a className="CartDrawer-Checkout" href="/shop">Continue shopping</a></div>
+            }
             </div>
 
             <OrderSummary />

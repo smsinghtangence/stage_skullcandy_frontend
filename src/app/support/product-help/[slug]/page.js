@@ -1,6 +1,6 @@
 import React from 'react'
 
-function page() {
+function Page() {
   return (
     <>
     <div className="container-fluid">
@@ -789,4 +789,4 @@ function page() {
   )
 }
 
-export default page
+export default Page

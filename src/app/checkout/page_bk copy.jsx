@@ -8,7 +8,7 @@ import OrderSummary from '@/components/OrderSummary';
 import PaymentMethod from '@/components/PaymentMethod';
 import { useRouter } from 'next/navigation'
 import AddressSection from '@/components/AddressSection'
-function page() {
+function Page() {
 
     const router = useRouter();
     const { users } = useSelector(state => state.auth)
@@ -320,4 +320,4 @@ function page() {
     )
 }
 
-export default page
+export default Page

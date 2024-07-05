@@ -2,7 +2,7 @@
 import React from 'react'
 import Link from 'next/link'
 import AboutPageSlider from '@/components/AboutPageSlider'
-function page() {
+function Page() {
 
     
   return (
@@ -150,4 +150,4 @@ function page() {
   )
 }
 
-export default page
+export default Page

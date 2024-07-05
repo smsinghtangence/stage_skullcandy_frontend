@@ -3,7 +3,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 
-const page = () => {
+const Page = () => {
   const router = useRouter();
 //   const { code } = router?.query;
 const { code } = "dads";  
@@ -57,4 +57,4 @@ const [password, setPassword] = useState('');
   );
 };
 
-export default page;
+export default Page;

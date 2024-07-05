@@ -1,6 +1,7 @@
 "use client"
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import cartnWishService from "./cartnWishService";
+
 const cart = JSON.parse(localStorage?.getItem('cart'))
 const initialState = {
   cart: cart ? cart : [],

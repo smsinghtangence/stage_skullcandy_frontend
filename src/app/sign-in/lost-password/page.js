@@ -3,7 +3,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify'
 
-function page() {
+function Page() {
   const API_URL = process.env.API_URL || "";
 
   const [email, setEmail] = useState('');
@@ -98,4 +98,4 @@ function page() {
   )
 }
 
-export default page
+export default Page

@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Link from 'next/link'
 
 
-const page = () => {
+const Page = () => {
   const API_URL =  process.env.API_URL || '';
   const [data, setData] = useState();  
   const { users, isError, isSuccess, message, isLaoding, loginTimestamp } =
@@ -111,4 +111,4 @@ const formattedDate = date.toLocaleDateString('en-US', options);
   );
 };
 
-export default page;
+export default Page;

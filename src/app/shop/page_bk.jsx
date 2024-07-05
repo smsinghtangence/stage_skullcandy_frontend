@@ -8,7 +8,7 @@ import { useState } from 'react'
 // import MobileFilter from '@/components/MobileFilter'
  
  
-function page() {
+function Page() {
   const [isActive, setActive] = useState("false");
   const handleToggle = () => {
     setActive(!isActive);
@@ -123,4 +123,4 @@ function page() {
   )
 }
 
-export default page
+export default Page

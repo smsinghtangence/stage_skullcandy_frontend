@@ -17,7 +17,7 @@ import { resetAllState, setCheckOutUserType } from "@/features/CheckOut/checkOut
  
 import { useRouter,useSearchParams  } from 'next/navigation'
 import { useDispatch, useSelector } from "react-redux";
-function page() {
+function Page() {
   
   const dispatch = useDispatch();
  
@@ -135,4 +135,4 @@ function page() {
   )
 }
 
-export default page
+export default Page

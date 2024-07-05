@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation'
 import { toast } from 'react-toastify'
 
-function page() {
+function Page() {
   const API_URL = process.env.API_URL || "";
   const [formData, setFormData] = useState({
     fullName: '',
@@ -272,4 +272,4 @@ function page() {
   )
 }
 
-export default page
+export default Page
